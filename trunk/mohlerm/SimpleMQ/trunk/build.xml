@@ -1,0 +1,42 @@
+<project name="SimpleMQ" default="run" basedir=".">
+
+  <!-- set global properties for this build -->
+  <property name="server.src.dir"    location="server/src"/>
+  <property name="client.src.dir"    location="client/src"/>
+  <property name="build.dir"  location="bin"/>
+  <property name="libs.dir"    location="lib"/>
+  <property name="main-class" value="server.src.HelloASL"/>
+  <path id="classpath">
+    <fileset dir="${lib.dir}" includes="postgresql-9.4-1203.jdbc42.jar"/>
+    <fileset dir="${lib.dir}" includes="log4j-1.2.17.jar"/>
+  </path>
+
+  <target name="compile" description="compiles the source">
+    <!-- Compile the java code from ${src} into ${build} -->
+    <mkdir dir="${build.dir}"/>
+    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath" includeantruntime="false" />
+  </target>
+
+  <target name="jar" depends="compile" description="generate a jar executable" >
+    <!-- Put everything in into a executable jar file -->
+    <jar jarfile="${ant.project.name}.jar" basedir="${build.dir}" />
+  </target>
+
+  <target name="run" depends="jar" description="execute the jar file" >
+    <java classname="${main-class}" fork="true">
+      <classpath>
+        <path refid="classpath"/>
+        <path location="${ant.project.name}.jar"/>
+      </classpath>
+     <!-- <arg value="${user}"/>
+      <arg value="${password}"/> -->
+    </java>
+  </target>
+
+  <target name="clean" description="clean up" >
+    <!-- Delete the ${build} directory and the jar file -->
+    <delete dir="${build.dir}"/>
+    <delete file="${ant.project.name}.jar"/>
+  </target>
+
+</project>
