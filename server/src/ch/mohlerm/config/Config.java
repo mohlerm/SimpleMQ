@@ -9,5 +9,7 @@ public class Config {
     public static String DBNAME = "testdb";
     public static String DBUSER = "testdb";
 
-    public static int SERVICEPORT = 1234;
+    public static int SERVERPORT = 1234;
+    public static int SERVERID = 0;
+    public static int CPUWORKERSCALING = 2;
 }

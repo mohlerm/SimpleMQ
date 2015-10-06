@@ -19,4 +19,6 @@ public class InsertQueries {
     public static int addQueue (){
         return 0;
     }
+    public static int addClient () {
+        return 0; }
 }
