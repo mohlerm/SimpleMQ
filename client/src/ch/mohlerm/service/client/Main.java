@@ -5,8 +5,9 @@ import ch.mohlerm.trafficgen.TrafficGenerator;
 import ch.mohlerm.trafficgen.TrafficGeneratorFactory;
 import org.apache.log4j.Logger;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 
 /**

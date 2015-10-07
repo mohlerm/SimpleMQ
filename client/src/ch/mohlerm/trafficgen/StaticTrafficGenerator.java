@@ -4,9 +4,7 @@ import ch.mohlerm.config.Config;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
-import java.util.Iterator;
 
 /**
  * Created by marcel on 10/7/15.

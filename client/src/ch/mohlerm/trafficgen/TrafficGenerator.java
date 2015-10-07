@@ -1,16 +1,7 @@
 package ch.mohlerm.trafficgen;
 
-import ch.mohlerm.config.Config;
-
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
-import java.nio.channels.spi.SelectorProvider;
-import java.util.*;
 
 /**
  * Created by marcel on 10/7/15.
