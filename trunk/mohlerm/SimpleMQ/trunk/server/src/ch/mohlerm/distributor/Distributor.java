@@ -3,9 +3,9 @@ package ch.mohlerm.distributor;
 import ch.mohlerm.config.Config;
 import ch.mohlerm.worker.Worker;
 import org.apache.log4j.Logger;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
