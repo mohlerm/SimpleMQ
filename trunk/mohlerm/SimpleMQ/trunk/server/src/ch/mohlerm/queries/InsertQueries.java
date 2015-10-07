@@ -8,7 +8,6 @@ import ch.mohlerm.domain.psql.PsqlMessageQueue;
  */
 public class InsertQueries {
     /**
-     *
      * @param message
      * @param queue
      * @return
@@ -16,9 +15,12 @@ public class InsertQueries {
     public static int insertMessageIntoQueue(PsqlMessage message, PsqlMessageQueue queue) {
         return 0;
     }
-    public static int addQueue (){
+
+    public static int addQueue() {
         return 0;
     }
-    public static int addClient () {
-        return 0; }
+
+    public static int addClient() {
+        return 0;
+    }
 }

@@ -1,6 +1,7 @@
 package ch.mohlerm.domain.psql;
 
 import ch.mohlerm.domain.Message;
+
 /**
  * Created by marcel on 9/23/15.
  */
@@ -11,10 +12,11 @@ public class PsqlMessage implements Message {
     private int queue;
     private int timestamp;
     private String message;
-    
+
     public PsqlMessage() {
 
     }
+
     @Override
     public int getSender() {
         return sender;

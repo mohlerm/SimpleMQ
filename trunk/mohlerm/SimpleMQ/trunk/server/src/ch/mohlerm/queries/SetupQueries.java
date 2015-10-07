@@ -1,7 +1,6 @@
 package ch.mohlerm.queries;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -11,6 +10,7 @@ import java.sql.Statement;
 public class SetupQueries {
     /**
      * sets up the database
+     *
      * @param connection
      * @return true if successful
      * @throws SQLException
