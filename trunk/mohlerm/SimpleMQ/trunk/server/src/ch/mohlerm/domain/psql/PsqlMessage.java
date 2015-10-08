@@ -13,8 +13,13 @@ public class PsqlMessage implements Message {
     private int timestamp;
     private String message;
 
-    public PsqlMessage() {
-
+    public PsqlMessage(int id, int sender, int receiver, int queue, int timestamp, String message) {
+        this.id = id;
+        this.sender = sender;
+        this.receiver = receiver;
+        this.queue = queue;
+        this.timestamp = timestamp;
+        this.message = message;
     }
 
     @Override
@@ -39,7 +44,7 @@ public class PsqlMessage implements Message {
 
     @Override
     public int getTimestamp() {
-        return 0;
+        return timestamp;
     }
 
     @Override

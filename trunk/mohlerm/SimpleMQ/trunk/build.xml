@@ -20,13 +20,13 @@
     <mkdir dir="${api.build.dir}"/>
     <mkdir dir="${client.build.dir}"/>
     <mkdir dir="${server.build.dir}"/>
-    <javac srcdir="${api.src.dir}" destdir="${server.build.dir}" classpathref="classpath" includeantruntime="false" />
-    <javac srcdir="${api.src.dir}" destdir="${client.build.dir}" classpathref="classpath" includeantruntime="false" />
+    <javac source="1.7" target="1.7" srcdir="${api.src.dir}" destdir="${server.build.dir}" classpathref="classpath" includeantruntime="false" />
+    <javac source="1.7" target="1.7" srcdir="${api.src.dir}" destdir="${client.build.dir}" classpathref="classpath" includeantruntime="false" />
   </target>
 
   <target name="compileclient" depends="compileapi" description="compiles the client source">
     <!-- Compile the java code from ${src} into ${build} -->
-    <javac srcdir="${client.src.dir}" destdir="${client.build.dir}" classpathref="classpath" includeantruntime="false" />
+    <javac source="1.7" target="1.7" srcdir="${client.src.dir}" destdir="${client.build.dir}" classpathref="classpath" includeantruntime="false" />
     <copy todir="${client.build.dir}">
       <fileset dir="${client.src.dir}" excludes="**/*.java"/>
     </copy>
@@ -34,7 +34,7 @@
 
   <target name="compileserver" depends="compileapi" description="compiles the server source">
     <!-- Compile the java code from ${src} into ${build} -->
-    <javac srcdir="${server.src.dir}" destdir="${server.build.dir}" classpathref="classpath" includeantruntime="false" />
+    <javac source="1.7" target="1.7" srcdir="${server.src.dir}" destdir="${server.build.dir}" classpathref="classpath" includeantruntime="false" />
     <copy todir="${server.build.dir}">
       <fileset dir="${server.src.dir}" excludes="**/*.java"/>
     </copy>

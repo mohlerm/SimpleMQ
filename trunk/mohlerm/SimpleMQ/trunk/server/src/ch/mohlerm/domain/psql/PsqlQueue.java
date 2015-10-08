@@ -1,18 +1,18 @@
 package ch.mohlerm.domain.psql;
 
 import ch.mohlerm.domain.Message;
-import ch.mohlerm.domain.MessageQueue;
+import ch.mohlerm.domain.Queue;
 
 import java.util.Stack;
 
 /**
  * Created by marcel on 9/23/15.
  */
-public class PsqlMessageQueue implements MessageQueue {
+public class PsqlQueue implements Queue {
     private Stack<Message> messageStack;
     private int id;
 
-    public PsqlMessageQueue() {
+    public PsqlQueue() {
         messageStack = new Stack<Message>();
     }
 

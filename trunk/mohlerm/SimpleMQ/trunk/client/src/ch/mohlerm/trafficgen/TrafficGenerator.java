@@ -1,5 +1,7 @@
 package ch.mohlerm.trafficgen;
 
+import ch.mohlerm.config.Config;
+
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
 
@@ -9,6 +11,7 @@ import java.nio.channels.SocketChannel;
 public abstract class TrafficGenerator implements Runnable {
     // The host:port combination to connect to
     protected SocketChannel socketChannel;
+    protected int numberOfRequests = Config.CLIENTAMOUNT;
 
     public TrafficGenerator(SocketChannel socketChannel) throws IOException {
         this.socketChannel = socketChannel;

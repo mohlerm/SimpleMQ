@@ -20,16 +20,16 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         // basic setu
-        if(args.length < 2) {
-            System.out.println("Please specify <clientid>, <serverip>, (<serverport>)!");
+        if(args.length < 4) {
+            System.out.println("Please specify <clientid>, <serverip>, <serverport>, <amount>!");
         } else {
             Config.CLIENTID = Integer.parseInt(args[0]);
             Config.SERVERIP = InetAddress.getByName(args[1]);
             log.info("Using server ip: " + args[1]);
-            if(args.length == 3) {
-                Config.SERVERPORT = Integer.parseInt(args[2]);
-                log.info("Overriding server port: " + args[2]);
-            }
+            Config.SERVERPORT = Integer.parseInt(args[2]);
+            log.info("Using server port: " + args[2]);
+            Config.CLIENTAMOUNT = Integer.parseInt(args[3]);
+            log.info("Using amount of client requests: " + args[3]);
             SocketChannel socketChannel = SocketChannel.open();
             socketChannel.connect(new InetSocketAddress(Config.SERVERIP, Config.SERVERPORT));
             TrafficGenerator trafficGenerator;
