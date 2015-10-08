@@ -11,4 +11,5 @@ public class Config {
     public static InetAddress SERVERIP;
     public static int CLIENTID = 0;
     public static int SERVERREQUESTPORT = 0;
+    public static int CLIENTAMOUNT = 0;
 }

@@ -21,18 +21,20 @@ public class Main {
     static Logger log = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
-        try {
-            Config.SERVERIP = InetAddress.getByName("127.0.0.1");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        if (args.length < 2) {
-            System.out.println("Please specify <serverid>, <serverport>!");
+//        try {
+//            Config.SERVERIP = InetAddress.getByName("127.0.0.1");
+//        } catch (UnknownHostException e) {
+//            e.printStackTrace();
+//        }
+        if (args.length < 3) {
+            System.out.println("Please specify <serverid>, <serverport>, <dbhostname>!");
         } else {
             Config.SERVERID = Integer.parseInt(args[0]);
             log.debug("Using server id: " + args[0]);
             Config.SERVERPORT = Integer.parseInt(args[1]);
             log.debug("Using server port: " + args[1]);
+            Config.DBURL = args[2];
+            log.debug("Using db ip: " + args[2]);
 
             log.debug("-------- PostgreSQL "
                     + "JDBC Connection Testing ------------");
@@ -63,6 +65,11 @@ public class Main {
                 log.debug("Connection Failed! Check output console");
                 e.printStackTrace();
             }
+            if (connection != null) {
+                log.debug("You made it, take control your database now!");
+            } else {
+                log.debug("Failed to make connection!");
+            }
             try {
                 SetupQueries setupQueries = new SetupQueries();
                 setupQueries.setupDB(connection);
@@ -73,17 +80,13 @@ public class Main {
             } finally {
                 try {
                     if (connection != null) {
+                        log.debug("Close connection.");
                         connection.close();
                     }
                 } catch (SQLException e) {
                     log.debug("Can not close connection");
                     e.printStackTrace();
                 }
-            }
-            if (connection != null) {
-                log.debug("You made it, take control your database now!");
-            } else {
-                log.debug("Failed to make connection!");
             }
             // at this point connection is working and established
 //            Distributor distributor = null;
