@@ -1,4 +1,8 @@
 #!/bin/bash
+# usage: sh experiment.sh --serverMachine=dryad07.ethz.ch --clientMachine=dryad08.ethz.ch --noOfClients=10 --remoteUserName=mohlerm --experimentId=0 --clientRunTime=100
+# db:    /mnt/local/mohlerm/postgres/bin/postgres -D /mnt/local/mohlerm/postgres/db/ -p 51230 -i -k /mnt/local/mohlerm/
+# ./createdb -h 127.0.0.1 -p 51230 -U testdb testdb
+# ./createuser -h 127.0.0.1 -p 51230 --interactive
 #
 # Sample automation script that
 #
@@ -22,10 +26,11 @@
 
 function usage() {
 	local programName=$1
-	echo "Usage: $programName --serverMachine=<address> --clientMachine=<address> --noOfClients=<int> --remoteUserName=<username> --experimentId=<id> --clientRunTime=<seconds>"
+	echo "Usage: $programName --dbMachine=<address> --serverMachine=<address> --clientMachine=<address> --noOfClients=<int> --remoteUserName=<username> --experimentId=<id> --clientRunTime=<seconds>"
 	exit -1
 }
 
+dbMachine=""
 serverMachine=""
 clientMachine=""
 noOfClients=""
@@ -35,10 +40,10 @@ experimentId=""
 serviceport=51234
 clientRunTime=5
 executionDir="/mnt/local/mohlerm"
-serverStartMessage="PostgreSQL"
+serverStartMessage="Using server id: 0"
 
 # Extract command line arguments
-TEMP=`getopt -o b: --long serverMachine:,clientMachine:,noOfClients:,remoteUserName:,experimentId:,clientRunTime: \
+TEMP=`getopt -o b: --long dbMachine:,serverMachine:,clientMachine:,noOfClients:,remoteUserName:,experimentId:,clientRunTime: \
      -n 'example.bash' -- "$@"`
 
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
@@ -48,6 +53,7 @@ eval set -- "$TEMP"
 
 while true ; do
         case "$1" in
+        		--dbMachine) dbMachine="$2" ; shift 2 ;;
                 --serverMachine) serverMachine="$2" ; shift 2 ;;
                 --clientMachine) clientMachine="$2" ; shift 2 ;;
                 --noOfClients) noOfClients="$2" ; shift 2 ;;
@@ -60,10 +66,21 @@ while true ; do
 done
 
 # Check for correctness of the commandline arguments
-if [[ $serverMachine == "" || $clientMachine == "" || $noOfClients == "" || $remoteUserName == "" || $experimentId == "" ]]
+if [[ $dbMachine == "" || $serverMachine == "" || $clientMachine == "" || $noOfClients == "" || $remoteUserName == "" || $experimentId == "" ]]
 then
 	usage $1
 fi
+
+#####################################
+#
+# Build server and clients locally
+#
+#####################################
+
+echo -ne " Build using ant"
+cd ..
+ant >> ant.log
+cd scripts
 
 #####################################
 #
@@ -88,12 +105,28 @@ then
 fi
 echo "OK"
 
-echo "  Copying server.jar to server machine: $serverMachine ... "
+echo "  Create directories on all machines"
+ssh $remoteUserName@$dbMachine "mkdir -p $executionDir"
+ssh $remoteUserName@$serverMachine "mkdir -p $executionDir"
+ssh $remoteUserName@$clientMachine "mkdir -p $executionDir"
+
+echo "  Copying server.jar to server machine: $serverMachine"
 # Copy jar to server machine
 scp ../jar/SimpleMQ_server.jar $remoteUserName@$serverMachine:$executionDir
-echo "  Copying client.jar to client machine: $serverMachine ... "
+echo "  Copying client.jar to client machine: $clientMachine"
 # Copy jar to client machine
 scp ../jar/SimpleMQ_client.jar $remoteUserName@$clientMachine:$executionDir
+
+######################################
+#
+# Move, unzip, configure and start SQL
+#
+######################################
+#echo "  Setup PostgreSQL"
+#ssh $remoteUserName@$dbMachine "cp /home/$remoteUserName/postgres_init.tar.gz $executionDir"
+#ssh $remoteUserName@$dbMachine "tar -zxf $executionDir/postgres_init.tar.gz -C $executionDir"
+#ssh $remoteUserName$dbMachine  "screen -dmS postgres $executionDir/postgres/bin/postgres -D $executionDir/postgres/db/ -p 51230 -i -k $executionDir/
+
 
 ######################################
 #
@@ -103,7 +136,7 @@ scp ../jar/SimpleMQ_client.jar $remoteUserName@$clientMachine:$executionDir
 
 # Run server
 echo "  Starting the server"
-ssh $remoteUserName@$serverMachine "java -cp $executionDir/SimpleMQ_server.jar 0 $serviceport 2>&1 > $executionDir/server.out " &
+ssh $remoteUserName@$serverMachine "java -jar $executionDir/SimpleMQ_server.jar 0 $serviceport $dbMachine 2>&1 > $executionDir/server.out " &
 
 # Wait for the server to start up
 echo -ne "  Waiting for the server to start up..."
@@ -121,7 +154,7 @@ pids=""
 for clientId in $clientIds
 do
 	echo "    Start client: $clientId"
-	ssh $remoteUserName@$clientMachine "cd $executionDir; java -cp $executionDir/SimpleMQ_client.jar $clientId $serverMachine $serviceport $clientRunTime > $executionDir/out.client${clientId}" &
+	ssh $remoteUserName@$clientMachine "cd $executionDir; java -jar $executionDir/SimpleMQ_client.jar $clientId $serverMachine $serviceport $clientRunTime > $executionDir/out.client${clientId}" &
 	pids="$pids $!"
 done
 
@@ -138,7 +171,9 @@ echo "  Sending shut down signal to server"
 # Note: server.jar catches SIGHUP signals and terminates gracefully
 ssh $remoteUserName@$serverMachine "killall java"
 
-echo -ne "  Waiting for the server to shut down... "
+#echo -ne "  Waiting for the server to shut down... "
+# TODO
+echo -ne "  Done"
 # Wait for the server to gracefully shut down
 while [ `ssh $remoteUserName@$serverMachine "cat $executionDir/server.out | grep 'Server shutting down' | wc -l"` != 1 ]
 do
