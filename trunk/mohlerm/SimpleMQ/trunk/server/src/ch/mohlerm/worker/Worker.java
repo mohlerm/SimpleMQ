@@ -4,7 +4,6 @@ import ch.mohlerm.config.Config;
 import ch.mohlerm.distributor.Distributor;
 import ch.mohlerm.domain.psql.PsqlMessage;
 import ch.mohlerm.queries.InsertQueries;
-import ch.mohlerm.queries.SetupQueries;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -66,6 +65,7 @@ public class Worker implements Runnable {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+            callBack.workerCallBack(this);
             return;
         }
 
@@ -79,6 +79,7 @@ public class Worker implements Runnable {
                 e.printStackTrace();
             }
             key.cancel();
+            callBack.workerCallBack(this);
             return;
         }
         if (numRead > 0) {
