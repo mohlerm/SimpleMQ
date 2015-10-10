@@ -77,10 +77,11 @@ fi
 #
 #####################################
 
-echo -ne " Build using ant"
+echo -ne " Build using ant..."
 cd ..
 ant >> ant.log
 cd scripts
+echo "OK"
 
 #####################################
 #
@@ -105,32 +106,37 @@ then
 fi
 echo "OK"
 
-echo "  Create directories on all machines"
+echo -ne "  Create directories on all machines..."
 ssh $remoteUserName@$dbMachine "mkdir -p $executionDir"
 ssh $remoteUserName@$serverMachine "mkdir -p $executionDir"
 ssh $remoteUserName@$clientMachine "mkdir -p $executionDir"
+echo "OK"
 
-echo "  Copying server.jar to server machine: $serverMachine"
+#echo -ne "  Copying server.jar to server machine: $serverMachine..."
 # Copy jar to server machine
 scp ../jar/SimpleMQ_server.jar $remoteUserName@$serverMachine:$executionDir
-echo "  Copying client.jar to client machine: $clientMachine"
+#echo "OK"
+#echo -ne "  Copying client.jar to client machine: $clientMachine"
 # Copy jar to client machine
 scp ../jar/SimpleMQ_client.jar $remoteUserName@$clientMachine:$executionDir
+#echo "OK"
 
 ######################################
 #
 # Move, unzip, configure and start SQL
 #
 ######################################
-#echo "  Setup PostgreSQL"
-#ssh $remoteUserName@$dbMachine "cp /home/$remoteUserName/postgres_init.tar.gz $executionDir"
-#ssh $remoteUserName@$dbMachine "tar -zxf $executionDir/postgres_init.tar.gz -C $executionDir"
-#ssh $remoteUserName$dbMachine  "screen -dmS postgres $executionDir/postgres/bin/postgres -D $executionDir/postgres/db/ -p 51230 -i -k $executionDir/
-
+echo -ne "  Setup PostgreSQL..."
+ssh $remoteUserName@$dbMachine "cp /home/$remoteUserName/postgres_init.tar.gz $executionDir"
+ssh $remoteUserName@$dbMachine "tar -zxf $executionDir/postgres_init.tar.gz -C $executionDir"
+sleep 1
+ssh $remoteUserName@$dbMachine  "screen -dmS postgres $executionDir/postgres/bin/postgres -D $executionDir/postgres/db/ -p 51230 -i -k $executionDir/"
+sleep 3
+echo "OK"
 
 ######################################
 #
-# Run server and clients
+# Run server and clients remotely
 #
 ######################################
 
@@ -148,38 +154,32 @@ done
 echo "OK"
 
 echo "  Start the clients on the client machine: $clientMachine"
+scp  client.sh $remoteUserName@$clientMachine:$executionDir
+ssh $remoteUserName@$clientMachine "cd $executionDir; sh client.sh $serverMachine $serviceport $noOfClients $clientRunTime"
 # Run the clients
-clientIds=`seq $noOfClients`
-pids=""
-for clientId in $clientIds
-do
-	echo "    Start client: $clientId"
-	ssh $remoteUserName@$clientMachine "cd $executionDir; java -jar $executionDir/SimpleMQ_client.jar $clientId $serverMachine $serviceport $clientRunTime > $executionDir/out.client${clientId}" &
-	pids="$pids $!"
-done
 
-# Wait for the clients to finish
-echo -ne "  Waiting for the clients to finish ... "
-for f in $pids
-do
-	wait $f
-done
+
+echo -ne "  Sending shut down signal to database..."
+ssh $remoteUserName@$dbMachine "screen -X -S postgres quit"
+ssh $remoteUserName@$dbMachine "killall postgres"
 echo "OK"
 
-echo "  Sending shut down signal to server"
+
+echo -ne "  Sending shut down signal to server..."
 # Send a shut down signal to the server
 # Note: server.jar catches SIGHUP signals and terminates gracefully
 ssh $remoteUserName@$serverMachine "killall java"
+echo "OK"
 
 #echo -ne "  Waiting for the server to shut down... "
 # TODO
-echo -ne "  Done"
+#echo -ne "  Done"
 # Wait for the server to gracefully shut down
-while [ `ssh $remoteUserName@$serverMachine "cat $executionDir/server.out | grep 'Server shutting down' | wc -l"` != 1 ]
-do
-	sleep 1
-done
-echo "OK"
+#while [ `ssh $remoteUserName@$serverMachine "cat $executionDir/server.out | grep 'Server shutting down' | wc -l"` != 1 ]
+#do
+#	sleep 1
+#done
+#echo "OK"
 
 ########################################
 #
@@ -192,14 +192,21 @@ mkdir -p $experimentId
 echo "  Copying log files from client machine... "
 for clientId in $clientIds
 do
-	scp $remoteUserName@$clientMachine:$executionDir/client$clientId ./$experimentId/
+	scp $remoteUserName@$clientMachine:$executionDir/out.client$clientId ./$experimentId/
 done
-
-# Cleanup
-echo -ne "  Cleaning up files on client and server machines... "
-ssh $remoteUserName@$clientMachine "rm $executionDir/client*; rm $executionDir/out.client*"
-ssh $remoteUserName@$serverMachine "rm $executionDir/server.out"
-echo "OK"
+scp $remoteUserName@$serverMachine:$executionDir/server.out ./$experimentId/
+#
+## Cleanup
+#echo -ne "  Cleaning up files on client and server machines... "
+#ssh $remoteUserName@$clientMachine "rm $executionDir/out.client*"
+#ssh $remoteUserName@$serverMachine "rm $executionDir/server.out"
+#echo "OK"
+#echo -ne " Cleanup directories..."
+#ssh $remoteUserName@$serverMachine "rm -Rf $executionDir"
+#ssh $remoteUserName@$clientMachine "rm -Rf $executionDir"
+#ssh $remoteUserName@$dbMachine "rm -Rf $executionDir"
+#echo "OK"
+#
 
 # Process the log files from the clients
 echo "  Processing log files"
