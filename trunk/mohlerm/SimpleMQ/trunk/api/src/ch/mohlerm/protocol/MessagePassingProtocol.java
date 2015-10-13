@@ -30,6 +30,9 @@ public class MessagePassingProtocol {
             case CREATECLIENT:
                 type = "CreateClient";
                 break;
+            case DELETECLIENT:
+                type = "DeleteClient";
+                break;
             case CREATEQUEUE:
                 type = "CreateQueue";
                 break;

@@ -15,11 +15,7 @@ public class InsertQueries {
      * @param queue
      * @return
      */
-    public static int insertMessageIntoQueue(PsqlMessage message, PsqlQueue queue) {
-        return 0;
-    }
-
-    public static int addMessage(Connection connection, PsqlMessage message) throws SQLException{
+    public static int insertMessage(Connection connection, PsqlMessage message) throws SQLException{
         String callableSQL = "{call add_message(?,?,?,?,?)}";
         CallableStatement callableStatement = connection.prepareCall(callableSQL);
         // sender
@@ -45,7 +41,7 @@ public class InsertQueries {
         return 0;
     }
 
-    public static int addQueue(Connection connection, PsqlQueue queue) throws SQLException {
+    public static int insertQueue(Connection connection) throws SQLException {
         String callableSQL = "{call add_queue()}";
             CallableStatement callableStatement = connection.prepareCall(callableSQL);
             callableStatement.execute();
@@ -53,12 +49,13 @@ public class InsertQueries {
         return 0;
     }
 
-    public static int addClient(Connection connection, PsqlClient client) throws SQLException {
+    public static int insertClient(Connection connection, int clientId) throws SQLException {
         String callableSQL = "{call add_client(?)}";
         CallableStatement callableStatement = connection.prepareCall(callableSQL);
         // clientId
-        callableStatement.setInt(1, client.getId());
+        callableStatement.setInt(1, clientId);
         callableStatement.execute();
-        return client.getId();
+        // todo add real return value
+        return clientId;
     }
 }

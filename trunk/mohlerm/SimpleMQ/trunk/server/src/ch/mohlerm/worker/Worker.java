@@ -8,7 +8,9 @@ import ch.mohlerm.domain.psql.PsqlQueue;
 import ch.mohlerm.protocol.MessagePassingProtocol;
 import ch.mohlerm.protocol.SerializableAnswer;
 import ch.mohlerm.protocol.SerializableRequest;
+import ch.mohlerm.queries.DeleteQueries;
 import ch.mohlerm.queries.InsertQueries;
+import ch.mohlerm.queries.SelectQueries;
 import org.apache.log4j.Logger;
 
 import java.io.*;
@@ -106,35 +108,51 @@ public class Worker implements Runnable {
             int newid;
             switch (request.getType()) {
                 case CREATECLIENT:
-                    PsqlClient psqlClient = new PsqlClient(request.getSource());
                     try {
-                        newid = InsertQueries.addClient(dbConnection, psqlClient);
+                        newid = InsertQueries.insertClient(dbConnection, request.getSource());
                         answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, request.getId(), request.getSource(), newid, "");
                     } catch (SQLException e) {
                         e.printStackTrace();
                         answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, request.getId(), request.getSource(), -1, "Could not add client with id "+String.valueOf(request.getSource())+"!");
                     }
                     break;
+                case DELETECLIENT:
+                    try {
+                        newid = DeleteQueries.deleteClient(dbConnection, request.getSource());
+                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, request.getId(), request.getSource(), newid, "");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, request.getId(), request.getSource(), -1, "Could not remove client with id "+String.valueOf(request.getSource())+"!");
+                    }
+                    break;
                 case QUERYCLIENT:
+                    // TODO QUERYCLIENT
                     break;
                 case CREATEQUEUE:
-                    PsqlQueue sqlQueue = new PsqlQueue();
                     try {
-                        newid = InsertQueries.addQueue(dbConnection, sqlQueue);
+                        newid = InsertQueries.insertQueue(dbConnection);
                         answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, request.getId(), request.getSource(),newid, "");
                     } catch (SQLException e) {
                         e.printStackTrace();
                         answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, request.getId(), request.getSource(), -1, "Could not create queue!");
                     }
-                        break;
+                    break;
                 case DELETEQUEUE:
+                    try {
+                        newid = DeleteQueries.deleteQueue(dbConnection, request.getQueue());
+                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, request.getId(), request.getSource(), newid, "");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, request.getId(), request.getSource(), -1, "Could not remove client with id "+String.valueOf(request.getSource())+"!");
+                    }
                     break;
                 case QUERYQUEUESFORRECEIVER:
+                    // TODO QUERYQUEUESFORRRECEIVER
                     break;
                 case SENDMESSAGETOALL:
                     PsqlMessage sqlMessage = new PsqlMessage(request, new Timestamp(System.currentTimeMillis()));
                     try {
-                        newid = InsertQueries.addMessage(dbConnection, sqlMessage);
+                        newid = InsertQueries.insertMessage(dbConnection, sqlMessage);
                         answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, request.getId(), request.getSource(), newid,"");
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -142,14 +160,26 @@ public class Worker implements Runnable {
                     }
                     break;
                 case SENDMESSAGETORECEIVER:
+                    // TODO SENDMESSAGETORECEIVER
                     break;
                 case POPQUEUE:
+                    PsqlMessage psqlMessage;
+                    try {
+                        psqlMessage = SelectQueries.popQueue(dbConnection, request.getQueue());
+                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ANSWERMESSAGE, request.getId(), request.getSource(), psqlMessage.getId(), psqlMessage.getMessage());
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, request.getId(), request.getSource(), -1, "Could not pop queue "+request.getQueue()+"!");
+                    }
                     break;
                 case PEEKQUEUE:
+                    // TODO PEEKQUEUE
                     break;
                 case QUERYMESSAGESFORSENDER:
+                    // TODO QUERYMESSAGESFORSENDER
                     break;
                 case QUERYMESSAGESFORRECEIVER:
+                    // TODO QUERYMESSAGESFORRECEIVER
                     break;
                 default:
                     break;

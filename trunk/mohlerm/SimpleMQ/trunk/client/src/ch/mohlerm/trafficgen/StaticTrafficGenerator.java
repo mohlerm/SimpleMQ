@@ -52,7 +52,12 @@ public class StaticTrafficGenerator extends TrafficGenerator {
           */
         while(counter < numberOfRequests+1) {
 
-            request = new SerializableRequest(SerializableRequest.RequestType.SENDMESSAGETOALL, counter, Config.CLIENTID, 0, 1, fixMessage);
+            // always send a message and then query for one
+//            if(counter%2 == 0) {
+                request = new SerializableRequest(SerializableRequest.RequestType.SENDMESSAGETOALL, counter, Config.CLIENTID, 0, 1, fixMessage);
+//            } else {
+//                request = new SerializableRequest(SerializableRequest.RequestType.POPQUEUE, counter, Config.CLIENTID, 0, 1, "");
+//            }
             postRequest(request);
             MessagePassingProtocol.logRequest(request, log);
             answer = null;
@@ -71,6 +76,19 @@ public class StaticTrafficGenerator extends TrafficGenerator {
                 e.printStackTrace();
             }
             counter++;
+        }
+
+        request = new SerializableRequest(SerializableRequest.RequestType.DELETECLIENT, counter, Config.CLIENTID, 0, 0, "Empty");
+        log.debug("Delete client id " + Config.CLIENTID + " on server.");
+        postRequest(request);
+        MessagePassingProtocol.logRequest(request, log);
+        answer = null;
+        try {
+            log.debug("Wait for init answer");
+            answer = getAnswer();
+            MessagePassingProtocol.logAnswer(answer, log);
+        } catch (NoAnswerException e) {
+            e.printStackTrace();
         }
 
     }
