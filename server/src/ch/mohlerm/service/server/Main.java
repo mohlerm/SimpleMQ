@@ -7,7 +7,10 @@ package ch.mohlerm.service.server;
 import ch.mohlerm.config.Config;
 import ch.mohlerm.distributor.Distributor;
 import ch.mohlerm.queries.SetupQueries;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -19,11 +22,7 @@ public class Main {
     static Logger log = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
-//        try {
-//            Config.SERVERIP = InetAddress.getByName("127.0.0.1");
-//        } catch (UnknownHostException e) {
-//            e.printStackTrace();
-//        }
+
         if (args.length < 3) {
             System.out.println("Please specify <serverid>, <serverport>, <dbhostname>!");
         } else {
@@ -31,9 +30,9 @@ public class Main {
 
 //            FileAppender fa = new FileAppender();
 //            fa.setName("FileLogger");
-//            fa.setFile("logs/server_0.log");
+//            fa.setFile("logs/server_"+String.valueOf(Config.SERVERID)+".log");
 //            fa.setLayout(new PatternLayout("%d %-5p [%c{1}] %m%n"));
-//            fa.setThreshold(Level.DEBUG);
+//            fa.setThreshold(Level.INFO);
 //            fa.setAppend(true);
 //            fa.activateOptions();
 //            Logger.getRootLogger().addAppender(fa);

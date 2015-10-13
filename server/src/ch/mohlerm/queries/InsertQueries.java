@@ -4,9 +4,7 @@ import ch.mohlerm.domain.psql.PsqlClient;
 import ch.mohlerm.domain.psql.PsqlMessage;
 import ch.mohlerm.domain.psql.PsqlQueue;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Created by marcel on 9/23/15.
@@ -34,9 +32,16 @@ public class InsertQueries {
         callableStatement.setTimestamp(4,message.getTimestamp());
         // message
         callableStatement.setString(5, message.getMessage());
-        callableStatement.execute();
 
-        // TODO add real return value
+    //    int result = 0;
+   //     callableStatement.registerOutParameter(6, Types.INTEGER);
+        callableStatement.execute();
+//        while(hadResults) {
+//            ResultSet rs = callableStatement.getResultSet();
+//            rs.
+//        }
+        // TODO
+       // return callableStatement.getInt(6);
         return 0;
     }
 

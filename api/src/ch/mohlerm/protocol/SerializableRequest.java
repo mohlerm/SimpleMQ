@@ -8,7 +8,7 @@ import java.io.Serializable;
 /*
     This class describes the messages used for SimpleMQ
 
-    BYTE | INT    | INT    | INT    | INT   | TIME | STRING
+    ENUM | INT    | INT    | INT    | INT   | TIME | STRING
     TYPE | ID     | SOURCE | TARGET | QUEUE | TIME | MESSAGE
 
     TYPE:

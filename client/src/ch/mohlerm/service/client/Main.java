@@ -38,7 +38,7 @@ public class Main {
                 fa.setName("FileLogger");
                 fa.setFile("logs/client_" + Config.CLIENTID + ".log");
                 fa.setLayout(new PatternLayout("%d %-5p [%c{1}] %m%n"));
-                fa.setThreshold(Level.DEBUG);
+                fa.setThreshold(Level.INFO);
                 fa.setAppend(true);
                 fa.activateOptions();
                 Logger.getRootLogger().addAppender(fa);

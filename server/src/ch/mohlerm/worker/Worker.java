@@ -109,10 +109,10 @@ public class Worker implements Runnable {
                     PsqlClient psqlClient = new PsqlClient(request.getSource());
                     try {
                         newid = InsertQueries.addClient(dbConnection, psqlClient);
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, newid, 0, "");
+                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, request.getId(), request.getSource(), newid, "");
                     } catch (SQLException e) {
                         e.printStackTrace();
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, 0, 0, "Can not add client.");
+                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, request.getId(), request.getSource(), -1, "Could not add client with id "+String.valueOf(request.getSource())+"!");
                     }
                     break;
                 case QUERYCLIENT:
@@ -121,10 +121,10 @@ public class Worker implements Runnable {
                     PsqlQueue sqlQueue = new PsqlQueue();
                     try {
                         newid = InsertQueries.addQueue(dbConnection, sqlQueue);
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, newid, 0, "");
+                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, request.getId(), request.getSource(),newid, "");
                     } catch (SQLException e) {
                         e.printStackTrace();
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, 0, 0, "Can not create queue.");
+                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, request.getId(), request.getSource(), -1, "Could not create queue!");
                     }
                         break;
                 case DELETEQUEUE:
@@ -134,11 +134,11 @@ public class Worker implements Runnable {
                 case SENDMESSAGETOALL:
                     PsqlMessage sqlMessage = new PsqlMessage(request, new Timestamp(System.currentTimeMillis()));
                     try {
-                        InsertQueries.addMessage(dbConnection, sqlMessage);
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, request.getId(), 0,"");
+                        newid = InsertQueries.addMessage(dbConnection, sqlMessage);
+                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, request.getId(), request.getSource(), newid,"");
                     } catch (SQLException e) {
                         e.printStackTrace();
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, 0, 0, "Can not send message to all.");
+                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, request.getId(), request.getSource(), -1, "Can not send message to all.");
                     }
                     break;
                 case SENDMESSAGETORECEIVER:
