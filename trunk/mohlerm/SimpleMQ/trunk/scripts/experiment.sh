@@ -142,12 +142,13 @@ echo "OK"
 
 # Run server
 echo "  Starting the server"
-ssh $remoteUserName@$serverMachine "java -jar $executionDir/SimpleMQ_server.jar 0 $serviceport $dbMachine 2>&1 > $executionDir/server.out " &
+ssh $remoteUserName@$serverMachine "java -jar $executionDir/SimpleMQ_server.jar 0 $serviceport $dbMachine 2>&1 > $executionDir/server_0.log" &
 
 # Wait for the server to start up
 echo -ne "  Waiting for the server to start up..."
 sleep 1
-while [ `ssh $remoteUserName@$serverMachine "cat $executionDir/server.out | grep '$serverStartMessage' | wc -l"` != 1 ]
+# TODO
+while [ `ssh $remoteUserName@$serverMachine "cat $executionDir/server_0.log | grep '$serverStartMessage' | wc -l"` != 1 ]
 do
 	sleep 1
 done
@@ -188,29 +189,30 @@ echo "OK"
 ########################################
 
 # Copy log files from the clients
+clientIds=`seq $noOfClients`
 mkdir -p $experimentId
 echo "  Copying log files from client machine... "
 for clientId in $clientIds
 do
-	scp $remoteUserName@$clientMachine:$executionDir/out.client$clientId ./$experimentId/
+	scp $remoteUserName@$clientMachine:$executionDir/logs/client_$clientId.log ./$experimentId/
 done
-scp $remoteUserName@$serverMachine:$executionDir/server.out ./$experimentId/
-#
-## Cleanup
+scp $remoteUserName@$serverMachine:$executionDir/server_0.log ./$experimentId/
+
+# Cleanup
 #echo -ne "  Cleaning up files on client and server machines... "
-#ssh $remoteUserName@$clientMachine "rm $executionDir/out.client*"
+#ssh $remoteUserName@$clientMachine "rm $executionDir/logs/.client*"
 #ssh $remoteUserName@$serverMachine "rm $executionDir/server.out"
 #echo "OK"
-#echo -ne " Cleanup directories..."
-#ssh $remoteUserName@$serverMachine "rm -Rf $executionDir"
-#ssh $remoteUserName@$clientMachine "rm -Rf $executionDir"
-#ssh $remoteUserName@$dbMachine "rm -Rf $executionDir"
-#echo "OK"
-#
+echo -ne " Cleanup directories..."
+ssh $remoteUserName@$serverMachine "rm -Rf $executionDir"
+ssh $remoteUserName@$clientMachine "rm -Rf $executionDir"
+ssh $remoteUserName@$dbMachine "rm -Rf $executionDir"
+echo "OK"
+
 
 # Process the log files from the clients
 echo "  Processing log files"
-cat $experimentId/client* | sort -n > $experimentId/allclients
+cat $experimentId/client* | sort -n > $experimentId/allclients.log
 
 echo "  Generating trace.jpg with gnuplot"
 gnuplot << EOF
@@ -221,5 +223,5 @@ set ylabel 'Response Time (ms)'
 set title 'Trace log'
 set xrange [0:]
 set yrange [0:]
-plot '$experimentId/allclients' using (\$1/1000):2 with lp title "$experimentId"
+plot '$experimentId/allclients.log' using (\$1/1000):2 with lp title "$experimentId"
 EOF
