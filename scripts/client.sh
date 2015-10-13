@@ -26,7 +26,7 @@ pids=""
 for clientId in $clientIds
 do
 	echo "    Start client: $clientId"
-	screen -dmS client$clientId java -jar SimpleMQ_client.jar $clientId $serverMachine $serverPort $clientRunTime
+	screen -dmS client$clientId java -jar SimpleMQ_client.jar $clientId $serverMachine $serverPort staticsmall $clientRunTime
 done
 
 echo -ne "  Waiting for the clients to finish ... "
