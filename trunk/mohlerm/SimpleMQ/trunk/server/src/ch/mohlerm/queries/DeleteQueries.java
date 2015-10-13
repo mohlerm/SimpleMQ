@@ -1,7 +1,5 @@
 package ch.mohlerm.queries;
 
-import ch.mohlerm.domain.psql.PsqlMessage;
-
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;

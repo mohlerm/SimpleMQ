@@ -1,19 +1,20 @@
 package ch.mohlerm.queries;
 
-import ch.mohlerm.domain.psql.PsqlClient;
 import ch.mohlerm.domain.psql.PsqlMessage;
-import ch.mohlerm.domain.psql.PsqlQueue;
 
-import java.sql.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Created by marcel on 9/23/15.
  */
 public class InsertQueries {
     /**
-     * @param message
-     * @param queue
-     * @return
+     * @param connection the database connection
+     * @param message the message to insert
+     * @return int the id of the inserted message
      */
     public static int insertMessage(Connection connection, PsqlMessage message) throws SQLException{
         String callableSQL = "{call add_message(?,?,?,?,?)}";
@@ -29,24 +30,27 @@ public class InsertQueries {
         // message
         callableStatement.setString(5, message.getMessage());
 
-    //    int result = 0;
-   //     callableStatement.registerOutParameter(6, Types.INTEGER);
         callableStatement.execute();
-//        while(hadResults) {
-//            ResultSet rs = callableStatement.getResultSet();
-//            rs.
-//        }
-        // TODO
-       // return callableStatement.getInt(6);
-        return 0;
+
+        ResultSet rs = callableStatement.getResultSet();
+        int result = -1;
+        while(rs.next()) {
+            result = rs.getInt(1);
+        }
+        return result;
     }
 
     public static int insertQueue(Connection connection) throws SQLException {
         String callableSQL = "{call add_queue()}";
-            CallableStatement callableStatement = connection.prepareCall(callableSQL);
-            callableStatement.execute();
-        // TODO add real return value
-        return 0;
+        CallableStatement callableStatement = connection.prepareCall(callableSQL);
+        callableStatement.execute();
+
+        ResultSet rs = callableStatement.getResultSet();
+        int result = -1;
+        while(rs.next()) {
+            result = rs.getInt(1);
+        }
+        return result;
     }
 
     public static int insertClient(Connection connection, int clientId) throws SQLException {
@@ -55,7 +59,11 @@ public class InsertQueries {
         // clientId
         callableStatement.setInt(1, clientId);
         callableStatement.execute();
-        // todo add real return value
-        return clientId;
+        ResultSet rs = callableStatement.getResultSet();
+        int result = -1;
+        while(rs.next()) {
+            result = rs.getInt(1);
+        }
+        return result;
     }
 }

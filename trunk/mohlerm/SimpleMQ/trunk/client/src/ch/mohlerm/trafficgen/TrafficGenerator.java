@@ -4,9 +4,10 @@ import ch.mohlerm.config.Config;
 import ch.mohlerm.protocol.MessagePassingProtocol;
 import ch.mohlerm.protocol.SerializableAnswer;
 import ch.mohlerm.protocol.SerializableRequest;
-import org.apache.log4j.Logger;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 

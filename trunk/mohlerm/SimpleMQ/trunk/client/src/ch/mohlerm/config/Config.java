@@ -16,5 +16,5 @@ public class Config {
     public static int INITWAIT = 100;
 
     public static int REQUESTBUFFERSIZE = 4096;
-    public static int ANSWERBUFFERSIZE = 1024;
+    public static int ANSWERBUFFERSIZE = 4096;
 }

@@ -6,8 +6,7 @@ import ch.mohlerm.protocol.SerializableAnswer;
 import ch.mohlerm.protocol.SerializableRequest;
 import org.apache.log4j.Logger;
 
-import java.io.*;
-import java.nio.ByteBuffer;
+import java.io.IOException;
 import java.nio.channels.SocketChannel;
 
 /**
@@ -53,11 +52,14 @@ public class StaticTrafficGenerator extends TrafficGenerator {
         while(counter < numberOfRequests+1) {
 
             // always send a message and then query for one
-//            if(counter%2 == 0) {
+            if(counter%3 == 1) {
                 request = new SerializableRequest(SerializableRequest.RequestType.SENDMESSAGETOALL, counter, Config.CLIENTID, 0, 1, fixMessage);
-//            } else {
-//                request = new SerializableRequest(SerializableRequest.RequestType.POPQUEUE, counter, Config.CLIENTID, 0, 1, "");
-//            }
+            } else if (counter%3 == 2){
+                request = new SerializableRequest(SerializableRequest.RequestType.PEEKQUEUE, counter, Config.CLIENTID, 0, 1, "");
+            } else {
+                request = new SerializableRequest(SerializableRequest.RequestType.SENDMESSAGETOALL, counter, Config.CLIENTID, 0, 1, fixMessage);
+                //request = new SerializableRequest(SerializableRequest.RequestType.POPQUEUE, counter, Config.CLIENTID, 0, 1, "");
+            }
             postRequest(request);
             MessagePassingProtocol.logRequest(request, log);
             answer = null;

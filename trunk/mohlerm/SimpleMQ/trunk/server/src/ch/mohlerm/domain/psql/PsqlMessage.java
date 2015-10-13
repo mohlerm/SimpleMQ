@@ -82,4 +82,14 @@ public class PsqlMessage implements Message {
     public void setId(int id1) {
         id = id1;
     }
+
+    @Override
+    public void setSender(int sender) {
+        this.sender = sender;
+    }
+
+    @Override
+    public void setReceiver(int receiver) {
+        this.receiver = receiver;
+    }
 }
