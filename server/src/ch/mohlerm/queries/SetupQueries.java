@@ -30,8 +30,8 @@ public class SetupQueries {
 //        statement = connection.createStatement();
 //        statement.execute(queryString);
         // create the 0 client (catchall)
-          InsertQueries.addClient(connection, new PsqlClient(0));
+          InsertQueries.insertClient(connection, 0);
         // create initial queue
-          InsertQueries.addQueue(connection, new PsqlQueue());
+          InsertQueries.insertQueue(connection);
     }
 }

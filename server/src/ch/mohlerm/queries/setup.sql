@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS messages (
         message TEXT);
 
 
-CREATE OR REPLACE FUNCTION add_message(sender_id INTEGER, receiver_id INTEGER, queue_id INTEGER, sendtime TIMESTAMP, message TEXT, OUT new_id INTEGER)
+CREATE OR REPLACE FUNCTION add_message(sender_id INTEGER, receiver_id INTEGER, queue_id INTEGER, sendtime TIMESTAMP, message TEXT)
 RETURNS void AS $$
         BEGIN
                 INSERT INTO messages VALUES (default, sender_id, receiver_id, queue_id, sendtime, message);
@@ -29,6 +29,12 @@ RETURNS void AS $$
         END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION delete_queue(queue_id INTEGER)
+        RETURNS void AS $$
+        BEGIN
+                DELETE FROM queues WHERE id=queue_id;
+        END;
+$$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION add_client(client_id INTEGER)
         RETURNS void AS $$
@@ -36,3 +42,28 @@ CREATE OR REPLACE FUNCTION add_client(client_id INTEGER)
                 INSERT INTO clients VALUES (client_id);
         END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION delete_client(client_id INTEGER)
+        RETURNS void AS $$
+        BEGIN
+                DELETE FROM clients WHERE id=client_id;
+        END;
+$$ LANGUAGE plpgsql;
+--
+--
+-- CREATE OR REPLACE FUNCTION pop_queue(queue_id INTEGER)
+--         RETURNS void AS $$
+--         BEGIN
+--                 I
+--         END;
+-- $$ LANGUAGE plpgsql;
+--
+--
+-- CREATE OR REPLACE FUNCTION peek_queue(queue_id INTEGER)
+--         RETURNS void AS $$
+--         BEGIN
+--
+--         END;
+-- $$ LANGUAGE plpgsql;
+
+
