@@ -1,7 +1,5 @@
 package ch.mohlerm.config;
 
-import java.net.InetAddress;
-
 /**
  * Created by marcel on 9/22/15.
  */
@@ -15,4 +13,6 @@ public class Config {
     public static int SERVERID = 0;
    // public static InetAddress SERVERIP;
     public static int CPUWORKERSCALING = 4;
+    public static int REQUESTBUFFERSIZE = 4096;
+    public static int ANSWERBUFFERSIZE = 1024;
 }

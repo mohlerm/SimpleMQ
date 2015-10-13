@@ -5,17 +5,17 @@ DROP TABLE IF EXISTS clients CASCADE;
 CREATE TABLE IF NOT EXISTS queues (
         id SERIAL PRIMARY KEY );
 CREATE TABLE IF NOT EXISTS clients (
-        id SERIAL PRIMARY KEY );
+        id INTEGER PRIMARY KEY );
 CREATE TABLE IF NOT EXISTS messages (
         id SERIAL PRIMARY KEY,
         sender_id INTEGER REFERENCES clients (id) ON DELETE CASCADE,
         receiver_id INTEGER REFERENCES clients (id) ON DELETE CASCADE,
         queue_id INTEGER REFERENCES queues (id) ON DELETE CASCADE,
-        sendtime DATE,
+        sendtime TIMESTAMP,
         message TEXT);
 
 
-CREATE OR REPLACE FUNCTION add_message(sender_id INTEGER, receiver_id INTEGER, queue_id INTEGER, sendtime DATE, message TEXT )
+CREATE OR REPLACE FUNCTION add_message(sender_id INTEGER, receiver_id INTEGER, queue_id INTEGER, sendtime TIMESTAMP, message TEXT )
 RETURNS void AS $$
         BEGIN
                 INSERT INTO messages VALUES (default, sender_id, receiver_id, queue_id, sendtime, message);
@@ -30,9 +30,9 @@ RETURNS void AS $$
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION add_client()
+CREATE OR REPLACE FUNCTION add_client(client_id INTEGER)
         RETURNS void AS $$
         BEGIN
-                INSERT INTO clients VALUES (default);
+                INSERT INTO clients VALUES (client_id);
         END;
 $$ LANGUAGE plpgsql;

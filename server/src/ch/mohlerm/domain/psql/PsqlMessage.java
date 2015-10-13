@@ -1,6 +1,9 @@
 package ch.mohlerm.domain.psql;
 
 import ch.mohlerm.domain.Message;
+import ch.mohlerm.protocol.SerializableRequest;
+
+import java.sql.Timestamp;
 
 /**
  * Created by marcel on 9/23/15.
@@ -10,16 +13,24 @@ public class PsqlMessage implements Message {
     private int sender;
     private int receiver;
     private int queue;
-    private int timestamp;
+    private Timestamp timestamp;
     private String message;
 
-    public PsqlMessage(int id, int sender, int receiver, int queue, int timestamp, String message) {
+    public PsqlMessage(int id, int sender, int receiver, int queue, Timestamp timestamp, String message) {
         this.id = id;
         this.sender = sender;
         this.receiver = receiver;
         this.queue = queue;
         this.timestamp = timestamp;
         this.message = message;
+    }
+    public PsqlMessage(SerializableRequest serializableMessage, Timestamp timestamp) {
+        this.id = serializableMessage.getId();
+        this.sender = serializableMessage.getSource();
+        this.receiver = serializableMessage.getTarget();
+        this.queue = serializableMessage.getQueue();
+        this.timestamp = timestamp;
+        this.message = serializableMessage.getMessage();
     }
 
     @Override
@@ -43,12 +54,12 @@ public class PsqlMessage implements Message {
     }
 
     @Override
-    public int getTimestamp() {
+    public Timestamp getTimestamp() {
         return timestamp;
     }
 
     @Override
-    public void setTimestamp(int time1) {
+    public void setTimestamp(Timestamp time1) {
         timestamp = time1;
     }
 

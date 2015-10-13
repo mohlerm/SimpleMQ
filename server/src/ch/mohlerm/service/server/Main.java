@@ -10,8 +10,6 @@ import ch.mohlerm.queries.SetupQueries;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -30,24 +28,34 @@ public class Main {
             System.out.println("Please specify <serverid>, <serverport>, <dbhostname>!");
         } else {
             Config.SERVERID = Integer.parseInt(args[0]);
-            log.debug("Using server id: " + args[0]);
-            Config.SERVERPORT = Integer.parseInt(args[1]);
-            log.debug("Using server port: " + args[1]);
-            Config.DBURL = args[2];
-            log.debug("Using db ip: " + args[2]);
 
-            log.debug("-------- PostgreSQL "
+//            FileAppender fa = new FileAppender();
+//            fa.setName("FileLogger");
+//            fa.setFile("logs/server_0.log");
+//            fa.setLayout(new PatternLayout("%d %-5p [%c{1}] %m%n"));
+//            fa.setThreshold(Level.DEBUG);
+//            fa.setAppend(true);
+//            fa.activateOptions();
+//            Logger.getRootLogger().addAppender(fa);
+
+            log.info("Using server id: " + args[0]);
+            Config.SERVERPORT = Integer.parseInt(args[1]);
+            log.info("Using server port: " + args[1]);
+            Config.DBURL = args[2];
+            log.info("Using db ip: " + args[2]);
+
+            log.info("-------- PostgreSQL "
                     + "JDBC Connection Testing ------------");
             try {
                 Class.forName("org.postgresql.Driver");
             } catch (ClassNotFoundException e) {
-                log.debug("Where is your PostgreSQL JDBC Driver? "
+                log.info("Where is your PostgreSQL JDBC Driver? "
                         + "Include in your library path!");
                 e.printStackTrace();
                 return;
             }
 
-            log.debug("PostgreSQL JDBC Driver Registered!");
+            log.info("PostgreSQL JDBC Driver Registered!");
             Connection connection = null;
             try {
                 connection = DriverManager.getConnection(
@@ -62,29 +70,29 @@ public class Main {
                 //                System.out.println(resultSet.getString(1));
                 //            }
             } catch (SQLException e) {
-                log.debug("Connection Failed! Check output console");
+                log.info("Connection Failed! Check output console");
                 e.printStackTrace();
             }
             if (connection != null) {
-                log.debug("You made it, take control your database now!");
+                log.info("You made it, take control your database now!");
             } else {
-                log.debug("Failed to make connection!");
+                log.info("Failed to make connection!");
             }
             try {
                 SetupQueries setupQueries = new SetupQueries();
                 setupQueries.setupDB(connection);
-                log.debug("Executed setup queries");
+                log.info("Executed setup queries");
             } catch (SQLException e) {
-                log.debug("Failed to execute setup queries");
+                log.info("Failed to execute setup queries");
                 e.printStackTrace();
             } finally {
                 try {
                     if (connection != null) {
-                        log.debug("Close connection.");
+                        log.info("Close connection.");
                         connection.close();
                     }
                 } catch (SQLException e) {
-                    log.debug("Can not close connection");
+                    log.info("Can not close connection");
                     e.printStackTrace();
                 }
             }
@@ -102,7 +110,7 @@ public class Main {
             try {
                 distributor = new Distributor();
             } catch (IOException e) {
-                log.error("Failed to initialize Initializer");
+                log.info("Failed to initialize Initializer");
                 e.printStackTrace();
             }
 
