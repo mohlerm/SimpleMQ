@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS messages (
         message TEXT);
 
 
-CREATE OR REPLACE FUNCTION add_message(sender_id INTEGER, receiver_id INTEGER, queue_id INTEGER, sendtime TIMESTAMP, message TEXT )
+CREATE OR REPLACE FUNCTION add_message(sender_id INTEGER, receiver_id INTEGER, queue_id INTEGER, sendtime TIMESTAMP, message TEXT, OUT new_id INTEGER)
 RETURNS void AS $$
         BEGIN
                 INSERT INTO messages VALUES (default, sender_id, receiver_id, queue_id, sendtime, message);
