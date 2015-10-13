@@ -1,17 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" readonly="true" id="14393db9-4cbb-4857-babb-83c5655654e2" name="Default" comment="Initial commit with basic project structure and some sample/test code.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/ant.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/log4j_1_2_17.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/postgresql_9_4_1203_jdbc42.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/client.iml" afterPath="$PROJECT_DIR$/client/client.iml" />
+    <list default="true" readonly="true" id="14393db9-4cbb-4857-babb-83c5655654e2" name="Default" comment="Peek&amp;Pop working">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/known_bugs" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/ch/mohlerm/config/Config.java" afterPath="$PROJECT_DIR$/client/src/ch/mohlerm/config/Config.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/src/ch/mohlerm/config/Config.java" afterPath="$PROJECT_DIR$/server/src/ch/mohlerm/config/Config.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/src/ch/mohlerm/queries/DeleteQueries.java" afterPath="$PROJECT_DIR$/server/src/ch/mohlerm/queries/DeleteQueries.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/src/ch/mohlerm/queries/InsertQueries.java" afterPath="$PROJECT_DIR$/server/src/ch/mohlerm/queries/InsertQueries.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/ch/mohlerm/service/client/Main.java" afterPath="$PROJECT_DIR$/client/src/ch/mohlerm/service/client/Main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/src/ch/mohlerm/service/server/Main.java" afterPath="$PROJECT_DIR$/server/src/ch/mohlerm/service/server/Main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/src/ch/mohlerm/domain/Message.java" afterPath="$PROJECT_DIR$/api/src/ch/mohlerm/domain/Message.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/src/ch/mohlerm/protocol/MessagePassingProtocol.java" afterPath="$PROJECT_DIR$/api/src/ch/mohlerm/protocol/MessagePassingProtocol.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/src/ch/mohlerm/domain/psql/PsqlMessage.java" afterPath="$PROJECT_DIR$/server/src/ch/mohlerm/domain/psql/PsqlMessage.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/src/ch/mohlerm/queries/SelectQueries.java" afterPath="$PROJECT_DIR$/server/src/ch/mohlerm/queries/SelectQueries.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/src/ch/mohlerm/protocol/SerializableAnswer.java" afterPath="$PROJECT_DIR$/api/src/ch/mohlerm/protocol/SerializableAnswer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/src/ch/mohlerm/protocol/SerializableRequest.java" afterPath="$PROJECT_DIR$/api/src/ch/mohlerm/protocol/SerializableRequest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/src/ch/mohlerm/queries/SetupQueries.java" afterPath="$PROJECT_DIR$/server/src/ch/mohlerm/queries/SetupQueries.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/ch/mohlerm/trafficgen/StaticTrafficGenerator.java" afterPath="$PROJECT_DIR$/client/src/ch/mohlerm/trafficgen/StaticTrafficGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/ch/mohlerm/trafficgen/TrafficGenerator.java" afterPath="$PROJECT_DIR$/client/src/ch/mohlerm/trafficgen/TrafficGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/src/ch/mohlerm/worker/Worker.java" afterPath="$PROJECT_DIR$/server/src/ch/mohlerm/worker/Worker.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/src/log4j.properties" afterPath="$PROJECT_DIR$/server/src/log4j.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/src/ch/mohlerm/queries/setup.sql" afterPath="$PROJECT_DIR$/server/src/ch/mohlerm/queries/setup.sql" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/libs" afterPath="$PROJECT_DIR$/lib" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/libs/log4j-1.2.17.jar" afterPath="$PROJECT_DIR$/lib/log4j-1.2.17.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/libs/postgresql-9.4-1203.jdbc42.jar" afterPath="$PROJECT_DIR$/lib/postgresql-9.4-1203.jdbc42.jar" />
     </list>
     <ignored path="SimpleMQ.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,14 +51,130 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/service/server/Main.java">
+      <file leaf-file-name="Worker.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/worker/Worker.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="98" column="18" selection-start-line="98" selection-start-column="18" selection-end-line="98" selection-end-column="18" />
+              <caret line="184" column="56" selection-start-line="184" selection-start-column="56" selection-end-line="184" selection-end-column="56" />
+              <folding>
+                <marker date="1444766937247" expanded="true" signature="35:772" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PsqlMessage.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/domain/psql/PsqlMessage.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="18" column="11" selection-start-line="18" selection-start-column="11" selection-end-line="18" selection-end-column="11" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <marker date="1443425134020" expanded="true" signature="1382:1398" placeholder="SELECT VERSI..." />
+                <element signature="e#1928#1929#0" expanded="true" />
+                <element signature="e#1964#1965#0" expanded="true" />
+                <element signature="e#2023#2024#0" expanded="true" />
+                <element signature="e#2063#2064#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StaticTrafficGenerator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/src/ch/mohlerm/trafficgen/StaticTrafficGenerator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="60" column="18" selection-start-line="60" selection-start-column="18" selection-end-line="60" selection-end-column="18" />
+              <folding>
+                <marker date="1444766937241" expanded="true" signature="39:311" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="setup.sql" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/queries/setup.sql">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-4.8076925">
+              <caret line="75" column="30" selection-start-line="75" selection-start-column="30" selection-end-line="75" selection-end-column="30" />
+              <folding>
+                <marker date="1444766660704" expanded="true" signature="1435:1648" placeholder="DECLARE new_..." />
+                <marker date="1444766660704" expanded="true" signature="1489:1604" placeholder="INSERT INTO ..." />
+                <marker date="1444766660704" expanded="true" signature="1622:1635" placeholder="RETURN new_i..." />
+                <marker date="1444766660704" expanded="true" signature="1741:1899" placeholder="DECLARE new_..." />
+                <marker date="1444766660704" expanded="true" signature="1795:1855" placeholder="INSERT INTO ..." />
+                <marker date="1444766660704" expanded="true" signature="1873:1886" placeholder="RETURN new_i..." />
+                <marker date="1444766660704" expanded="true" signature="2008:2079" placeholder="BEGIN DELETE..." />
+                <marker date="1444766660704" expanded="true" signature="2030:2066" placeholder="DELETE FROM ..." />
+                <marker date="1444766660704" expanded="true" signature="2190:2351" placeholder="DECLARE new_..." />
+                <marker date="1444766660704" expanded="true" signature="2244:2307" placeholder="INSERT INTO ..." />
+                <marker date="1444766660704" expanded="true" signature="2325:2338" placeholder="RETURN new_i..." />
+                <marker date="1444766660704" expanded="true" signature="2462:2535" placeholder="BEGIN DELETE..." />
+                <marker date="1444766660704" expanded="true" signature="2484:2522" placeholder="DELETE FROM ..." />
+                <marker date="1444766660704" expanded="true" signature="2666:3104" placeholder="DECLARE res_..." />
+                <marker date="1444766660704" expanded="true" signature="2767:2967" placeholder="SELECT INTO ..messages..." />
+                <marker date="1444766660704" expanded="true" signature="2986:3054" placeholder="DELETE FROM ..." />
+                <marker date="1444766660704" expanded="true" signature="3072:3091" placeholder="RETURN res_m..." />
+                <marker date="1444766660704" expanded="true" signature="3236:3560" placeholder="DECLARE res_..." />
+                <marker date="1444766660704" expanded="true" signature="3305:3510" placeholder="SELECT INTO ..messages..." />
+                <marker date="1444766660704" expanded="true" signature="3528:3547" placeholder="RETURN res_m..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="known_bugs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/known_bugs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="34" selection-start-line="0" selection-start-column="34" selection-end-line="0" selection-end-column="34" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ant.log" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ant.log">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.024161074">
+              <caret line="736" column="0" selection-start-line="736" selection-start-column="0" selection-end-line="736" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="client_1.log" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/0/client_1.log">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-18.0">
+              <caret line="1412" column="74" selection-start-line="1412" selection-start-column="74" selection-end-line="1412" selection-end-column="87" />
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="client_19.log" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/0/client_19.log">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.64285713">
+              <caret line="32" column="64" selection-start-line="32" selection-start-column="64" selection-end-line="32" selection-end-column="64" />
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SelectQueries.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/queries/SelectQueries.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="47" column="40" selection-start-line="47" selection-start-column="40" selection-end-line="47" selection-end-column="40" />
+              <folding>
+                <marker date="1444766937254" expanded="true" signature="29:192" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -57,103 +184,10 @@
         <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/queries/InsertQueries.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+              <caret line="14" column="17" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <marker date="1444766937251" expanded="true" signature="36:192" placeholder="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SetupQueries.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/queries/SetupQueries.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="25" column="8" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="8" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <marker date="1443424983643" expanded="true" signature="441:478" placeholder="DROP TABLE I..." />
-                <marker date="1443424983643" expanded="true" signature="441:494" placeholder="DROP TABLE I..." />
-                <marker date="1443424983643" expanded="true" signature="581:607" placeholder="CREATE TABLE..IF..." />
-                <marker date="1443424983643" expanded="true" signature="581:617" placeholder="CREATE TABLE..IF..." />
-                <marker date="1443424983643" expanded="true" signature="581:775" placeholder="CREATE TABLE..IF..." />
-                <marker date="1443424983643" expanded="true" signature="892:989" placeholder="CREATE TABLE..IF..." />
-                <marker date="1443424983643" expanded="true" signature="1106:1270" placeholder="CREATE TABLE..IF..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/src/ch/mohlerm/service/client/Main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="42" column="3" selection-start-line="42" selection-start-column="3" selection-end-line="42" selection-end-column="3" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="build.xml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/build.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.13935484">
-              <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Config.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/src/ch/mohlerm/config/Config.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="7" column="51" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="log4j.properties" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/src/log4j.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="11" column="31" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PsqlMessageQueue.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/domain/psql/PsqlMessageQueue.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="37" column="1" selection-start-line="37" selection-start-column="1" selection-end-line="37" selection-end-column="1" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Message.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/api/src/ch/mohlerm/domain/Message.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="14" column="28" selection-start-line="14" selection-start-column="28" selection-end-line="14" selection-end-column="28" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MessageQueue.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/api/src/ch/mohlerm/domain/MessageQueue.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="7" column="47" selection-start-line="7" selection-start-column="47" selection-end-line="7" selection-end-column="47" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -182,9 +216,7 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/api/src/ch/mohlerm/persistence/MessageDao.java" />
         <option value="$PROJECT_DIR$/database/src/ch/mohlerm/connector/config/Config.java" />
-        <option value="$PROJECT_DIR$/api/src/ch/mohlerm/domain/MessageQueue.java" />
         <option value="$PROJECT_DIR$/api/src/ch/mohlerm/domain/DomainObject.java" />
         <option value="$PROJECT_DIR$/database/src/ch/mohlerm/domain/psql/PsqlMessage.java" />
         <option value="$PROJECT_DIR$/api/src/ch/mohlerm/domain/Client.java" />
@@ -194,18 +226,47 @@
         <option value="$PROJECT_DIR$/api/src/ch/mohlerm/protocol/KnockKnockProtocol.java" />
         <option value="$PROJECT_DIR$/database/src/ch/mohlerm/config/Config.java" />
         <option value="$PROJECT_DIR$/database/src/ch/mohlerm/service/database/Main.java" />
-        <option value="$PROJECT_DIR$/client/src/ch/mohlerm/config/Config.java" />
         <option value="$PROJECT_DIR$/log4j.properties" />
         <option value="$PROJECT_DIR$/server/log4j.properties" />
-        <option value="$PROJECT_DIR$/server/src/log4j.properties" />
-        <option value="$PROJECT_DIR$/client/src/log4j.properties" />
-        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/domain/psql/PsqlMessage.java" />
-        <option value="$PROJECT_DIR$/api/src/ch/mohlerm/domain/Message.java" />
-        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/queries/SetupQueries.java" />
-        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/service/server/Main.java" />
-        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/queries/InsertQueries.java" />
-        <option value="$PROJECT_DIR$/client/src/ch/mohlerm/service/client/Main.java" />
+        <option value="$PROJECT_DIR$/server/build_server.xml" />
+        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/initializer/Connection.java" />
+        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/initializer/InitializerThread.java" />
+        <option value="$PROJECT_DIR$/client/src/ch/mohlerm/trafficgen/RspHandler.java" />
+        <option value="$PROJECT_DIR$/client/src/ch/mohlerm/trafficgen/ChangeRequest.java" />
+        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/initializer/Initializer.java" />
         <option value="$PROJECT_DIR$/build.xml" />
+        <option value="$PROJECT_DIR$/api/src/ch/mohlerm/domain/MessageQueue.java" />
+        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/domain/psql/PsqlQueue.java" />
+        <option value="$PROJECT_DIR$/api/src/ch/mohlerm/protocol/SerializableMessage.java" />
+        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/domain/psql/PsqlClient.java" />
+        <option value="$PROJECT_DIR$/client/src/ch/mohlerm/trafficgen/NoAnswerException.java" />
+        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/distributor/Distributor.java" />
+        <option value="$PROJECT_DIR$/client/src/ch/mohlerm/trafficgen/TrafficGenerator.java" />
+        <option value="$PROJECT_DIR$/client/src/ch/mohlerm/trafficgen/TrafficGeneratorNotFoundException.java" />
+        <option value="$PROJECT_DIR$/client/src/ch/mohlerm/trafficgen/TrafficGeneratorFactory.java" />
+        <option value="$PROJECT_DIR$/scripts/client.sh" />
+        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/queries/clean.sql" />
+        <option value="$PROJECT_DIR$/client/src/log4j.properties" />
+        <option value="$PROJECT_DIR$/client/src/ch/mohlerm/service/client/Main.java" />
+        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/service/server/Main.java" />
+        <option value="$PROJECT_DIR$/scripts/experiment.sh" />
+        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/queries/DeleteQueries.java" />
+        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/queries/SetupQueries.java" />
+        <option value="$PROJECT_DIR$/scripts/0/client_1.log" />
+        <option value="$PROJECT_DIR$/server/src/log4j.properties" />
+        <option value="$PROJECT_DIR$/api/src/ch/mohlerm/protocol/SerializableAnswer.java" />
+        <option value="$PROJECT_DIR$/api/src/ch/mohlerm/protocol/SerializableRequest.java" />
+        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/config/Config.java" />
+        <option value="$PROJECT_DIR$/client/src/ch/mohlerm/config/Config.java" />
+        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/queries/SelectQueries.java" />
+        <option value="$PROJECT_DIR$/api/src/ch/mohlerm/protocol/MessagePassingProtocol.java" />
+        <option value="$PROJECT_DIR$/client/src/ch/mohlerm/trafficgen/StaticTrafficGenerator.java" />
+        <option value="$PROJECT_DIR$/api/src/ch/mohlerm/domain/Message.java" />
+        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/domain/psql/PsqlMessage.java" />
+        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/worker/Worker.java" />
+        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/queries/InsertQueries.java" />
+        <option value="$PROJECT_DIR$/server/src/ch/mohlerm/queries/setup.sql" />
+        <option value="$PROJECT_DIR$/known_bugs" />
       </list>
     </option>
   </component>
@@ -324,7 +385,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -376,6 +436,32 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SimpleMQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SimpleMQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mohlerm" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="worker" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -478,6 +564,10 @@
               <option name="myItemId" value="mohlerm" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="distributor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -489,11 +579,51 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="out" />
+              <option name="myItemId" value="server" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="production" />
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mohlerm" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SimpleMQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SimpleMQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SimpleMQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SimpleMQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="0" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -540,6 +670,32 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SimpleMQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SimpleMQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mohlerm" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trafficgen" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -656,10 +812,6 @@
               <option name="myItemId" value="mohlerm" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="persistence" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -704,12 +856,13 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/build.xml" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/server/build_server.xml" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -720,14 +873,21 @@
     <property name="OverrideImplement.combined" value="true" />
     <property name="OverrideImplement.overriding.sorted" value="false" />
     <property name="restartRequiresConfirmation" value="true" />
+    <property name="GenerateAntBuildDialog.generateSingleFile" value="false" />
+    <property name="GenerateAntBuildDialog.enableUiFormCompile" value="true" />
+    <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
+    <property name="GenerateAntBuildDialog.backupFiles" value="true" />
+    <property name="GenerateAntBuildDialog.inclineRuntiemClasspath" value="false" />
+    <property name="GenerateAntBuildDialog.generateIdeaHomeProperty" value="false" />
+    <property name="GenerateAntBuildDialog.outputFileNameProperty" value="simplemq" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/server" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/client" />
       <recent name="$PROJECT_DIR$/client/src" />
       <recent name="$PROJECT_DIR$/server/libs" />
-      <recent name="$PROJECT_DIR$/libs" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -995,6 +1155,18 @@
     </recent_temporary>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="StatisticProjectComponent">
+    <option name="excludeCompilerOutput" value="true" />
+    <option name="excludeIdea9ArtifactDirectory" value="true" />
+    <option name="excludeTargetDirectories" value="true" />
+    <option name="activateWhenOpenProject" value="true" />
+    <option name="excludedDirectories">
+      <value>
+        <list size="0" />
+      </value>
+    </option>
+    <option name="fileTypes" value="class;svn-base;svn-work;Extra;gif;png;jpg;jpeg;bmp;tga;tiff;ear;war;zip;jar;iml;iws;ipr;bz2;gz;" />
+  </component>
   <component name="SvnConfiguration" cleanupOnStartRun="true">
     <configuration>$USER_HOME$/.subversion</configuration>
     <supportedVersion>125</supportedVersion>
@@ -1053,12 +1225,116 @@
       <workItem from="1443426641184" duration="498000" />
       <workItem from="1443431405587" duration="802000" />
       <workItem from="1443449732780" duration="378000" />
-      <workItem from="1443450144036" duration="776000" />
+      <workItem from="1443450144036" duration="5471000" />
+      <workItem from="1443482126822" duration="670000" />
+      <workItem from="1443482895838" duration="22605000" />
+      <workItem from="1443843020385" duration="13000" />
+      <workItem from="1443919948533" duration="11000" />
+      <workItem from="1443930337723" duration="46000" />
+      <workItem from="1444047537115" duration="53316000" />
+      <workItem from="1444234384709" duration="29000" />
+      <workItem from="1444234424715" duration="29020000" />
+      <workItem from="1444518069736" duration="188000" />
+      <workItem from="1444653771169" duration="25946000" />
+      <workItem from="1444743947920" duration="1186000" />
+      <workItem from="1444745146300" duration="6356000" />
+      <workItem from="1444751514501" duration="12314000" />
     </task>
+    <task id="LOCAL-00001" summary="renamed lib directory (from libs)">
+      <created>1443450956415</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1443450956415</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Modified build script to further automate the build process">
+      <created>1443483136706</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1443483136706</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Cleaned up some unnecessary files">
+      <created>1443517299955</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1443517299955</updated>
+    </task>
+    <task id="LOCAL-00004" summary="First, simple implementation of Server">
+      <created>1444123883663</created>
+      <option name="number" value="00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1444123883663</updated>
+    </task>
+    <task id="LOCAL-00005" summary="First, working implementation of Client/Server with Java NIO">
+      <created>1444209088898</created>
+      <option name="number" value="00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1444209088898</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Optimized Imports">
+      <created>1444209229281</created>
+      <option name="number" value="00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1444209229281</updated>
+    </task>
+    <task id="LOCAL-00007" summary="First version of experiment script">
+      <created>1444210109758</created>
+      <option name="number" value="00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1444210109758</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Updated experiment script">
+      <created>1444317147764</created>
+      <option name="number" value="00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1444317147764</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Working server/client&#10;Added basic sql setup file&#10;Updated ant buildscript to be compatible with the dryad">
+      <created>1444317261899</created>
+      <option name="number" value="00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1444317261899</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Updated scripts">
+      <created>1444518187343</created>
+      <option name="number" value="00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1444518187343</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Fixed nasty bug in Worker Runnable">
+      <created>1444518252066</created>
+      <option name="number" value="00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1444518252066</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Enhanced server/client with new Protocol. Basic stuff working.">
+      <created>1444743112927</created>
+      <option name="number" value="00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1444743112927</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Improved log output, more documentation">
+      <created>1444749592449</created>
+      <option name="number" value="00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1444749592449</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Improved Scripts">
+      <created>1444749612792</created>
+      <option name="number" value="00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1444749612792</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Added Client removal and some other stuff">
+      <created>1444752554206</created>
+      <option name="number" value="00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1444752554206</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32683000" />
+    <option name="totallyTimeSpent" value="189078000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1074,28 +1350,29 @@
     <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16558862" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.13116474" sideWeight="0.497426" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16544503" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.12591815" sideWeight="0.497426" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32988358" sideWeight="0.502574" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32948583" sideWeight="0.497426" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32988358" sideWeight="0.497426" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.1539267" sideWeight="0.497426" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22198953" sideWeight="0.497426" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21360382" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.112171836" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Statistic" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19162303" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947233" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18992655" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.13484487" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.050517105" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22897801" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24763903" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32988358" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1112,7 +1389,23 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit with basic project structure and some sample/test code." />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial commit with basic project structure and some sample/test code." />
+    <MESSAGE value="renamed lib directory (from libs)" />
+    <MESSAGE value="Modified build script to further automate the build process" />
+    <MESSAGE value="Cleaned up some unnecessary files" />
+    <MESSAGE value="First, simple implementation of Server" />
+    <MESSAGE value="First, working implementation of Client/Server with Java NIO" />
+    <MESSAGE value="Optimized Imports" />
+    <MESSAGE value="First version of experiment script" />
+    <MESSAGE value="Updated experiment script" />
+    <MESSAGE value="Working server/client&#10;Added basic sql setup file&#10;Updated ant buildscript to be compatible with the dryad" />
+    <MESSAGE value="Updated scripts" />
+    <MESSAGE value="Fixed nasty bug in Worker Runnable" />
+    <MESSAGE value="Enhanced server/client with new Protocol. Basic stuff working." />
+    <MESSAGE value="Improved log output, more documentation" />
+    <MESSAGE value="Improved Scripts" />
+    <MESSAGE value="Added Client removal and some other stuff" />
+    <MESSAGE value="Peek&amp;Pop working" />
+    <option name="LAST_COMMIT_MESSAGE" value="Peek&amp;Pop working" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1122,216 +1415,16 @@
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="FILTER_TARGETS" value="false" />
     <buildFile url="file://$PROJECT_DIR$/build.xml">
+      <targetFilters>
+        <filter targetName="compile" isVisible="true" />
+        <filter targetName="jar" isVisible="true" />
+        <filter targetName="run" isVisible="true" />
+        <filter targetName="clean" isVisible="true" />
+      </targetFilters>
       <expanded value="true" />
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/service/server/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="75" column="33" selection-start-line="75" selection-start-column="33" selection-end-line="75" selection-end-column="33" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1443425134020" expanded="true" signature="1382:1398" placeholder="SELECT VERSI..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/queries/InsertQueries.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/log4j.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="11" column="47" selection-start-line="11" selection-start-column="47" selection-end-line="11" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/log4j.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="11" column="31" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/queries/SelectQueries.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/ch/mohlerm/service/client/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="43" column="21" selection-start-line="43" selection-start-column="21" selection-end-line="43" selection-end-column="21" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/ch/mohlerm/config/Config.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="51" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/src/ch/mohlerm/protocol/KnockKnockProtocol.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="39" column="13" selection-start-line="39" selection-start-column="13" selection-end-line="39" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/service/server/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1443425134020" expanded="true" signature="1382:1398" placeholder="SELECT VERSI..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/queries/InsertQueries.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/log4j.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/queries/SelectQueries.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/ch/mohlerm/service/client/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="40" column="38" selection-start-line="40" selection-start-column="38" selection-end-line="40" selection-end-column="38" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/ch/mohlerm/config/Config.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="51" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/src/ch/mohlerm/protocol/KnockKnockProtocol.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="2" selection-start-line="5" selection-start-column="2" selection-end-line="5" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/domain/psql/PsqlMessageQueue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="37" column="1" selection-start-line="37" selection-start-column="1" selection-end-line="37" selection-end-column="1" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/config/Config.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="7" selection-start-line="0" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/service/server/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1443425134020" expanded="true" signature="1382:1398" placeholder="SELECT VERSI..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/queries/InsertQueries.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/log4j.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/queries/SelectQueries.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/ch/mohlerm/service/client/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="40" column="38" selection-start-line="40" selection-start-column="38" selection-end-line="40" selection-end-column="38" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/ch/mohlerm/config/Config.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="51" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/src/ch/mohlerm/protocol/KnockKnockProtocol.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="2" selection-start-line="5" selection-start-column="2" selection-end-line="5" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/domain/psql/PsqlMessageQueue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="37" column="1" selection-start-line="37" selection-start-column="1" selection-end-line="37" selection-end-column="1" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/config/Config.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1388,98 +1481,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/config/Config.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="7" selection-start-line="0" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/queries/SelectQueries.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/log4j.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="11" column="47" selection-start-line="11" selection-start-column="47" selection-end-line="11" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/src/ch/mohlerm/protocol/KnockKnockProtocol.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="39" column="13" selection-start-line="39" selection-start-column="13" selection-end-line="39" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/domain/psql/PsqlMessage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="60" column="5" selection-start-line="60" selection-start-column="5" selection-end-line="60" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/src/ch/mohlerm/domain/DomainObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="8" column="15" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/src/ch/mohlerm/domain/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/src/ch/mohlerm/domain/Message.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="14" column="28" selection-start-line="14" selection-start-column="28" selection-end-line="14" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/src/ch/mohlerm/domain/MessageQueue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="47" selection-start-line="7" selection-start-column="47" selection-end-line="7" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/ch/mohlerm/config/Config.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="51" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/log4j.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="11" column="31" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/domain/psql/PsqlMessageQueue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="37" column="1" selection-start-line="37" selection-start-column="1" selection-end-line="37" selection-end-column="1" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///usr/lib/jvm/java-8-openjdk/jre/lib/rt.jar!/java/sql/Statement.class">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3480663">
@@ -1487,30 +1488,275 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/ant.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-openjdk/jre/lib/rt.jar!/java/lang/Runnable.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.17475729">
+          <caret line="9" column="9" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-openjdk/jre/lib/rt.jar!/java/lang/Object.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.730769">
+          <caret line="23" column="18" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/src/ch/mohlerm/domain/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/domain/psql/PsqlQueue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/server.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/domain/psql/PsqlClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="15" column="15" selection-start-line="15" selection-start-column="15" selection-end-line="15" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/distributor/Distributor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="37" column="40" selection-start-line="37" selection-start-column="40" selection-end-line="37" selection-end-column="40" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/ch/mohlerm/trafficgen/NoAnswerException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="8" selection-end-column="5" />
+          <folding>
+            <element signature="e#170#171#0" expanded="true" />
+            <element signature="e#200#201#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/ch/mohlerm/trafficgen/TrafficGeneratorNotFoundException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="6" column="44" selection-start-line="6" selection-start-column="44" selection-end-line="6" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.57327586">
+          <caret line="70" column="16" selection-start-line="70" selection-start-column="16" selection-end-line="70" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/client.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="28" column="110" selection-start-line="28" selection-start-column="110" selection-end-line="28" selection-end-column="110" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/experiment.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-22.192308">
+          <caret line="225" column="34" selection-start-line="225" selection-start-column="34" selection-end-line="225" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/ch/mohlerm/trafficgen/TrafficGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="51" column="33" selection-start-line="51" selection-start-column="33" selection-end-line="51" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#690#691#0" expanded="false" />
+            <element signature="e#740#741#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/service/server/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="98" column="18" selection-start-line="98" selection-start-column="18" selection-end-line="98" selection-end-column="18" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1443425134020" expanded="true" signature="1382:1398" placeholder="SELECT VERSI..." />
-          </folding>
+          <caret line="21" column="4" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="63" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/queries/SetupQueries.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="25" column="8" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="8" />
+          <caret line="29" column="51" selection-start-line="29" selection-start-column="51" selection-end-line="29" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/0/client_4.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/0/server_0.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="368" column="59" selection-start-line="368" selection-start-column="58" selection-end-line="368" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/log4j.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1" column="22" selection-start-line="1" selection-start-column="22" selection-end-line="1" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/ch/mohlerm/service/client/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="40" column="30" selection-start-line="40" selection-start-column="30" selection-end-line="40" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/log4j.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1" column="21" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/0/client_2.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="104.85714">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/queries/DeleteQueries.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="28" column="1" selection-start-line="28" selection-start-column="1" selection-end-line="28" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/ch/mohlerm/trafficgen/TrafficGeneratorFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="9" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/config/Config.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="16" column="45" selection-start-line="16" selection-start-column="45" selection-end-line="16" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/ch/mohlerm/config/Config.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="18" column="45" selection-start-line="18" selection-start-column="45" selection-end-line="18" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/src/ch/mohlerm/protocol/SerializableRequest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="31" column="15" selection-start-line="31" selection-start-column="15" selection-end-line="31" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/src/ch/mohlerm/protocol/SerializableAnswer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="45" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/src/ch/mohlerm/protocol/MessagePassingProtocol.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="75" column="19" selection-start-line="75" selection-start-column="19" selection-end-line="75" selection-end-column="19" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1443424983643" expanded="true" signature="441:478" placeholder="DROP TABLE I..." />
-            <marker date="1443424983643" expanded="true" signature="441:494" placeholder="DROP TABLE I..." />
-            <marker date="1443424983643" expanded="true" signature="581:607" placeholder="CREATE TABLE..IF..." />
-            <marker date="1443424983643" expanded="true" signature="581:617" placeholder="CREATE TABLE..IF..." />
-            <marker date="1443424983643" expanded="true" signature="581:775" placeholder="CREATE TABLE..IF..." />
-            <marker date="1443424983643" expanded="true" signature="892:989" placeholder="CREATE TABLE..IF..." />
-            <marker date="1443424983643" expanded="true" signature="1106:1270" placeholder="CREATE TABLE..IF..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/src/ch/mohlerm/domain/DomainObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="8" column="15" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/src/ch/mohlerm/domain/Queue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="5" column="22" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/src/ch/mohlerm/domain/Message.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="40" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/ch/mohlerm/trafficgen/StaticTrafficGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="60" column="18" selection-start-line="60" selection-start-column="18" selection-end-line="60" selection-end-column="18" />
+          <folding>
+            <marker date="1444766937241" expanded="true" signature="39:311" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -1518,27 +1764,110 @@
     <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/queries/InsertQueries.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+          <caret line="14" column="17" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <marker date="1444766937251" expanded="true" signature="36:192" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/ch/mohlerm/service/client/Main.java">
+    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/domain/psql/PsqlMessage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="42" column="3" selection-start-line="42" selection-start-column="3" selection-end-line="42" selection-end-column="3" />
+          <caret line="18" column="11" selection-start-line="18" selection-start-column="11" selection-end-line="18" selection-end-column="11" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#1928#1929#0" expanded="true" />
+            <element signature="e#1964#1965#0" expanded="true" />
+            <element signature="e#2023#2024#0" expanded="true" />
+            <element signature="e#2063#2064#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.xml">
+    <entry file="file://$PROJECT_DIR$/scripts/0/client_1.log">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.13935484">
-          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+        <state vertical-scroll-proportion="-18.0">
+          <caret line="1412" column="74" selection-start-line="1412" selection-start-column="74" selection-end-line="1412" selection-end-column="87" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/0/client_19.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.64285713">
+          <caret line="32" column="64" selection-start-line="32" selection-start-column="64" selection-end-line="32" selection-end-column="64" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/worker/Worker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="184" column="56" selection-start-line="184" selection-start-column="56" selection-end-line="184" selection-end-column="56" />
+          <folding>
+            <marker date="1444766937247" expanded="true" signature="35:772" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/queries/SelectQueries.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="47" column="40" selection-start-line="47" selection-start-column="40" selection-end-line="47" selection-end-column="40" />
+          <folding>
+            <marker date="1444766937254" expanded="true" signature="29:192" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/ch/mohlerm/queries/setup.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.8076925">
+          <caret line="75" column="30" selection-start-line="75" selection-start-column="30" selection-end-line="75" selection-end-column="30" />
+          <folding>
+            <marker date="1444766660704" expanded="true" signature="1435:1648" placeholder="DECLARE new_..." />
+            <marker date="1444766660704" expanded="true" signature="1489:1604" placeholder="INSERT INTO ..." />
+            <marker date="1444766660704" expanded="true" signature="1622:1635" placeholder="RETURN new_i..." />
+            <marker date="1444766660704" expanded="true" signature="1741:1899" placeholder="DECLARE new_..." />
+            <marker date="1444766660704" expanded="true" signature="1795:1855" placeholder="INSERT INTO ..." />
+            <marker date="1444766660704" expanded="true" signature="1873:1886" placeholder="RETURN new_i..." />
+            <marker date="1444766660704" expanded="true" signature="2008:2079" placeholder="BEGIN DELETE..." />
+            <marker date="1444766660704" expanded="true" signature="2030:2066" placeholder="DELETE FROM ..." />
+            <marker date="1444766660704" expanded="true" signature="2190:2351" placeholder="DECLARE new_..." />
+            <marker date="1444766660704" expanded="true" signature="2244:2307" placeholder="INSERT INTO ..." />
+            <marker date="1444766660704" expanded="true" signature="2325:2338" placeholder="RETURN new_i..." />
+            <marker date="1444766660704" expanded="true" signature="2462:2535" placeholder="BEGIN DELETE..." />
+            <marker date="1444766660704" expanded="true" signature="2484:2522" placeholder="DELETE FROM ..." />
+            <marker date="1444766660704" expanded="true" signature="2666:3104" placeholder="DECLARE res_..." />
+            <marker date="1444766660704" expanded="true" signature="2767:2967" placeholder="SELECT INTO ..messages..." />
+            <marker date="1444766660704" expanded="true" signature="2986:3054" placeholder="DELETE FROM ..." />
+            <marker date="1444766660704" expanded="true" signature="3072:3091" placeholder="RETURN res_m..." />
+            <marker date="1444766660704" expanded="true" signature="3236:3560" placeholder="DECLARE res_..." />
+            <marker date="1444766660704" expanded="true" signature="3305:3510" placeholder="SELECT INTO ..messages..." />
+            <marker date="1444766660704" expanded="true" signature="3528:3547" placeholder="RETURN res_m..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/known_bugs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="34" selection-start-line="0" selection-start-column="34" selection-end-line="0" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ant.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.024161074">
+          <caret line="736" column="0" selection-start-line="736" selection-start-column="0" selection-end-line="736" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1596,7 +1925,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>client</last-edited>
+          <last-edited>api</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

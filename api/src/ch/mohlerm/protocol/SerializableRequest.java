@@ -40,7 +40,11 @@ public class SerializableRequest implements Serializable {
         this.source = source;
         this.target = target;
         this.queue = queue;
-        this.message = message;
+        if(message == null || message.equals("")) {
+            this.message = "null";
+        } else {
+            this.message = message;
+        }
     }
 
     public RequestType getType() {

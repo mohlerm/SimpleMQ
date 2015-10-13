@@ -1,9 +1,6 @@
 package ch.mohlerm.protocol;
 
-import ch.mohlerm.domain.DomainObject;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Created by marcel on 10/13/15.
@@ -39,7 +36,11 @@ public class SerializableAnswer implements Serializable {
         this.requestId = requestId;
         this.clientId = clientId;
         this.resultId = resultId;
-        this.message = message;
+        if(message == null || message.equals("")) {
+            this.message = "null";
+        } else {
+            this.message = message;
+        }
     }
 
     public AnswerType getType() {

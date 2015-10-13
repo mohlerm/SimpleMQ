@@ -7,10 +7,7 @@ package ch.mohlerm.service.server;
 import ch.mohlerm.config.Config;
 import ch.mohlerm.distributor.Distributor;
 import ch.mohlerm.queries.SetupQueries;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
 
 import java.io.IOException;
 import java.sql.Connection;

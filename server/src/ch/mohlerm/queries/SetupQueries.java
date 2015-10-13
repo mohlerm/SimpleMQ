@@ -1,8 +1,5 @@
 package ch.mohlerm.queries;
 
-import ch.mohlerm.domain.psql.PsqlClient;
-import ch.mohlerm.domain.psql.PsqlQueue;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 

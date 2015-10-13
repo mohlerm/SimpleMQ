@@ -63,15 +63,17 @@ public class MessagePassingProtocol {
             default:
                 type = "ERROR";
         }
-        if (request.getMessage().length() == 200) {
-            return type + delimiter + String.valueOf(request.getId()) + delimiter + String.valueOf(request.getSource()) + delimiter + String.valueOf(request.getTarget()) + delimiter + String.valueOf(request.getQueue()) + delimiter + "smallMessage";
-        } else if (request.getMessage().length() == 1100) {
-            return type + delimiter + String.valueOf(request.getId()) + delimiter + String.valueOf(request.getSource()) + delimiter + String.valueOf(request.getTarget()) + delimiter + String.valueOf(request.getQueue()) + delimiter + "mediumMessage";
-        } else if (request.getMessage().length() == 2000) {
-            return type + delimiter + String.valueOf(request.getId()) + delimiter + String.valueOf(request.getSource()) + delimiter + String.valueOf(request.getTarget()) + delimiter + String.valueOf(request.getQueue()) + delimiter + "largeMessage";
+        String message;
+        if(request.getMessage().length()==200) {
+            message = "smallMessage";
+        } else if (request.getMessage().length()==1100) {
+            message = "mediumMessage";
+        } else if (request.getMessage().length()==2000) {
+            message = "largeMessage";
         } else {
-            return type + delimiter + String.valueOf(request.getId()) + delimiter + String.valueOf(request.getSource()) + delimiter + String.valueOf(request.getTarget()) + delimiter + String.valueOf(request.getQueue()) + delimiter + request.getMessage();
+            message = request.getMessage();
         }
+        return "REQ"+delimiter+type + delimiter + String.valueOf(request.getId()) + delimiter + String.valueOf(request.getSource()) + delimiter + String.valueOf(request.getTarget()) + delimiter + String.valueOf(request.getQueue()) + delimiter + message;
     }
     private static String parseAnswerToString(SerializableAnswer answer) {
         String type;
@@ -91,15 +93,17 @@ public class MessagePassingProtocol {
             default:
                 type = "ERROR";
         }
+        String message;
         if(answer.getMessage().length()==200) {
-            return type+delimiter+String.valueOf(answer.getRequestId())+delimiter+String.valueOf(answer.getResultId())+delimiter+"smallMessage";
+            message = "smallMessage";
         } else if (answer.getMessage().length()==1100) {
-            return type+delimiter+String.valueOf(answer.getRequestId())+delimiter+String.valueOf(answer.getResultId())+delimiter+"mediumMessage";
+            message = "mediumMessage";
         } else if (answer.getMessage().length()==2000) {
-            return type+delimiter+String.valueOf(answer.getRequestId())+delimiter+String.valueOf(answer.getResultId())+delimiter+"largeMessage";
+            message = "largeMessage";
         } else {
-            return type+delimiter+String.valueOf(answer.getRequestId())+delimiter+String.valueOf(answer.getResultId())+delimiter+answer.getMessage();
+            message = answer.getMessage();
         }
+        return "ANS"+delimiter+type+delimiter+String.valueOf(answer.getRequestId())+delimiter+String.valueOf(answer.getClientId())+delimiter+String.valueOf(answer.getResultId())+delimiter+message;
 
     }
     private static String delimiter = "|";

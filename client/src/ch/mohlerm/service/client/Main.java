@@ -1,7 +1,6 @@
 package ch.mohlerm.service.client;
 
 import ch.mohlerm.config.Config;
-import ch.mohlerm.protocol.MessagePassingProtocol;
 import ch.mohlerm.trafficgen.TrafficGenerator;
 import ch.mohlerm.trafficgen.TrafficGeneratorFactory;
 import ch.mohlerm.trafficgen.TrafficGeneratorNotFoundException;

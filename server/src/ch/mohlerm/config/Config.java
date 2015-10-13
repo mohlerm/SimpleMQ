@@ -14,5 +14,5 @@ public class Config {
    // public static InetAddress SERVERIP;
     public static int CPUWORKERSCALING = 4;
     public static int REQUESTBUFFERSIZE = 4096;
-    public static int ANSWERBUFFERSIZE = 1024;
+    public static int ANSWERBUFFERSIZE = 4096;
 }

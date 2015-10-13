@@ -2,9 +2,7 @@ package ch.mohlerm.worker;
 
 import ch.mohlerm.config.Config;
 import ch.mohlerm.distributor.Distributor;
-import ch.mohlerm.domain.psql.PsqlClient;
 import ch.mohlerm.domain.psql.PsqlMessage;
-import ch.mohlerm.domain.psql.PsqlQueue;
 import ch.mohlerm.protocol.MessagePassingProtocol;
 import ch.mohlerm.protocol.SerializableAnswer;
 import ch.mohlerm.protocol.SerializableRequest;
@@ -13,7 +11,9 @@ import ch.mohlerm.queries.InsertQueries;
 import ch.mohlerm.queries.SelectQueries;
 import org.apache.log4j.Logger;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
@@ -21,7 +21,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Calendar;
 
 /**
  * Created by marcel on 10/6/15.
@@ -106,6 +105,7 @@ public class Worker implements Runnable {
             // split on request type and create appropriate answer
             MessagePassingProtocol.logRequest(request, log);
             int newid;
+            PsqlMessage psqlMessage;
             switch (request.getType()) {
                 case CREATECLIENT:
                     try {
@@ -150,9 +150,11 @@ public class Worker implements Runnable {
                     // TODO QUERYQUEUESFORRRECEIVER
                     break;
                 case SENDMESSAGETOALL:
-                    PsqlMessage sqlMessage = new PsqlMessage(request, new Timestamp(System.currentTimeMillis()));
+                    psqlMessage = new PsqlMessage(request, new Timestamp(System.currentTimeMillis()));
                     try {
-                        newid = InsertQueries.insertMessage(dbConnection, sqlMessage);
+                        // override receiver
+                        psqlMessage.setReceiver(0);
+                        newid = InsertQueries.insertMessage(dbConnection, psqlMessage);
                         answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, request.getId(), request.getSource(), newid,"");
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -160,12 +162,18 @@ public class Worker implements Runnable {
                     }
                     break;
                 case SENDMESSAGETORECEIVER:
-                    // TODO SENDMESSAGETORECEIVER
+                    psqlMessage = new PsqlMessage(request, new Timestamp(System.currentTimeMillis()));
+                    try {
+                        newid = InsertQueries.insertMessage(dbConnection, psqlMessage);
+                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, request.getId(), request.getSource(), newid,"");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, request.getId(), request.getSource(), -1, "Can not send message to receiver: "+request.getTarget());
+                    }
                     break;
                 case POPQUEUE:
-                    PsqlMessage psqlMessage;
                     try {
-                        psqlMessage = SelectQueries.popQueue(dbConnection, request.getQueue());
+                        psqlMessage = SelectQueries.popQueue(dbConnection, request.getQueue(), request.getSource());
                         answer = new SerializableAnswer(SerializableAnswer.AnswerType.ANSWERMESSAGE, request.getId(), request.getSource(), psqlMessage.getId(), psqlMessage.getMessage());
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -173,7 +181,13 @@ public class Worker implements Runnable {
                     }
                     break;
                 case PEEKQUEUE:
-                    // TODO PEEKQUEUE
+                    try {
+                        psqlMessage = SelectQueries.peekQueue(dbConnection, request.getQueue(), request.getSource());
+                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ANSWERMESSAGE, request.getId(), request.getSource(), psqlMessage.getId(), psqlMessage.getMessage());
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, request.getId(), request.getSource(), -1, "Could not peek queue "+request.getQueue()+"!");
+                    }
                     break;
                 case QUERYMESSAGESFORSENDER:
                     // TODO QUERYMESSAGESFORSENDER

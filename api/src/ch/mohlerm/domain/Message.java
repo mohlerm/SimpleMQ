@@ -7,8 +7,10 @@ import java.sql.Timestamp;
  */
 public interface Message extends DomainObject{
     public int getSender();
+    public void setSender(int sender);
 
     public int getReceiver();
+    public void setReceiver(int receiver);
 
     public int getQueue();
     public void setQueue(int queue);
