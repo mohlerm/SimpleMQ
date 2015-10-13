@@ -13,7 +13,7 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 import java.util.Iterator;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ArrayBlockingQueue;
 
 /**
  * Created by marcel on 10/5/15.
@@ -28,14 +28,14 @@ public class Distributor implements Runnable {
     // The channel on which we'll accept connections
     private ServerSocketChannel serverChannel;
 
-    private LinkedBlockingQueue<Worker> workerQueue;
+    private ArrayBlockingQueue<Worker> workerQueue;
 
 
     public Distributor() throws IOException{
         int cpus = Runtime.getRuntime().availableProcessors();
-        workerQueue = new LinkedBlockingQueue<>();
+        workerQueue = new ArrayBlockingQueue<Worker>(Config.CPUWORKERSCALING * cpus);
         for (int i = 0; i < Config.CPUWORKERSCALING * cpus; i++) {
-            workerQueue.add(new Worker());
+            workerQueue.add(new Worker(i));
         }
         log.debug("Initialized " + workerQueue.size() + " workers");
         this.selector = this.initSelector();
@@ -134,10 +134,7 @@ public class Distributor implements Runnable {
 
     public void workerCallBack(Worker worker) {
         try {
-            {
-                workerQueue.put(worker);
-            }
-
+            workerQueue.put(worker);
 
         } catch (InterruptedException e) {
             e.printStackTrace();

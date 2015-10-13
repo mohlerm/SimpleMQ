@@ -5,7 +5,6 @@ import ch.mohlerm.domain.psql.PsqlQueue;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * Created by marcel on 9/27/15.
@@ -30,8 +29,9 @@ public class SetupQueries {
 //        queryString = "CREATE TABLE IF NOT EXISTS message_queues (message_id integer NOT NULL, queue_id integer NOT NULL, Constraint message_queue_pkey Primary Key (message_id, queue_id));";
 //        statement = connection.createStatement();
 //        statement.execute(queryString);
-          InsertQueries.addClient(connection, new PsqlClient());
-          InsertQueries.addClient(connection, new PsqlClient());
+        // create the 0 client (catchall)
+          InsertQueries.addClient(connection, new PsqlClient(0));
+        // create initial queue
           InsertQueries.addQueue(connection, new PsqlQueue());
     }
 }

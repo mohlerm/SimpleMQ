@@ -6,6 +6,10 @@ import ch.mohlerm.domain.Client;
  * Created by marcel on 9/29/15.
  */
 public class PsqlClient implements Client {
+
+    public PsqlClient(int id) {
+        this.id = id;
+    }
     private int id;
 
     @Override

@@ -1,9 +1,12 @@
 package ch.mohlerm.trafficgen;
 
 import ch.mohlerm.config.Config;
+import ch.mohlerm.protocol.MessagePassingProtocol;
+import ch.mohlerm.protocol.SerializableAnswer;
+import ch.mohlerm.protocol.SerializableRequest;
 import org.apache.log4j.Logger;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
@@ -12,76 +15,64 @@ import java.nio.channels.SocketChannel;
  */
 public class StaticTrafficGenerator extends TrafficGenerator {
     static Logger log = Logger.getLogger(StaticTrafficGenerator.class.getName());
+    private final String fixMessage;
 
-    public StaticTrafficGenerator(SocketChannel socketChannel) throws IOException {
+    public StaticTrafficGenerator(SocketChannel socketChannel, String fixMessage) throws IOException {
         super(socketChannel);
+        this.fixMessage = fixMessage;
     }
 
     @Override
 
     public void run() {
-        long counter = 0;
-        while(counter < numberOfRequests) {
-            String newData = "CLIENT " + String.valueOf(Config.CLIENTID) + " Number: " + counter++;
+        int counter = 0;
 
-            ByteBuffer buf = ByteBuffer.allocate(48);
-            buf.clear();
-            buf.put(newData.getBytes());
+        SerializableRequest request = new SerializableRequest(SerializableRequest.RequestType.CREATECLIENT, counter, Config.CLIENTID, 0, 0, "Empty");
+        log.debug("Initialize with client id " + Config.CLIENTID + " on server.");
+        postRequest(request);
+        MessagePassingProtocol.logRequest(request, log);
+        SerializableAnswer answer = null;
+        try {
+            log.debug("Wait for init answer");
+            answer = getAnswer();
+            MessagePassingProtocol.logAnswer(answer, log);
+        } catch (NoAnswerException e) {
+            e.printStackTrace();
+        }
+        // sleep for a predefined time
+        try {
+            Thread.sleep(Config.INITWAIT);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-            buf.flip();
+        counter++;
+        /*
+            this is the main loop
+          */
+        while(counter < numberOfRequests+1) {
 
-            while (buf.hasRemaining()) {
-                try {
-                    log.info("Write message [" + counter + "] to buffer");
-                    socketChannel.write(buf);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            buf.flip();
-            // Attempt to read off the channel
-            int numRead;
+            request = new SerializableRequest(SerializableRequest.RequestType.SENDMESSAGETOALL, counter, Config.CLIENTID, 0, 1, fixMessage);
+            postRequest(request);
+            MessagePassingProtocol.logRequest(request, log);
+            answer = null;
             try {
-                numRead = socketChannel.read(buf);
-                log.info("Read message [" + counter + "] from buffer");
-            } catch (IOException e) {
-                log.debug("Forced close");
-                // The remote forcibly closed the connection, cancel
-                // the selection key and close the channel.
-                try {
-                    socketChannel.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                return;
+                log.debug("Wait for answer");
+                answer = getAnswer();
+                MessagePassingProtocol.logAnswer(answer, log);
+            } catch (NoAnswerException e) {
+                e.printStackTrace();
             }
 
-            if (numRead == -1) {
-                log.debug("Cleanly closed");
-                // Remote entity shut the socket down cleanly. Do the
-                // same from our end and cancel the channel.
-                try {
-                    socketChannel.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return;
-            }
-            if (numRead > 0) {
-                logData(buf.array(), numRead);
-            }
+            // sleep for a predefined time
             try {
-                Thread.sleep(100);
+                Thread.sleep(Config.CLIENTPAUSE);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            counter++;
         }
 
     }
-    public void logData(byte[] data, int count) {
-        byte[] dataCopy = new byte[count];
-        System.arraycopy(data, 0, dataCopy, 0, count);
-        log.info(new String(dataCopy));
-    }
+
 }

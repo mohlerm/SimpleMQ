@@ -12,4 +12,9 @@ public class Config {
     public static int CLIENTID = 0;
     public static int SERVERREQUESTPORT = 0;
     public static int CLIENTAMOUNT = 0;
+    public static int CLIENTPAUSE = 100;
+    public static int INITWAIT = 100;
+
+    public static int REQUESTBUFFERSIZE = 4096;
+    public static int ANSWERBUFFERSIZE = 1024;
 }
