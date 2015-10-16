@@ -37,6 +37,11 @@ do
 done
 echo "OK"
 
+echo -ne "  Packing logs ... "
+cd logs
+tar czf ../client_logs.tar.gz *.*
+cd ..
+
 #
 # Wait for the clients to finish
 #echo -ne "  Waiting for the clients to finish ... "
