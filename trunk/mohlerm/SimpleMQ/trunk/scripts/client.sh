@@ -37,13 +37,13 @@ do
 	screen -dmSl client$clientId java -jar SimpleMQ_client.jar $clientId ${servers[$serverId]} $serverPort staticsmall $clientRunTime
 done
 
-echo -ne "  Waiting for the clients to finish ... "
+#echo -ne "  Waiting for the clients to finish ... "
 sleep 1
 while [ `ps aux | grep java | grep $username | wc -l` != 1 ]
 do
 	sleep 1
 done
-echo "OK"
+#echo "OK"
 
 echo -ne "  Packing logs ... "
 cd logs

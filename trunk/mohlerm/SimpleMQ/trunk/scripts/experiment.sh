@@ -112,7 +112,7 @@ echo "OK"
 
 echo -ne "  Testing passwordless connection to the server and client machines... "
 # Check if command can be run on server and client
-for server in $servers
+for server in "${servers[@]}"
 do
     success=$( ssh -o BatchMode=yes  $remoteUserName@$server echo ok 2>&1 )
     if [ $success != "ok" ]
@@ -122,7 +122,7 @@ do
     fi
 done
 
-for client in $clients
+for client in "${clients[@]}"
 do
     success=$( ssh -o BatchMode=yes  $remoteUserName@$client echo ok 2>&1 )
     if [ $success != "ok" ]
@@ -135,11 +135,11 @@ echo "OK"
 
 echo -ne "  Create directories on all machines..."
 ssh $remoteUserName@$dbMachine "mkdir -p $executionDir"
-for server in $servers
+for server in "${servers[@]}"
 do
     ssh $remoteUserName@$server "mkdir -p $executionDir"
 done
-for client in $clients
+for client in "${clients[@]}"
 do
     ssh $remoteUserName@$client "mkdir -p $executionDir"
 done
@@ -147,14 +147,14 @@ echo "OK"
 
 #echo -ne "  Copying server.jar to server machines: $serverMachine..."
 # Copy jar to server machine
-for server in $servers
+for server in "${servers[@]}"
 do
     scp ../jar/SimpleMQ_server.jar $remoteUserName@$server:$executionDir
 done
 #echo "OK"
 #echo -ne "  Copying client.jar to client machines: $clientMachine"
 # Copy jar to client machine
-for client in $clients
+for client in "${clients[@]}"
 do
     scp ../jar/SimpleMQ_client.jar $remoteUserName@$client:$executionDir
 done
@@ -181,7 +181,7 @@ echo "OK"
 
 # Run server
 i=1
-for server in $servers
+for server in "${servers[@]}"
 do
     echo "  Starting the server $server"
     #port=$(($serverPort+$i))
@@ -195,12 +195,13 @@ do
 	    sleep 1
     done
     echo "OK"
+    ((i++))
 done
 
 idStart=1
 idStep=$(($noOfClients/$clientCount))
 idEnd=$idStep
-for client in $clients
+for client in "${clients[@]}"
 do
     echo "  Start the clients on the client machine: $client"
     # we use all servermachines
@@ -210,11 +211,12 @@ do
     idEnd=$(($idEnd+$idStep))
 done
 
-echo -ne "  Waiting for the clients to finish ... "
+echo -ne "  Waiting for the clients to finish ..."
 sleep 1
 while [ `ps aux | grep "sh experiment_sub.sh" | grep $(whoami) | wc -l` != 1 ]
 do
 	sleep 1
+	echo -ne "waiting..."
 done
 echo "OK"
 
@@ -227,7 +229,7 @@ echo "OK"
 
 # Send a shut down signal to the server
 # Note: server.jar catches SIGHUP signals and terminates gracefully
-for server in $servers
+for server in "${servers[@]}"
 do
     echo -ne "  Sending shut down signal to server $server..."
     ssh $remoteUserName@$server "killall java"
@@ -256,7 +258,7 @@ done
 mkdir -p $experimentId
 echo "  Copying tar'd log files from client machine untar and delete tar"
 
-for client in $clients
+for client in "${clients[@]}"
 do
     scp $remoteUserName@$client:$executionDir/client_logs.tar.gz ./$experimentId/
     cd $experimentId
@@ -265,7 +267,7 @@ do
     cd ..
 done
 i=1
-for server in $servers
+for server in "${servers[@]}"
 do
     echo "  Copying log files from server $server"
     scp $remoteUserName@$server:$executionDir/server_$i.log ./$experimentId/
@@ -278,11 +280,11 @@ done
 #ssh $remoteUserName@$serverMachine "rm $executionDir/server.out"
 #echo "OK"
 echo -ne " Cleanup directories..."
-for server in $servers
+for server in "${servers[@]}"
 do
     ssh $remoteUserName@$server "rm -Rf $executionDir"
 done
-for client in $clients
+for client in "${clients[@]}"
 do
     ssh $remoteUserName@$client "rm -Rf $executionDir"
 done
