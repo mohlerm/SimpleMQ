@@ -37,7 +37,8 @@ noOfClients=""
 remoteUserName=""
 experimentId=""
 
-serviceport=51234
+serverPort=51234
+dbPort=21721
 clientRunTime=5
 executionDir="/mnt/local/mohlerm"
 serverStartMessage="Using server id: 0"
@@ -130,7 +131,7 @@ echo -ne "  Setup PostgreSQL..."
 ssh $remoteUserName@$dbMachine "cp /home/$remoteUserName/postgres_init.tar.gz $executionDir"
 ssh $remoteUserName@$dbMachine "tar -zxf $executionDir/postgres_init.tar.gz -C $executionDir"
 sleep 1
-ssh $remoteUserName@$dbMachine  "screen -dmS postgres $executionDir/postgres/bin/postgres -D $executionDir/postgres/db/ -p 51230 -i -k $executionDir/"
+ssh $remoteUserName@$dbMachine  "screen -dmS postgres $executionDir/postgres/bin/postgres -D $executionDir/postgres/db/ -p $dbPort -i -k $executionDir/"
 sleep 3
 echo "OK"
 
@@ -142,7 +143,7 @@ echo "OK"
 
 # Run server
 echo "  Starting the server"
-ssh $remoteUserName@$serverMachine "java -jar $executionDir/SimpleMQ_server.jar 0 $serviceport $dbMachine 2>&1 > $executionDir/server_0.log" &
+ssh $remoteUserName@$serverMachine "java -jar $executionDir/SimpleMQ_server.jar 0 $serverPort $dbMachine $dbPort 2>&1 > $executionDir/server_0.log" &
 
 # Wait for the server to start up
 echo -ne "  Waiting for the server to start up..."
@@ -156,7 +157,7 @@ echo "OK"
 
 echo "  Start the clients on the client machine: $clientMachine"
 scp  client.sh $remoteUserName@$clientMachine:$executionDir
-ssh $remoteUserName@$clientMachine "cd $executionDir; sh client.sh $serverMachine $serviceport $noOfClients $clientRunTime"
+ssh $remoteUserName@$clientMachine "cd $executionDir; sh client.sh $serverMachine $serverPort $noOfClients $clientRunTime"
 # Run the clients
 
 
@@ -189,13 +190,15 @@ echo "OK"
 ########################################
 
 # Copy log files from the clients
-clientIds=`seq $noOfClients`
+#clientIds=`seq $noOfClients`
 mkdir -p $experimentId
-echo "  Copying log files from client machine... "
-for clientId in $clientIds
-do
-	scp $remoteUserName@$clientMachine:$executionDir/logs/client_$clientId.log ./$experimentId/
-done
+echo "  Copying tar'd log files from client machine untar and delete tar"
+scp $remoteUserName@$clientMachine:$executionDir/client_logs.tar.gz ./$experimentId/
+cd $experimentId
+tar xzf client_logs.tar.gz
+rm client_logs.tar.gz
+cd ..
+echo "  Copying log files from servers"
 scp $remoteUserName@$serverMachine:$executionDir/server_0.log ./$experimentId/
 
 # Cleanup
@@ -214,14 +217,17 @@ echo "OK"
 echo "  Processing log files"
 cat $experimentId/client* | sort -n > $experimentId/allclients.log
 
-echo "  Generating trace.jpg with gnuplot"
-gnuplot << EOF
-set terminal jpeg
-set output '$experimentId/trace.jpg'
-set xlabel 'Time (s)'
-set ylabel 'Response Time (ms)'
-set title 'Trace log'
-set xrange [0:]
-set yrange [0:]
-plot '$experimentId/allclients.log' using (\$1/1000):2 with lp title "$experimentId"
-EOF
+#echo "  Generating trace.jpg with gnuplot"
+#gnuplot << EOF
+#set terminal jpeg
+#set output '$experimentId/trace.jpg'
+#set xlabel 'Time (s)'
+#set ylabel 'Response Time (ms)'
+#set title 'Trace log'
+#set xrange [0:]
+#set yrange [0:]
+#plot '$experimentId/allclients.log' using (\$1/1000):2 with lp title "$experimentId"
+#EOF
+
+echo "  Parse with python and generate graphs using matplotlib"
+python graphs.py $experimentId allclients.log
