@@ -8,7 +8,7 @@ serverMachines=$4
 serverPort=$5
 idStart=$6
 idEnd=$7
-clientRunTime=$7
+clientRunTime=$8
 
 scp  client.sh $remoteUserName@$client:$executionDir
 ssh $remoteUserName@$client "cd $executionDir; bash client.sh $serverMachines $serverPort $idStart $idEnd $clientRunTime"
