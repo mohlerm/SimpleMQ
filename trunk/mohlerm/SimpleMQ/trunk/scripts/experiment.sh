@@ -26,25 +26,25 @@
 
 function usage() {
 	local programName=$1
-	echo "Usage: $programName --dbMachine=<address> --serverMachine=<address> --clientMachine=<address> --noOfClients=<int> --remoteUserName=<username> --experimentId=<id> --clientRunTime=<seconds>"
+	echo "Usage: $programName --dbMachine=<address> --serverMachines=<address> --clientMachines=<address> --noOfClients=<int> --remoteUserName=<username> --experimentId=<id> --clientRunTime=<seconds>"
 	exit -1
 }
 
 dbMachine=""
-serverMachine=""
-clientMachine=""
+serverMachines=""
+clientMachines=""
 noOfClients=""
 remoteUserName=""
 experimentId=""
 
-serverPort=51234
+serverPort=51234 # keep in mind first server uses +1, second uses +2 etc...
 dbPort=21721
 clientRunTime=5
 executionDir="/mnt/local/mohlerm"
-serverStartMessage="Using server id: 0"
+serverStartMessage="Using server id: "
 
 # Extract command line arguments
-TEMP=`getopt -o b: --long dbMachine:,serverMachine:,clientMachine:,noOfClients:,remoteUserName:,experimentId:,clientRunTime: \
+TEMP=`getopt -o b: --long dbMachine:,serverMachines:,clientMachines:,noOfClients:,remoteUserName:,experimentId:,clientRunTime: \
      -n 'example.bash' -- "$@"`
 
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
@@ -55,8 +55,8 @@ eval set -- "$TEMP"
 while true ; do
         case "$1" in
         		--dbMachine) dbMachine="$2" ; shift 2 ;;
-                --serverMachine) serverMachine="$2" ; shift 2 ;;
-                --clientMachine) clientMachine="$2" ; shift 2 ;;
+                --serverMachines) serverMachines="$2" ; shift 2 ;;
+                --clientMachines) clientMachines="$2" ; shift 2 ;;
                 --noOfClients) noOfClients="$2" ; shift 2 ;;
                 --remoteUserName) remoteUserName="$2" ; shift 2 ;;
                 --experimentId) experimentId="$2" ; shift 2 ;;
@@ -67,10 +67,30 @@ while true ; do
 done
 
 # Check for correctness of the commandline arguments
-if [[ $dbMachine == "" || $serverMachine == "" || $clientMachine == "" || $noOfClients == "" || $remoteUserName == "" || $experimentId == "" ]]
+if [[ $dbMachine == "" || $serverMachines == "" || $clientMachines == "" || $noOfClients == "" || $remoteUserName == "" || $experimentId == "" ]]
 then
 	usage $1
 fi
+
+declare -a servers
+declare -a clients
+serverCount=0
+clientCount=0
+IFS=',' read -ra ADDR <<< "$serverMachines"
+for i in "${ADDR[@]}"; do
+    servers[serverCount]=$i
+    ((serverCount++))
+done
+IFS=',' read -ra ADDR <<< "$clientMachines"
+for i in "${ADDR[@]}"; do
+    clients[clientCount]=$i
+    ((clientCount++))
+done
+
+echo -ne "servers: "$serverCount"\t"
+echo ${servers[*]}
+echo -ne "clients: "$clientCount"\t"
+echo ${clients[*]}
 
 #####################################
 #
@@ -90,36 +110,54 @@ echo "OK"
 #
 #####################################
 
-echo -ne "  Testing passwordless connection to the server machine and client machine... "
+echo -ne "  Testing passwordless connection to the server and client machines... "
 # Check if command can be run on server and client
-success=$( ssh -o BatchMode=yes  $remoteUserName@$serverMachine echo ok 2>&1 )
-if [ $success != "ok" ]
-then
-	echo "Passwordless login not successful for $remoteUserName on $serverMachine. Exiting..."
-	exit -1
-fi
+for server in $servers
+do
+    success=$( ssh -o BatchMode=yes  $remoteUserName@$server echo ok 2>&1 )
+    if [ $success != "ok" ]
+    then
+        echo "Passwordless login not successful for $remoteUserName on $server. Exiting..."
+        exit -1
+    fi
+done
 
-success=$( ssh -o BatchMode=yes  $remoteUserName@$clientMachine echo ok 2>&1 )
-if [ $success != "ok" ]
-then
-	echo "Passwordless login not successful for $remoteUserName on $clientMachine. Exiting..."
-	exit -1
-fi
+for client in $clients
+do
+    success=$( ssh -o BatchMode=yes  $remoteUserName@$client echo ok 2>&1 )
+    if [ $success != "ok" ]
+    then
+	    echo "Passwordless login not successful for $remoteUserName on $client. Exiting..."
+	    exit -1
+    fi
+done
 echo "OK"
 
 echo -ne "  Create directories on all machines..."
 ssh $remoteUserName@$dbMachine "mkdir -p $executionDir"
-ssh $remoteUserName@$serverMachine "mkdir -p $executionDir"
-ssh $remoteUserName@$clientMachine "mkdir -p $executionDir"
+for server in $servers
+do
+    ssh $remoteUserName@$server "mkdir -p $executionDir"
+done
+for client in $clients
+do
+    ssh $remoteUserName@$client "mkdir -p $executionDir"
+done
 echo "OK"
 
-#echo -ne "  Copying server.jar to server machine: $serverMachine..."
+#echo -ne "  Copying server.jar to server machines: $serverMachine..."
 # Copy jar to server machine
-scp ../jar/SimpleMQ_server.jar $remoteUserName@$serverMachine:$executionDir
+for server in $servers
+do
+    scp ../jar/SimpleMQ_server.jar $remoteUserName@$server:$executionDir
+done
 #echo "OK"
-#echo -ne "  Copying client.jar to client machine: $clientMachine"
+#echo -ne "  Copying client.jar to client machines: $clientMachine"
 # Copy jar to client machine
-scp ../jar/SimpleMQ_client.jar $remoteUserName@$clientMachine:$executionDir
+for client in $clients
+do
+    scp ../jar/SimpleMQ_client.jar $remoteUserName@$client:$executionDir
+done
 #echo "OK"
 
 ######################################
@@ -142,24 +180,43 @@ echo "OK"
 ######################################
 
 # Run server
-echo "  Starting the server"
-ssh $remoteUserName@$serverMachine "java -jar $executionDir/SimpleMQ_server.jar 0 $serverPort $dbMachine $dbPort 2>&1 > $executionDir/server_0.log" &
+i=1
+for server in $servers
+do
+    echo "  Starting the server $server"
+    #port=$(($serverPort+$i))
+    ssh $remoteUserName@$server "java -jar $executionDir/SimpleMQ_server.jar $i $serverPort $dbMachine $dbPort 2>&1 > $executionDir/server_$i.log" &
 
-# Wait for the server to start up
-echo -ne "  Waiting for the server to start up..."
+    # Wait for the server to start up
+    echo -ne "  Waiting for the server to start up..."
+    sleep 1
+    while [ `ssh $remoteUserName@$server "cat $executionDir/server_$i.log | grep '$serverStartMessage$i' | wc -l"` != 1 ]
+    do
+	    sleep 1
+    done
+    echo "OK"
+done
+
+idStart=1
+idStep=$(($noOfClients/$clientCount))
+idEnd=$idStep
+for client in $clients
+do
+    echo "  Start the clients on the client machine: $client"
+    # we use all servermachines
+    sh experiment_sub.sh $remoteUserName $client $executionDir $serverMachines $serverPort $idStart $idEnd $clientRunTime &
+    # Run the clients
+    idStart=$(($idStart+$idStep))
+    idEnd=$(($idEnd+$idStep))
+done
+
+echo -ne "  Waiting for the clients to finish ... "
 sleep 1
-# TODO
-while [ `ssh $remoteUserName@$serverMachine "cat $executionDir/server_0.log | grep '$serverStartMessage' | wc -l"` != 1 ]
+while [ `ps aux | grep "sh experiment_sub.sh" | grep $(whoami) | wc -l` != 1 ]
 do
 	sleep 1
 done
 echo "OK"
-
-echo "  Start the clients on the client machine: $clientMachine"
-scp  client.sh $remoteUserName@$clientMachine:$executionDir
-ssh $remoteUserName@$clientMachine "cd $executionDir; sh client.sh $serverMachine $serverPort $noOfClients $clientRunTime"
-# Run the clients
-
 
 echo -ne "  Sending shut down signal to database..."
 ssh $remoteUserName@$dbMachine "screen -X -S postgres quit"
@@ -167,11 +224,16 @@ ssh $remoteUserName@$dbMachine "killall postgres"
 echo "OK"
 
 
-echo -ne "  Sending shut down signal to server..."
+
 # Send a shut down signal to the server
 # Note: server.jar catches SIGHUP signals and terminates gracefully
-ssh $remoteUserName@$serverMachine "killall java"
-echo "OK"
+for server in $servers
+do
+    echo -ne "  Sending shut down signal to server $server..."
+    ssh $remoteUserName@$server "killall java"
+    echo "OK"
+done
+
 
 #echo -ne "  Waiting for the server to shut down... "
 # TODO
@@ -193,13 +255,22 @@ echo "OK"
 #clientIds=`seq $noOfClients`
 mkdir -p $experimentId
 echo "  Copying tar'd log files from client machine untar and delete tar"
-scp $remoteUserName@$clientMachine:$executionDir/client_logs.tar.gz ./$experimentId/
-cd $experimentId
-tar xzf client_logs.tar.gz
-rm client_logs.tar.gz
-cd ..
-echo "  Copying log files from servers"
-scp $remoteUserName@$serverMachine:$executionDir/server_0.log ./$experimentId/
+
+for client in $clients
+do
+    scp $remoteUserName@$client:$executionDir/client_logs.tar.gz ./$experimentId/
+    cd $experimentId
+    tar xzfm client_logs.tar.gz
+    rm client_logs.tar.gz
+    cd ..
+done
+i=1
+for server in $servers
+do
+    echo "  Copying log files from server $server"
+    scp $remoteUserName@$server:$executionDir/server_$i.log ./$experimentId/
+    ((i++))
+done
 
 # Cleanup
 #echo -ne "  Cleaning up files on client and server machines... "
@@ -207,8 +278,14 @@ scp $remoteUserName@$serverMachine:$executionDir/server_0.log ./$experimentId/
 #ssh $remoteUserName@$serverMachine "rm $executionDir/server.out"
 #echo "OK"
 echo -ne " Cleanup directories..."
-ssh $remoteUserName@$serverMachine "rm -Rf $executionDir"
-ssh $remoteUserName@$clientMachine "rm -Rf $executionDir"
+for server in $servers
+do
+    ssh $remoteUserName@$server "rm -Rf $executionDir"
+done
+for client in $clients
+do
+    ssh $remoteUserName@$client "rm -Rf $executionDir"
+done
 ssh $remoteUserName@$dbMachine "rm -Rf $executionDir"
 echo "OK"
 
