@@ -21,20 +21,15 @@ import java.io.Serializable;
 
  */
 public class SerializableRequest implements Serializable {
-    public enum RequestType {
-        CREATECLIENT, QUERYCLIENT, DELETECLIENT,
-        CREATEQUEUE, DELETEQUEUE, QUERYQUEUESFORRECEIVER,
-        SENDMESSAGETOALL, SENDMESSAGETORECEIVER, POPQUEUE, PEEKQUEUE,
-        QUERYMESSAGESFORSENDER, QUERYMESSAGESFORRECEIVER
-    }
-    RequestType type;
+
+    MessagePassingProtocol.RequestType type;
     int id;
     int source;
     int target;
     int queue;
     String message;
 
-    public SerializableRequest(RequestType type, int id, int source, int target, int queue, String message) {
+    public SerializableRequest(MessagePassingProtocol.RequestType type, int id, int source, int target, int queue, String message) {
         this.type = type;
         this.id = id;
         this.source = source;
@@ -47,7 +42,7 @@ public class SerializableRequest implements Serializable {
         }
     }
 
-    public RequestType getType() {
+    public MessagePassingProtocol.RequestType getType() {
         return type;
     }
 

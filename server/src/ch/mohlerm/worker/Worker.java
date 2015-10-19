@@ -32,7 +32,7 @@ public class Worker implements Runnable {
         this.id = id;
         this.request = null;
         this.answer = null;
-        log = Logger.getLogger(Worker.class.getName()+"["+String.valueOf(id)+"]");
+        log = Logger.getLogger("Server["+String.valueOf(Config.SERVERID)+"]Worker["+String.valueOf(id)+"]");
         setupDBConnection();
     }
     // worker id
@@ -66,7 +66,7 @@ public class Worker implements Runnable {
     @Override
     public void run() {
         log.debug("Got request");
-
+        long startTime = System.nanoTime();
         ByteBuffer requestBuffer = ByteBuffer.allocate(Config.REQUESTBUFFERSIZE);
         // Attempt to read off the channel
         int numRead;
@@ -110,19 +110,19 @@ public class Worker implements Runnable {
                 case CREATECLIENT:
                     try {
                         newid = InsertQueries.insertClient(dbConnection, request.getSource());
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, request.getId(), request.getSource(), newid, "");
+                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.CREATECLIENT, request.getId(), request.getSource(), newid, "OK");
                     } catch (SQLException e) {
                         e.printStackTrace();
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, request.getId(), request.getSource(), -1, "Could not add client with id "+String.valueOf(request.getSource())+"!");
+                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.ERROR, request.getId(), request.getSource(), -1, "Could not add client with id "+String.valueOf(request.getSource())+"!");
                     }
                     break;
                 case DELETECLIENT:
                     try {
                         newid = DeleteQueries.deleteClient(dbConnection, request.getSource());
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, request.getId(), request.getSource(), newid, "");
+                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.DELETECLIENT, request.getId(), request.getSource(), newid, "OK");
                     } catch (SQLException e) {
                         e.printStackTrace();
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, request.getId(), request.getSource(), -1, "Could not remove client with id "+String.valueOf(request.getSource())+"!");
+                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.ERROR, request.getId(), request.getSource(), -1, "Could not remove client with id "+String.valueOf(request.getSource())+"!");
                     }
                     break;
                 case QUERYCLIENT:
@@ -131,19 +131,19 @@ public class Worker implements Runnable {
                 case CREATEQUEUE:
                     try {
                         newid = InsertQueries.insertQueue(dbConnection);
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, request.getId(), request.getSource(),newid, "");
+                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.CREATEQUEUE, request.getId(), request.getSource(),newid, "OK");
                     } catch (SQLException e) {
                         e.printStackTrace();
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, request.getId(), request.getSource(), -1, "Could not create queue!");
+                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.ERROR, request.getId(), request.getSource(), -1, "Could not create queue!");
                     }
                     break;
                 case DELETEQUEUE:
                     try {
                         newid = DeleteQueries.deleteQueue(dbConnection, request.getQueue());
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, request.getId(), request.getSource(), newid, "");
+                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.DELETEQUEUE, request.getId(), request.getSource(), newid, "OK");
                     } catch (SQLException e) {
                         e.printStackTrace();
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, request.getId(), request.getSource(), -1, "Could not remove client with id "+String.valueOf(request.getSource())+"!");
+                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.ERROR, request.getId(), request.getSource(), -1, "Could not remove client with id "+String.valueOf(request.getSource())+"!");
                     }
                     break;
                 case QUERYQUEUESFORRECEIVER:
@@ -155,38 +155,38 @@ public class Worker implements Runnable {
                         // override receiver
                         psqlMessage.setReceiver(0);
                         newid = InsertQueries.insertMessage(dbConnection, psqlMessage);
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, request.getId(), request.getSource(), newid,"");
+                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.SENDMESSAGETOALL, request.getId(), request.getSource(), newid,"OK");
                     } catch (SQLException e) {
                         e.printStackTrace();
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, request.getId(), request.getSource(), -1, "Can not send message to all.");
+                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.ERROR, request.getId(), request.getSource(), -1, "Can not send message to all.");
                     }
                     break;
                 case SENDMESSAGETORECEIVER:
                     psqlMessage = new PsqlMessage(request, new Timestamp(System.currentTimeMillis()));
                     try {
                         newid = InsertQueries.insertMessage(dbConnection, psqlMessage);
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ACK, request.getId(), request.getSource(), newid,"");
+                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.SENDMESSAGETORECEIVER, request.getId(), request.getSource(), newid,"OK");
                     } catch (SQLException e) {
                         e.printStackTrace();
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, request.getId(), request.getSource(), -1, "Can not send message to receiver: "+request.getTarget());
+                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.ERROR, request.getId(), request.getSource(), -1, "Can not send message to receiver: "+request.getTarget());
                     }
                     break;
                 case POPQUEUE:
                     try {
                         psqlMessage = SelectQueries.popQueue(dbConnection, request.getQueue(), request.getSource());
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ANSWERMESSAGE, request.getId(), request.getSource(), psqlMessage.getId(), psqlMessage.getMessage());
+                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.POPQUEUE, request.getId(), request.getSource(), psqlMessage.getId(), psqlMessage.getMessage());
                     } catch (SQLException e) {
                         e.printStackTrace();
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, request.getId(), request.getSource(), -1, "Could not pop queue "+request.getQueue()+"!");
+                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.ERROR, request.getId(), request.getSource(), -1, "Could not pop queue "+request.getQueue()+"!");
                     }
                     break;
                 case PEEKQUEUE:
                     try {
                         psqlMessage = SelectQueries.peekQueue(dbConnection, request.getQueue(), request.getSource());
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ANSWERMESSAGE, request.getId(), request.getSource(), psqlMessage.getId(), psqlMessage.getMessage());
+                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.PEEKQUEUE, request.getId(), request.getSource(), psqlMessage.getId(), psqlMessage.getMessage());
                     } catch (SQLException e) {
                         e.printStackTrace();
-                        answer = new SerializableAnswer(SerializableAnswer.AnswerType.ERROR, request.getId(), request.getSource(), -1, "Could not peek queue "+request.getQueue()+"!");
+                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.ERROR, request.getId(), request.getSource(), -1, "Could not peek queue "+request.getQueue()+"!");
                     }
                     break;
                 case QUERYMESSAGESFORSENDER:
@@ -201,7 +201,7 @@ public class Worker implements Runnable {
 
 
             ByteBuffer answerBuffer = ByteBuffer.allocate(Config.ANSWERBUFFERSIZE);
-            MessagePassingProtocol.logAnswer(answer, log);
+
             ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
             try {
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteOutputStream);
@@ -227,6 +227,8 @@ public class Worker implements Runnable {
                     e.printStackTrace();
                 }
             }
+            long estimatedTime = System.nanoTime() - startTime;
+            MessagePassingProtocol.logAnswer(answer, log,estimatedTime);
         }
         log.debug("Finished request");
         callBack.workerCallBack(this);

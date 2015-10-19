@@ -9,6 +9,15 @@ import java.io.*;
  */
 
 public class MessagePassingProtocol {
+
+    public enum RequestType {
+        CREATECLIENT, QUERYCLIENT, DELETECLIENT,
+        CREATEQUEUE, DELETEQUEUE, QUERYQUEUESFORRECEIVER,
+        SENDMESSAGETOALL, SENDMESSAGETORECEIVER, POPQUEUE, PEEKQUEUE,
+        QUERYMESSAGESFORSENDER, QUERYMESSAGESFORRECEIVER,
+        ERROR
+    }
+
     public static String smallMessage() {
         return lorem.substring(0,200);
     }
@@ -21,8 +30,12 @@ public class MessagePassingProtocol {
     public static void logRequest(SerializableRequest request, Logger logger) {
         logger.info(parseRequestToString(request));
     }
-    public static void logAnswer(SerializableAnswer answer, Logger logger) {
-        logger.info(parseAnswerToString(answer));
+    public static void logAnswer(SerializableAnswer answer, Logger logger, long time) {
+        if(time!=-1) {
+            logger.info(parseAnswerToString(answer) + "||" + String.valueOf(time/1e6));
+        } else {
+            logger.info(parseAnswerToString(answer));
+        }
     }
     private static String parseRequestToString(SerializableRequest request) {
         String type;
@@ -60,8 +73,11 @@ public class MessagePassingProtocol {
             case QUERYMESSAGESFORRECEIVER:
                 type = "QueryMessagesForReceiver";
                 break;
+            case ERROR:
+                type = "Error";
+                break;
             default:
-                type = "ERROR";
+                type = "UnexpectedError";
         }
         String message;
         if(request.getMessage().length()==200) {
@@ -78,20 +94,44 @@ public class MessagePassingProtocol {
     private static String parseAnswerToString(SerializableAnswer answer) {
         String type;
         switch (answer.type) {
-            case ACK:
-                type = "Ack";
+            case CREATECLIENT:
+                type = "CreateClient";
+                break;
+            case DELETECLIENT:
+                type = "DeleteClient";
+                break;
+            case CREATEQUEUE:
+                type = "CreateQueue";
+                break;
+            case DELETEQUEUE:
+                type = "DeleteQueue";
+                break;
+            case QUERYQUEUESFORRECEIVER:
+                type = "QueryQueuesForReceiver";
+                break;
+            case SENDMESSAGETOALL:
+                type = "SendMessageToAll";
+                break;
+            case SENDMESSAGETORECEIVER:
+                type = "SendMessageToReceiver";
+                break;
+            case POPQUEUE:
+                type = "PopQueue";
+                break;
+            case PEEKQUEUE:
+                type = "PeekQueue";
+                break;
+            case QUERYMESSAGESFORSENDER:
+                type = "QueryMessagesForSender";
+                break;
+            case QUERYMESSAGESFORRECEIVER:
+                type = "QueryMessagesForReceiver";
                 break;
             case ERROR:
                 type = "Error";
                 break;
-            case ANSWERMESSAGE:
-                type = "Message";
-                break;
-            case ANSWERQUEUE:
-                type = "Queue";
-                break;
             default:
-                type = "ERROR";
+                type = "UnexpectedError";
         }
         String message;
         if(answer.getMessage().length()==200) {
@@ -113,7 +153,7 @@ public class MessagePassingProtocol {
     public static int answerBufferSize() {
         // setup dummy message to get max size of buffer
 
-        SerializableAnswer message = new SerializableAnswer(SerializableAnswer.AnswerType.ACK,-1, -1, -1, MessagePassingProtocol.largeMessage());
+        SerializableAnswer message = new SerializableAnswer(RequestType.CREATECLIENT,-1, -1, -1, MessagePassingProtocol.largeMessage());
 
         ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
 
@@ -133,7 +173,7 @@ public class MessagePassingProtocol {
     public static int requestBufferSize() {
         // setup dummy message to get max size of buffer
 
-        SerializableRequest message = new SerializableRequest(SerializableRequest.RequestType.SENDMESSAGETOALL, -1, -1, -1, -1, MessagePassingProtocol.largeMessage());
+        SerializableRequest message = new SerializableRequest(RequestType.CREATECLIENT, -1, -1, -1, -1, MessagePassingProtocol.largeMessage());
 
         ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
 
