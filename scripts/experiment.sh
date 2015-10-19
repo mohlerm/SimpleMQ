@@ -38,9 +38,9 @@ remoteUserName=""
 experimentId=""
 
 serverPort=51234 # keep in mind first server uses +1, second uses +2 etc...
-dbPort=21721
+dbPort=51230
 clientRunTime=5
-executionDir="/mnt/local/mohlerm"
+executionDir="/home/ubuntu/simplemq"
 serverStartMessage="Using server id: "
 
 # Extract command line arguments
@@ -114,7 +114,7 @@ echo -ne "  Testing passwordless connection to the server and client machines...
 # Check if command can be run on server and client
 for server in "${servers[@]}"
 do
-    success=$( ssh -o BatchMode=yes  $remoteUserName@$server echo ok 2>&1 )
+    success=$( ssh -i ~/.ssh/id_aws -o BatchMode=yes  $remoteUserName@$server echo ok 2>&1 )
     if [ $success != "ok" ]
     then
         echo "Passwordless login not successful for $remoteUserName on $server. Exiting..."
@@ -124,7 +124,7 @@ done
 
 for client in "${clients[@]}"
 do
-    success=$( ssh -o BatchMode=yes  $remoteUserName@$client echo ok 2>&1 )
+    success=$( ssh -i ~/.ssh/id_aws -o BatchMode=yes  $remoteUserName@$client echo ok 2>&1 )
     if [ $success != "ok" ]
     then
 	    echo "Passwordless login not successful for $remoteUserName on $client. Exiting..."
@@ -134,14 +134,14 @@ done
 echo "OK"
 
 echo -ne "  Create directories on all machines..."
-ssh $remoteUserName@$dbMachine "mkdir -p $executionDir"
+ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "mkdir -p $executionDir"
 for server in "${servers[@]}"
 do
-    ssh $remoteUserName@$server "mkdir -p $executionDir"
+    ssh -i ~/.ssh/id_aws $remoteUserName@$server "mkdir -p $executionDir"
 done
 for client in "${clients[@]}"
 do
-    ssh $remoteUserName@$client "mkdir -p $executionDir"
+    ssh -i ~/.ssh/id_aws $remoteUserName@$client "mkdir -p $executionDir"
 done
 echo "OK"
 
@@ -149,14 +149,14 @@ echo "OK"
 # Copy jar to server machine
 for server in "${servers[@]}"
 do
-    scp ../jar/SimpleMQ_server.jar $remoteUserName@$server:$executionDir
+    scp -i ~/.ssh/id_aws ../jar/SimpleMQ_server.jar $remoteUserName@$server:$executionDir
 done
 #echo "OK"
 #echo -ne "  Copying client.jar to client machines: $clientMachine"
 # Copy jar to client machine
 for client in "${clients[@]}"
 do
-    scp ../jar/SimpleMQ_client.jar $remoteUserName@$client:$executionDir
+    scp -i ~/.ssh/id_aws ../jar/SimpleMQ_client.jar $remoteUserName@$client:$executionDir
 done
 #echo "OK"
 
@@ -166,10 +166,11 @@ done
 #
 ######################################
 echo -ne "  Setup PostgreSQL..."
-ssh $remoteUserName@$dbMachine "cp /home/$remoteUserName/postgres_init.tar.gz $executionDir"
-ssh $remoteUserName@$dbMachine "tar -zxf $executionDir/postgres_init.tar.gz -C $executionDir"
+#scp -i ~/.ssh/id_aws postgres_init.tar.gz $remoteUserName@$dbMachine:$executionDir
+ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "cd $executionDir; wget http://mohlerm.ch/simplemq/postgres_init.tar.gz"
+ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "tar -zxf $executionDir/postgres_init.tar.gz -C $executionDir"
 sleep 1
-ssh $remoteUserName@$dbMachine  "screen -dmS postgres $executionDir/postgres/bin/postgres -D $executionDir/postgres/db/ -p $dbPort -i -k $executionDir/"
+ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine  "screen -dmS postgres $executionDir/postgres/bin/postgres -D $executionDir/postgres/db/ -p $dbPort -i -k $executionDir/"
 sleep 3
 echo "OK"
 
@@ -185,12 +186,12 @@ for server in "${servers[@]}"
 do
     echo "  Starting the server $server"
     #port=$(($serverPort+$i))
-    ssh $remoteUserName@$server "java -jar $executionDir/SimpleMQ_server.jar $i $serverPort $dbMachine $dbPort 2>&1 > $executionDir/server_$i.log" &
+    ssh -i ~/.ssh/id_aws $remoteUserName@$server "java -jar $executionDir/SimpleMQ_server.jar $i $serverPort $dbMachine $dbPort 2>&1 > $executionDir/server_$i.log" &
 
     # Wait for the server to start up
     echo -ne "  Waiting for the server to start up..."
     sleep 1
-    while [ `ssh $remoteUserName@$server "cat $executionDir/server_$i.log | grep '$serverStartMessage$i' | wc -l"` != 1 ]
+    while [ `ssh -i ~/.ssh/id_aws $remoteUserName@$server "cat $executionDir/server_$i.log | grep '$serverStartMessage$i' | wc -l"` != 1 ]
     do
 	    sleep 1
     done
@@ -221,8 +222,8 @@ done
 echo "OK"
 
 echo -ne "  Sending shut down signal to database..."
-ssh $remoteUserName@$dbMachine "screen -X -S postgres quit"
-ssh $remoteUserName@$dbMachine "killall postgres"
+ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "screen -X -S postgres quit"
+ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "killall postgres"
 echo "OK"
 
 
@@ -232,7 +233,7 @@ echo "OK"
 for server in "${servers[@]}"
 do
     echo -ne "  Sending shut down signal to server $server..."
-    ssh $remoteUserName@$server "killall java"
+    ssh -i ~/.ssh/id_aws $remoteUserName@$server "killall java"
     echo "OK"
 done
 
@@ -260,7 +261,7 @@ echo "  Copying tar'd log files from client machine untar and delete tar"
 
 for client in "${clients[@]}"
 do
-    scp $remoteUserName@$client:$executionDir/client_logs.tar.gz ./$experimentId/
+    scp -i ~/.ssh/id_aws $remoteUserName@$client:$executionDir/client_logs.tar.gz ./$experimentId/
     cd $experimentId
     tar xzfm client_logs.tar.gz
     rm client_logs.tar.gz
@@ -270,7 +271,7 @@ i=1
 for server in "${servers[@]}"
 do
     echo "  Copying log files from server $server"
-    scp $remoteUserName@$server:$executionDir/server_$i.log ./$experimentId/
+    scp -i ~/.ssh/id_aws $remoteUserName@$server:$executionDir/server_$i.log ./$experimentId/
     ((i++))
 done
 
@@ -282,13 +283,13 @@ done
 echo -ne " Cleanup directories..."
 for server in "${servers[@]}"
 do
-    ssh $remoteUserName@$server "rm -Rf $executionDir"
+    ssh -i ~/.ssh/id_aws $remoteUserName@$server "rm -Rf $executionDir"
 done
 for client in "${clients[@]}"
 do
-    ssh $remoteUserName@$client "rm -Rf $executionDir"
+    ssh -i ~/.ssh/id_aws $remoteUserName@$client "rm -Rf $executionDir"
 done
-ssh $remoteUserName@$dbMachine "rm -Rf $executionDir"
+ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "rm -Rf $executionDir"
 echo "OK"
 
 
