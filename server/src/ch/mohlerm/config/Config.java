@@ -12,7 +12,7 @@ public class Config {
     public static int SERVERPORT = 1234;
     public static int SERVERID = 0;
    // public static InetAddress SERVERIP;
-    public static int CPUWORKERSCALING = 4;
+    public static int CPUWORKERSCALING = 8;
     public static int REQUESTBUFFERSIZE = 4096;
     public static int ANSWERBUFFERSIZE = 4096;
 }
