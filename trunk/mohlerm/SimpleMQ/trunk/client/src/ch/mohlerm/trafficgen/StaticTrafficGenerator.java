@@ -55,12 +55,13 @@ public class StaticTrafficGenerator extends TrafficGenerator {
         while(counter < numberOfRequests+1) {
 
             // always send a message and then query for one
-            if(counter%3 == 1) {
+            if(counter%4 == 1) {
                 request = new SerializableRequest(MessagePassingProtocol.RequestType.SENDMESSAGETOALL, counter, Config.CLIENTID, 0, 1, fixMessage);
-            } else if (counter%3 == 2){
+            } else if (counter%4 == 2){
                 request = new SerializableRequest(MessagePassingProtocol.RequestType.PEEKQUEUE, counter, Config.CLIENTID, 0, 1, "");
+            } else if (counter%4 == 3) {
+                request = new SerializableRequest(MessagePassingProtocol.RequestType.SENDMESSAGETOALL, counter, Config.CLIENTID, 0, 1, fixMessage);
             } else {
-                //request = new SerializableRequest(SerializableRequest.RequestType.SENDMESSAGETOALL, counter, Config.CLIENTID, 0, 1, fixMessage);
                 request = new SerializableRequest(MessagePassingProtocol.RequestType.POPQUEUE, counter, Config.CLIENTID, 0, 1, "");
             }
             startTime = System.nanoTime();

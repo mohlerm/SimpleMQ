@@ -174,7 +174,11 @@ public class Worker implements Runnable {
                 case POPQUEUE:
                     try {
                         psqlMessage = SelectQueries.popQueue(dbConnection, request.getQueue(), request.getSource());
-                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.POPQUEUE, request.getId(), request.getSource(), psqlMessage.getId(), psqlMessage.getMessage());
+                        if(psqlMessage.getId() > 0) {
+                            answer = new SerializableAnswer(MessagePassingProtocol.RequestType.POPQUEUE, request.getId(), request.getSource(), psqlMessage.getId(), psqlMessage.getMessage());
+                        } else {
+                            answer = new SerializableAnswer(MessagePassingProtocol.RequestType.ERROR, request.getId(), request.getSource(), -1, "No message to pop available on queue "+request.getQueue()+"!");
+                        }
                     } catch (SQLException e) {
                         e.printStackTrace();
                         answer = new SerializableAnswer(MessagePassingProtocol.RequestType.ERROR, request.getId(), request.getSource(), -1, "Could not pop queue "+request.getQueue()+"!");
@@ -183,7 +187,11 @@ public class Worker implements Runnable {
                 case PEEKQUEUE:
                     try {
                         psqlMessage = SelectQueries.peekQueue(dbConnection, request.getQueue(), request.getSource());
-                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.PEEKQUEUE, request.getId(), request.getSource(), psqlMessage.getId(), psqlMessage.getMessage());
+                        if(psqlMessage.getId() > 0) {
+                            answer = new SerializableAnswer(MessagePassingProtocol.RequestType.PEEKQUEUE, request.getId(), request.getSource(), psqlMessage.getId(), psqlMessage.getMessage());
+                        } else {
+                            answer = new SerializableAnswer(MessagePassingProtocol.RequestType.ERROR, request.getId(), request.getSource(), -1, "No message to peek available on queue "+request.getQueue()+"!");
+                        }
                     } catch (SQLException e) {
                         e.printStackTrace();
                         answer = new SerializableAnswer(MessagePassingProtocol.RequestType.ERROR, request.getId(), request.getSource(), -1, "Could not peek queue "+request.getQueue()+"!");
@@ -228,7 +236,7 @@ public class Worker implements Runnable {
                 }
             }
             long estimatedTime = System.nanoTime() - startTime;
-            MessagePassingProtocol.logAnswer(answer, log,estimatedTime);
+            MessagePassingProtocol.logAnswer(answer, log, estimatedTime);
         }
         log.debug("Finished request");
         callBack.workerCallBack(this);
