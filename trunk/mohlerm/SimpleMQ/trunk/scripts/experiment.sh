@@ -43,9 +43,9 @@ remoteUserName=""
 experimentId=""
 
 serverPort=51234 # keep in mind first server uses +1, second uses +2 etc...
-dbPort=21721
-#executionDir="/home/ubuntu/simplemq"
-executionDir="/mnt/local/mohlerm"
+dbPort=51230
+executionDir="/home/ubuntu/simplemq"
+#executionDir="/mnt/local/mohlerm"
 serverStartMessage="Using server id: "
 
 # Extract command line arguments
@@ -110,7 +110,9 @@ echo ${clients[*]}
 # Save configuration
 #
 #####################################
-echo "sh experiment.sh --dbMachine=$dbMachine --serverMachines=$serverMachines --serverWorkerPerCore=$serverWorkerPerCore --clientMachines=$clientMachines --clientTotal=$clientTotal --clientWorkload=$clientWorkload --clientRunTime=$clientRunTime --remoteUserName=$remoteUserName --experimentId=$experimentId" > $experimentId/experiment_$experimentId.sh
+rm -R $experimentId
+mkdir -p $experimentId
+echo -e "#!/bin/bash\nsh experiment.sh --dbMachine=$dbMachine --serverMachines=$serverMachines --serverWorkerPerCore=$serverWorkerPerCore --clientMachines=$clientMachines --clientTotal=$clientTotal --clientWorkload=$clientWorkload --clientRunTime=$clientRunTime --remoteUserName=$remoteUserName --experimentId=$experimentId" > $experimentId/experiment_$experimentId.sh
 
 #####################################
 #
@@ -237,7 +239,7 @@ sleep 1
 while [ `ps aux | grep "sh experiment_sub.sh" | grep $(whoami) | wc -l` != 1 ]
 do
 	sleep 1
-	echo -ne "waiting..."
+	echo -ne "..."
 done
 echo "OK"
 
@@ -276,7 +278,7 @@ done
 
 # Copy log files from the clients
 #clientIds=`seq $clientTotal`
-mkdir -p $experimentId
+
 echo "  Copying tar'd log files from client machine untar and delete tar"
 
 for client in "${clients[@]}"
@@ -330,4 +332,4 @@ cat $experimentId/client* | sort -n > $experimentId/allclients.log
 #EOF
 
 echo "  Parse with python and generate graphs using matplotlib"
-python graphs.py $experimentId allclients.log
+python graphs.py $clientCount $experimentId allclients.log | tee "$experimentId/experiment_$experimentId.txt"
