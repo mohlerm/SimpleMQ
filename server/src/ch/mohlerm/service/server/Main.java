@@ -20,11 +20,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-        if (args.length < 4) {
-            System.out.println("Please specify <serverid>, <serverport>, <dbhostname>, <dbport>!");
+        if (args.length < 5) {
+            System.out.println("Please specify <serverid>, <serverport>, <workerpercore>, <dbhostname>, <dbport>!");
         } else {
             Config.SERVERID = Integer.parseInt(args[0]);
-
 //            FileAppender fa = new FileAppender();
 //            fa.setName("FileLogger");
 //            fa.setFile("logs/server_"+String.valueOf(Config.SERVERID)+".log");
@@ -33,14 +32,15 @@ public class Main {
 //            fa.setAppend(true);
 //            fa.activateOptions();
 //            Logger.getRootLogger().addAppender(fa);
-
-            log.info("Using server id: " + args[0]);
+            log.info("Using server id: " + String.valueOf(Config.SERVERID));
             Config.SERVERPORT = Integer.parseInt(args[1]);
-            log.info("Using server port: " + args[1]);
-            Config.DBURL = args[2];
-            log.info("Using db ip: " + args[2]);
-            Config.DBPORT = args[3];
-            log.info("Using db port: " + args[3]);
+            log.info("Using server port: " + String.valueOf(Config.SERVERPORT));
+            Config.CPUWORKERSCALING = Integer.parseInt(args[2]);
+            log.info("Using worker per core: " + String.valueOf(Config.CPUWORKERSCALING));
+            Config.DBURL = args[3];
+            log.info("Using db ip: " + Config.DBURL);
+            Config.DBPORT = args[4];
+            log.info("Using db port: " + Config.DBPORT);
 
             log.info("-------- PostgreSQL "
                     + "JDBC Connection Testing ------------");
