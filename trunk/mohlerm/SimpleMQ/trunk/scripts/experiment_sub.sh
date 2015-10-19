@@ -10,5 +10,5 @@ idStart=$6
 idEnd=$7
 clientRunTime=$8
 
-scp  client.sh $remoteUserName@$client:$executionDir
-ssh $remoteUserName@$client "cd $executionDir; bash client.sh $serverMachines $serverPort $idStart $idEnd $clientRunTime"
+scp -i ~/.ssh/id_aws client.sh $remoteUserName@$client:$executionDir
+ssh -i ~/.ssh/id_aws $remoteUserName@$client "cd $executionDir; bash client.sh $serverMachines $serverPort $idStart $idEnd $clientRunTime"
