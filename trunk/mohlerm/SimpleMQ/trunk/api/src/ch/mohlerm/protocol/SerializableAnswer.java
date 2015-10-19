@@ -22,16 +22,14 @@ import java.io.Serializable;
 
  */
 public class SerializableAnswer implements Serializable {
-    public enum AnswerType {
-        ACK, ERROR, ANSWERMESSAGE, ANSWERQUEUE;
-    }
-    AnswerType type;
+
+    MessagePassingProtocol.RequestType type;
     int requestId;
     int clientId;
     int resultId;
     String message;
 
-    public SerializableAnswer(AnswerType type, int requestId, int clientId, int resultId, String message) {
+    public SerializableAnswer(MessagePassingProtocol.RequestType type, int requestId, int clientId, int resultId, String message) {
         this.type = type;
         this.requestId = requestId;
         this.clientId = clientId;
@@ -43,7 +41,7 @@ public class SerializableAnswer implements Serializable {
         }
     }
 
-    public AnswerType getType() {
+    public MessagePassingProtocol.RequestType getType() {
         return type;
     }
 

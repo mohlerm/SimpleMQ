@@ -20,8 +20,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        if (args.length < 3) {
-            System.out.println("Please specify <serverid>, <serverport>, <dbhostname>!");
+        if (args.length < 4) {
+            System.out.println("Please specify <serverid>, <serverport>, <dbhostname>, <dbport>!");
         } else {
             Config.SERVERID = Integer.parseInt(args[0]);
 
@@ -39,6 +39,8 @@ public class Main {
             log.info("Using server port: " + args[1]);
             Config.DBURL = args[2];
             log.info("Using db ip: " + args[2]);
+            Config.DBPORT = args[3];
+            log.info("Using db port: " + args[3]);
 
             log.info("-------- PostgreSQL "
                     + "JDBC Connection Testing ------------");
@@ -75,9 +77,12 @@ public class Main {
                 log.info("Failed to make connection!");
             }
             try {
-                SetupQueries setupQueries = new SetupQueries();
-                setupQueries.setupDB(connection);
-                log.info("Executed setup queries");
+                // only the first server does this
+                if (Config.SERVERID == 1) {
+                    SetupQueries setupQueries = new SetupQueries();
+                    setupQueries.setupDB(connection);
+                    log.info("Executed setup queries");
+                }
             } catch (SQLException e) {
                 log.info("Failed to execute setup queries");
                 e.printStackTrace();

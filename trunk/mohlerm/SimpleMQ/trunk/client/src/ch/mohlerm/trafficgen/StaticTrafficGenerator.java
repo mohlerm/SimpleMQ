@@ -13,12 +13,13 @@ import java.nio.channels.SocketChannel;
  * Created by marcel on 10/7/15.
  */
 public class StaticTrafficGenerator extends TrafficGenerator {
-    static Logger log = Logger.getLogger(StaticTrafficGenerator.class.getName());
+    private final Logger log;
     private final String fixMessage;
 
     public StaticTrafficGenerator(SocketChannel socketChannel, String fixMessage) throws IOException {
         super(socketChannel);
         this.fixMessage = fixMessage;
+        this.log = Logger.getLogger("Client["+ String.valueOf(Config.CLIENTID)+"]");
     }
 
     @Override
@@ -26,15 +27,17 @@ public class StaticTrafficGenerator extends TrafficGenerator {
     public void run() {
         int counter = 0;
 
-        SerializableRequest request = new SerializableRequest(SerializableRequest.RequestType.CREATECLIENT, counter, Config.CLIENTID, 0, 0, "Empty");
+        SerializableRequest request = new SerializableRequest(MessagePassingProtocol.RequestType.CREATECLIENT, counter, Config.CLIENTID, 0, 0, "Empty");
         log.debug("Initialize with client id " + Config.CLIENTID + " on server.");
+        long startTime = System.nanoTime();
         postRequest(request);
         MessagePassingProtocol.logRequest(request, log);
         SerializableAnswer answer = null;
         try {
             log.debug("Wait for init answer");
             answer = getAnswer();
-            MessagePassingProtocol.logAnswer(answer, log);
+            long estimatedTime = System.nanoTime() - startTime;
+            MessagePassingProtocol.logAnswer(answer, log, estimatedTime);
         } catch (NoAnswerException e) {
             e.printStackTrace();
         }
@@ -53,20 +56,22 @@ public class StaticTrafficGenerator extends TrafficGenerator {
 
             // always send a message and then query for one
             if(counter%3 == 1) {
-                request = new SerializableRequest(SerializableRequest.RequestType.SENDMESSAGETOALL, counter, Config.CLIENTID, 0, 1, fixMessage);
+                request = new SerializableRequest(MessagePassingProtocol.RequestType.SENDMESSAGETOALL, counter, Config.CLIENTID, 0, 1, fixMessage);
             } else if (counter%3 == 2){
-                request = new SerializableRequest(SerializableRequest.RequestType.PEEKQUEUE, counter, Config.CLIENTID, 0, 1, "");
+                request = new SerializableRequest(MessagePassingProtocol.RequestType.PEEKQUEUE, counter, Config.CLIENTID, 0, 1, "");
             } else {
-                request = new SerializableRequest(SerializableRequest.RequestType.SENDMESSAGETOALL, counter, Config.CLIENTID, 0, 1, fixMessage);
-                //request = new SerializableRequest(SerializableRequest.RequestType.POPQUEUE, counter, Config.CLIENTID, 0, 1, "");
+                //request = new SerializableRequest(SerializableRequest.RequestType.SENDMESSAGETOALL, counter, Config.CLIENTID, 0, 1, fixMessage);
+                request = new SerializableRequest(MessagePassingProtocol.RequestType.POPQUEUE, counter, Config.CLIENTID, 0, 1, "");
             }
+            startTime = System.nanoTime();
             postRequest(request);
             MessagePassingProtocol.logRequest(request, log);
             answer = null;
             try {
                 log.debug("Wait for answer");
                 answer = getAnswer();
-                MessagePassingProtocol.logAnswer(answer, log);
+                long estimatedTime = System.nanoTime() - startTime;
+                MessagePassingProtocol.logAnswer(answer, log, estimatedTime);
             } catch (NoAnswerException e) {
                 e.printStackTrace();
             }
@@ -80,15 +85,17 @@ public class StaticTrafficGenerator extends TrafficGenerator {
             counter++;
         }
 
-        request = new SerializableRequest(SerializableRequest.RequestType.DELETECLIENT, counter, Config.CLIENTID, 0, 0, "Empty");
+        request = new SerializableRequest(MessagePassingProtocol.RequestType.DELETECLIENT, counter, Config.CLIENTID, 0, 0, "Empty");
         log.debug("Delete client id " + Config.CLIENTID + " on server.");
+        startTime = System.nanoTime();
         postRequest(request);
         MessagePassingProtocol.logRequest(request, log);
         answer = null;
         try {
             log.debug("Wait for init answer");
             answer = getAnswer();
-            MessagePassingProtocol.logAnswer(answer, log);
+            long estimatedTime = System.nanoTime() - startTime;
+            MessagePassingProtocol.logAnswer(answer, log, estimatedTime);
         } catch (NoAnswerException e) {
             e.printStackTrace();
         }
