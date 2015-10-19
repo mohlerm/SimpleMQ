@@ -1,8 +1,10 @@
 #!/bin/bash
-# usage: sh experiment.sh --serverMachine=dryad07.ethz.ch --clientMachine=dryad08.ethz.ch --noOfClients=10 --remoteUserName=mohlerm --experimentId=0 --clientRunTime=100
+# usage: sh experiment.sh --dbMachine=52.28.240.101 --serverMachines=52.29.50.196 --serverWorkerPerCore=8 --clientMachines=52.29.49.29 --clientTotal=10 --clientWorkload=staticsmall --clientRunTime=100 --remoteUserName=ubuntu --experimentId=2
 # db:    /mnt/local/mohlerm/postgres/bin/postgres -D /mnt/local/mohlerm/postgres/db/ -p 51230 -i -k /mnt/local/mohlerm/
 # ./createdb -h 127.0.0.1 -p 51230 -U testdb testdb
 # ./createuser -h 127.0.0.1 -p 51230 --interactive
+#
+# staticsmall | staticmedium | staticlarge
 #
 # Sample automation script that
 #
@@ -26,25 +28,28 @@
 
 function usage() {
 	local programName=$1
-	echo "Usage: $programName --dbMachine=<address> --serverMachines=<address> --clientMachines=<address> --noOfClients=<int> --remoteUserName=<username> --experimentId=<id> --clientRunTime=<seconds>"
+	echo "Usage: $programName --dbMachine=<address> --serverMachines=<address> --serverWorkerPerCore=<int> --clientMachines=<address> --clientTotal=<int> --clientWorkload=<string> --clientRunTime=<seconds>--remoteUserName=<username> --experimentId=<id>"
 	exit -1
 }
 
 dbMachine=""
 serverMachines=""
+serverWorkerPerCore=""
 clientMachines=""
-noOfClients=""
+clientWorkload=""
+clientTotal=""
+clientRunTime=""
 remoteUserName=""
 experimentId=""
 
 serverPort=51234 # keep in mind first server uses +1, second uses +2 etc...
-dbPort=51230
-clientRunTime=5
-executionDir="/home/ubuntu/simplemq"
+dbPort=21721
+#executionDir="/home/ubuntu/simplemq"
+executionDir="/mnt/local/mohlerm"
 serverStartMessage="Using server id: "
 
 # Extract command line arguments
-TEMP=`getopt -o b: --long dbMachine:,serverMachines:,clientMachines:,noOfClients:,remoteUserName:,experimentId:,clientRunTime: \
+TEMP=`getopt -o b: --long dbMachine:,serverMachines:,serverWorkerPerCore:,clientMachines:,clientTotal:,clientWorkload:,clientRunTime:,remoteUserName:,experimentId: \
      -n 'example.bash' -- "$@"`
 
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
@@ -56,21 +61,29 @@ while true ; do
         case "$1" in
         		--dbMachine) dbMachine="$2" ; shift 2 ;;
                 --serverMachines) serverMachines="$2" ; shift 2 ;;
+                --serverWorkerPerCore) serverWorkerPerCore="$2" ; shift 2 ;;
                 --clientMachines) clientMachines="$2" ; shift 2 ;;
-                --noOfClients) noOfClients="$2" ; shift 2 ;;
+                --clientTotal) clientTotal="$2" ; shift 2 ;;
+                --clientWorkload) clientWorkload="$2" ; shift 2 ;;
+                --clientRunTime) clientRunTime="$2" ; shift 2 ;;
                 --remoteUserName) remoteUserName="$2" ; shift 2 ;;
                 --experimentId) experimentId="$2" ; shift 2 ;;
-                --clientRunTime) clientRunTime="$2" ; shift 2 ;;
                 --) shift ; break ;;
                 *) echo "Internal error!" ; exit 1 ;;
         esac
 done
 
 # Check for correctness of the commandline arguments
-if [[ $dbMachine == "" || $serverMachines == "" || $clientMachines == "" || $noOfClients == "" || $remoteUserName == "" || $experimentId == "" ]]
+if [[ $dbMachine == "" || $serverMachines == "" || $serverWorkerPerCore == "" || $clientMachines == "" || $clientTotal == "" || $clientWorkload == "" || $clientRunTime == "" || $remoteUserName == "" || $experimentId == "" ]]
 then
 	usage $1
 fi
+
+#####################################
+#
+# Parse servers and client inputs
+#
+#####################################
 
 declare -a servers
 declare -a clients
@@ -91,6 +104,13 @@ echo -ne "servers: "$serverCount"\t"
 echo ${servers[*]}
 echo -ne "clients: "$clientCount"\t"
 echo ${clients[*]}
+
+#####################################
+#
+# Save configuration
+#
+#####################################
+echo "sh experiment.sh --dbMachine=$dbMachine --serverMachines=$serverMachines --serverWorkerPerCore=$serverWorkerPerCore --clientMachines=$clientMachines --clientTotal=$clientTotal --clientWorkload=$clientWorkload --clientRunTime=$clientRunTime --remoteUserName=$remoteUserName --experimentId=$experimentId" > $experimentId/experiment_$experimentId.sh
 
 #####################################
 #
@@ -166,8 +186,8 @@ done
 #
 ######################################
 echo -ne "  Setup PostgreSQL..."
-#scp -i ~/.ssh/id_aws postgres_init.tar.gz $remoteUserName@$dbMachine:$executionDir
-ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "cd $executionDir; wget http://mohlerm.ch/simplemq/postgres_init.tar.gz"
+scp -i ~/.ssh/id_aws postgres_init.tar.gz $remoteUserName@$dbMachine:$executionDir
+#ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "cd $executionDir; wget http://mohlerm.ch/simplemq/postgres_init.tar.gz"
 ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "tar -zxf $executionDir/postgres_init.tar.gz -C $executionDir"
 sleep 1
 ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine  "screen -dmS postgres $executionDir/postgres/bin/postgres -D $executionDir/postgres/db/ -p $dbPort -i -k $executionDir/"
@@ -186,7 +206,7 @@ for server in "${servers[@]}"
 do
     echo "  Starting the server $server"
     #port=$(($serverPort+$i))
-    ssh -i ~/.ssh/id_aws $remoteUserName@$server "java -jar $executionDir/SimpleMQ_server.jar $i $serverPort $dbMachine $dbPort 2>&1 > $executionDir/server_$i.log" &
+    ssh -i ~/.ssh/id_aws $remoteUserName@$server "java -jar $executionDir/SimpleMQ_server.jar $i $serverPort $serverWorkerPerCore $dbMachine $dbPort 2>&1 > $executionDir/server_$i.log" &
 
     # Wait for the server to start up
     echo -ne "  Waiting for the server to start up..."
@@ -200,13 +220,13 @@ do
 done
 
 idStart=1
-idStep=$(($noOfClients/$clientCount))
+idStep=$(($clientTotal/$clientCount))
 idEnd=$idStep
 for client in "${clients[@]}"
 do
     echo "  Start the clients on the client machine: $client"
     # we use all servermachines
-    sh experiment_sub.sh $remoteUserName $client $executionDir $serverMachines $serverPort $idStart $idEnd $clientRunTime &
+    sh experiment_sub.sh $remoteUserName $client $executionDir $serverMachines $serverPort $idStart $idEnd $clientWorkload $clientRunTime &
     # Run the clients
     idStart=$(($idStart+$idStep))
     idEnd=$(($idEnd+$idStep))
@@ -255,7 +275,7 @@ done
 ########################################
 
 # Copy log files from the clients
-#clientIds=`seq $noOfClients`
+#clientIds=`seq $clientTotal`
 mkdir -p $experimentId
 echo "  Copying tar'd log files from client machine untar and delete tar"
 

@@ -45,9 +45,9 @@ public class Main {
                 Config.SERVERIP = InetAddress.getByName(args[1]);
                 log.info("Using server ip: " + args[1]);
                 Config.SERVERPORT = Integer.parseInt(args[2]);
-                log.info("Using server port: " + args[2]);
+                log.info("Using server port: " + String.valueOf(Config.SERVERPORT));
                 Config.CLIENTAMOUNT = Integer.parseInt(args[4]);
-                log.info("Using amount of client requests: " + args[4]);
+                log.info("Using amount of client requests: " + String.valueOf(Config.CLIENTAMOUNT));
                 SocketChannel socketChannel = SocketChannel.open();
                 socketChannel.connect(new InetSocketAddress(Config.SERVERIP, Config.SERVERPORT));
                 TrafficGenerator trafficGenerator = null;
