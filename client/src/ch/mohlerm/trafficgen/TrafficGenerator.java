@@ -4,6 +4,7 @@ import ch.mohlerm.config.Config;
 import ch.mohlerm.protocol.MessagePassingProtocol;
 import ch.mohlerm.protocol.SerializableAnswer;
 import ch.mohlerm.protocol.SerializableRequest;
+import org.apache.log4j.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,13 +19,23 @@ public abstract class TrafficGenerator implements Runnable {
     // The host:port combination to connect to
     protected SocketChannel socketChannel;
     protected int numberOfRequests = Config.CLIENTAMOUNT;
+    protected Logger log;
+    protected int messageCounter;
 
     public TrafficGenerator(SocketChannel socketChannel) {
         this.socketChannel = socketChannel;
+        this.messageCounter = 0;
+        this.log = Logger.getLogger("Client["+ String.valueOf(Config.CLIENTID)+"]");
     }
 
 
-    public abstract void run();
+    public void run() {
+        register();
+        generateTraffic();
+        deregister();
+    }
+
+    protected abstract void generateTraffic();
 
 
     protected void postRequest(SerializableRequest request) {
@@ -91,6 +102,49 @@ public abstract class TrafficGenerator implements Runnable {
 
         }
         throw new NoAnswerException("No answer");
+    }
+
+    protected void register() {
+        SerializableRequest request = new SerializableRequest(MessagePassingProtocol.RequestType.CREATECLIENT, messageCounter, Config.CLIENTID, 0, 0, "Empty");
+        log.debug("Initialize with client id " + Config.CLIENTID + " on server.");
+        long startTime = System.nanoTime();
+        postRequest(request);
+        MessagePassingProtocol.logRequest(request, log);
+        SerializableAnswer answer = null;
+        try {
+            log.debug("Wait for init answer");
+            answer = getAnswer();
+            long estimatedTime = System.nanoTime() - startTime;
+            MessagePassingProtocol.logAnswer(answer, log, estimatedTime);
+        } catch (NoAnswerException e) {
+            e.printStackTrace();
+        }
+        // sleep for a predefined time
+        try {
+            Thread.sleep(Config.INITWAIT);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        log.info("Registered");
+        messageCounter++;
+    }
+
+    protected void deregister() {
+        SerializableRequest request = new SerializableRequest(MessagePassingProtocol.RequestType.DELETECLIENT, messageCounter, Config.CLIENTID, 0, 0, "Empty");
+        log.debug("Delete client id " + Config.CLIENTID + " on server.");
+        long startTime = System.nanoTime();
+        postRequest(request);
+        MessagePassingProtocol.logRequest(request, log);
+        SerializableAnswer answer = null;
+        try {
+            log.debug("Wait for init answer");
+            answer = getAnswer();
+            long estimatedTime = System.nanoTime() - startTime;
+            MessagePassingProtocol.logAnswer(answer, log, estimatedTime);
+        } catch (NoAnswerException e) {
+            e.printStackTrace();
+        }
+        log.info("Deregistered");
     }
 
 
