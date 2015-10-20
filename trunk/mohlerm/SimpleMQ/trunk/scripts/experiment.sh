@@ -28,11 +28,12 @@
 
 function usage() {
 	local programName=$1
-	echo "Usage: $programName --dbMachine=<address> --serverMachines=<address> --serverWorkerPerCore=<int> --clientMachines=<address> --clientTotal=<int> --clientWorkload=<string> --clientRunTime=<seconds>--remoteUserName=<username> --experimentId=<id>"
+	echo "Usage: $programName --dbMachine=<address> --dbPersistent=<true/false> --serverMachines=<address> --serverWorkerPerCore=<int> --clientMachines=<address> --clientTotal=<int> --clientWorkload=<string> --clientRunTime=<seconds>--remoteUserName=<username> --experimentId=<id>"
 	exit -1
 }
 
 dbMachine=""
+dbPersistent=""
 serverMachines=""
 serverWorkerPerCore=""
 clientMachines=""
@@ -49,8 +50,8 @@ executionDir="/home/ubuntu/simplemq"
 serverStartMessage="Using server id: "
 
 # Extract command line arguments
-TEMP=`getopt -o b: --long dbMachine:,serverMachines:,serverWorkerPerCore:,clientMachines:,clientTotal:,clientWorkload:,clientRunTime:,remoteUserName:,experimentId: \
-     -n 'example.bash' -- "$@"`
+TEMP=`getopt -o b: --long dbMachine:,dbPersistent:,serverMachines:,serverWorkerPerCore:,clientMachines:,clientTotal:,clientWorkload:,clientRunTime:,remoteUserName:,experimentId: \
+     -n 'experiment.sh' -- "$@"`
 
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 
@@ -60,6 +61,7 @@ eval set -- "$TEMP"
 while true ; do
         case "$1" in
         		--dbMachine) dbMachine="$2" ; shift 2 ;;
+        		--dbPersistent) dbPersistent="$2" ; shift 2 ;;
                 --serverMachines) serverMachines="$2" ; shift 2 ;;
                 --serverWorkerPerCore) serverWorkerPerCore="$2" ; shift 2 ;;
                 --clientMachines) clientMachines="$2" ; shift 2 ;;
@@ -74,7 +76,7 @@ while true ; do
 done
 
 # Check for correctness of the commandline arguments
-if [[ $dbMachine == "" || $serverMachines == "" || $serverWorkerPerCore == "" || $clientMachines == "" || $clientTotal == "" || $clientWorkload == "" || $clientRunTime == "" || $remoteUserName == "" || $experimentId == "" ]]
+if [[ $dbMachine == "" || dbPersistent == "" || $serverMachines == "" || $serverWorkerPerCore == "" || $clientMachines == "" || $clientTotal == "" || $clientWorkload == "" || $clientRunTime == "" || $remoteUserName == "" || $experimentId == "" ]]
 then
 	usage $1
 fi
@@ -112,7 +114,7 @@ echo ${clients[*]}
 #####################################
 rm -R $experimentId
 mkdir -p $experimentId
-echo -e "#!/bin/bash\nsh experiment.sh --dbMachine=$dbMachine --serverMachines=$serverMachines --serverWorkerPerCore=$serverWorkerPerCore --clientMachines=$clientMachines --clientTotal=$clientTotal --clientWorkload=$clientWorkload --clientRunTime=$clientRunTime --remoteUserName=$remoteUserName --experimentId=$experimentId" > $experimentId/experiment_$experimentId.sh
+echo -e "#!/bin/bash\nsh experiment.sh --dbMachine=$dbMachine --dbPersistent=$dbPersistent --serverMachines=$serverMachines --serverWorkerPerCore=$serverWorkerPerCore --clientMachines=$clientMachines --clientTotal=$clientTotal --clientWorkload=$clientWorkload --clientRunTime=$clientRunTime --remoteUserName=$remoteUserName --experimentId=$experimentId" > $experimentId/experiment_$experimentId.sh
 
 #####################################
 #
@@ -155,22 +157,11 @@ do
 done
 echo "OK"
 
-echo -ne "  Create directories on all machines..."
-ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "mkdir -p $executionDir"
-for server in "${servers[@]}"
-do
-    ssh -i ~/.ssh/id_aws $remoteUserName@$server "mkdir -p $executionDir"
-done
-for client in "${clients[@]}"
-do
-    ssh -i ~/.ssh/id_aws $remoteUserName@$client "mkdir -p $executionDir"
-done
-echo "OK"
-
 #echo -ne "  Copying server.jar to server machines: $serverMachine..."
 # Copy jar to server machine
 for server in "${servers[@]}"
 do
+    ssh -i ~/.ssh/id_aws $remoteUserName@$server "mkdir -p $executionDir"
     scp -i ~/.ssh/id_aws ../jar/SimpleMQ_server.jar $remoteUserName@$server:$executionDir
 done
 #echo "OK"
@@ -178,6 +169,7 @@ done
 # Copy jar to client machine
 for client in "${clients[@]}"
 do
+    ssh -i ~/.ssh/id_aws $remoteUserName@$client "mkdir -p $executionDir"
     scp -i ~/.ssh/id_aws ../jar/SimpleMQ_client.jar $remoteUserName@$client:$executionDir
 done
 #echo "OK"
@@ -187,14 +179,20 @@ done
 # Move, unzip, configure and start SQL
 #
 ######################################
-echo -ne "  Setup PostgreSQL..."
-scp -i ~/.ssh/id_aws postgres_init.tar.gz $remoteUserName@$dbMachine:$executionDir
-#ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "cd $executionDir; wget http://mohlerm.ch/simplemq/postgres_init.tar.gz"
-ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "tar -zxf $executionDir/postgres_init.tar.gz -C $executionDir"
-sleep 1
-ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine  "screen -dmS postgres $executionDir/postgres/bin/postgres -D $executionDir/postgres/db/ -p $dbPort -i -k $executionDir/"
-sleep 3
-echo "OK"
+if [ "$dbPersistent" == "false" ]
+then
+    echo -ne "  Setup PostgreSQL..."
+    ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "mkdir -p $executionDir"
+    scp -i ~/.ssh/id_aws postgres_init.tar.gz $remoteUserName@$dbMachine:$executionDir
+    #ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "cd $executionDir; wget http://mohlerm.ch/simplemq/postgres_init.tar.gz"
+    ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "tar -zxf $executionDir/postgres_init.tar.gz -C $executionDir"
+    sleep 1
+    ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine  "screen -dmS postgres $executionDir/postgres/bin/postgres -D $executionDir/postgres/db/ -p $dbPort -i -k $executionDir/"
+    sleep 3
+    echo "OK"
+else
+    echo "  Reusing previous PostgreSQL instance"
+fi
 
 ######################################
 #
@@ -243,11 +241,15 @@ do
 done
 echo "OK"
 
-echo -ne "  Sending shut down signal to database..."
-ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "screen -X -S postgres quit"
-ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "killall postgres"
-echo "OK"
-
+if [ "$dbPersistent" == "false" ]
+then
+    echo -ne "  Sending shut down signal to database..."
+    ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "screen -X -S postgres quit"
+    ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "killall postgres"
+    echo "OK"
+else
+    echo "  Do not shut down database"
+fi
 
 
 # Send a shut down signal to the server
@@ -292,8 +294,10 @@ done
 i=1
 for server in "${servers[@]}"
 do
+    echo "  Taring log file from server $server"
+    ssh -i ~/.ssh/id_aws $remoteUserName@$server "tar czf $executionDir/server_$i.tar.gz $executionDir/server_$i.log"
     echo "  Copying log files from server $server"
-    scp -i ~/.ssh/id_aws $remoteUserName@$server:$executionDir/server_$i.log ./$experimentId/
+    scp -i ~/.ssh/id_aws $remoteUserName@$server:$executionDir/server_$i.tar.gz ./$experimentId/
     ((i++))
 done
 
@@ -311,8 +315,12 @@ for client in "${clients[@]}"
 do
     ssh -i ~/.ssh/id_aws $remoteUserName@$client "rm -Rf $executionDir"
 done
-ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "rm -Rf $executionDir"
+if [ "$dbPersistent" == "false" ]
+then
+    ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "rm -Rf $executionDir"
+fi
 echo "OK"
+
 
 
 # Process the log files from the clients
