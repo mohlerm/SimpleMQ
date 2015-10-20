@@ -1,14 +1,36 @@
 import os
 import re
 import sys
-import numpy
 import statistics
 import datetime
 
 import matplotlib
 #matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib.mlab as mlab
+from matplotlib.ticker import FuncFormatter
+########################################
+#
+# custom percentage for y label
+#
+########################################
+def to_percent(y, position):
+    # Ignore the passed in position. This has the effect of scaling the default
+    # tick locations.
+    s = str(int(100 * y))
 
+    # The percent symbol needs escaping in latex
+    if matplotlib.rcParams['text.usetex'] == True:
+        return s + r'$\%$'
+    else:
+        return s + '%'
+
+########################################
+#
+# parse inputs and setup variables
+#
+########################################
 if(len(sys.argv) != 4):
     print("Please supply clientAmount, experimentId and log file")
     sys.exit(1)
@@ -31,6 +53,11 @@ req_rcv_time = []
 req_rcv_index = []
 
 currentClients = 0
+########################################
+#
+# parse merged logfile
+#
+########################################
 for line in inputfile:
     found = False
     # always look for deregistration messages
@@ -75,16 +102,29 @@ for line in inputfile:
    # if found == False:
        # print(line)
 
+########################################
 #
-print("Mean acks:              " + str(statistics.mean(ans_snd_response)) + "+-" + str(2*statistics.stdev(ans_snd_response)))
-print("Mean msg:               " + str(statistics.mean(ans_rcv_response)) + "+-" +str(2*statistics.stdev(ans_rcv_response)))
+# calculate and print means etc.
+#
+########################################
+mean_ans_snd_response = statistics.mean(ans_snd_response)
+mean_ans_rcv_response = statistics.mean(ans_rcv_response)
+stdev_ans_snd_response = statistics.stdev(ans_snd_response)
+stdev_ans_rcv_response = statistics.stdev(ans_rcv_response)
+median_ans_snd_response = statistics.median(ans_snd_response)
+median_ans_rcv_response = statistics.median(ans_rcv_response)
 
-snd_miliseconds = []
-rcv_miliseconds = []
+print("Mean SEND acks:         " + str(mean_ans_snd_response) + "+-" + str(2*stdev_ans_snd_response))
+print("Mean RECEIVE acks:      " + str(mean_ans_rcv_response) + "+-" +str(2*stdev_ans_rcv_response))
+print("median SEND acks:       " + str(median_ans_snd_response))
+print("median RECEIVE acks:    " + str(median_ans_rcv_response))
+
+ans_snd_miliseconds = []
+ans_rcv_miliseconds = []
 for s in ans_snd_time:
-    snd_miliseconds.append(datetime.datetime.strptime(s,"%Y-%m-%d %H:%M:%S,%f"))
+    ans_snd_miliseconds.append(datetime.datetime.strptime(s,"%Y-%m-%d %H:%M:%S,%f"))
 for s in ans_rcv_time:
-    rcv_miliseconds.append(datetime.datetime.strptime(s,"%Y-%m-%d %H:%M:%S,%f"))
+    ans_rcv_miliseconds.append(datetime.datetime.strptime(s,"%Y-%m-%d %H:%M:%S,%f"))
 
 startDate = datetime.datetime.strptime(req_snd_time[0],"%Y-%m-%d %H:%M:%S,%f")
 endDate = datetime.datetime.strptime(ans_snd_time[len(ans_snd_time)-1],"%Y-%m-%d %H:%M:%S,%f")
@@ -101,18 +141,118 @@ print("Number of ANS receives: " + str(len(ans_rcv_time)))
 print("Throughput:             " + str( (len(ans_snd_time)+len(ans_rcv_time))/total_seconds) + " messages/s")
 
 
-# plot it *yay*
-#t = arange(0.0, 2.0, 0.01)
-#s = sin(2*pi*t)
-#plt.plot_date(x=datestamp, y=value, fmt='-', linewidth=2)
-snd_miliseconds[:] = [(t-startDate).total_seconds() for t in snd_miliseconds]
-rcv_miliseconds[:] = [(t-startDate).total_seconds() for t in rcv_miliseconds]
-plt.plot(snd_miliseconds, ans_snd_response, 'r.', label="SEND (message send) - total: "+str(len(ans_snd_response)))
-plt.plot(rcv_miliseconds, ans_rcv_response, 'b.', label="RECEIVE (message peak/pop) - total: " +str(len(ans_rcv_response)))
-plt.xlabel('time since start of measurement [in seconds]')
-plt.ylabel('response time [in milliseconds]')
+########################################
+#
+# Plot it!
+#
+########################################
+########################################
+#
+# RESPONSE TIME (individual)
+#
+########################################
+ans_snd_miliseconds[:] = [(t-startDate).total_seconds() for t in ans_snd_miliseconds]
+ans_rcv_miliseconds[:] = [(t-startDate).total_seconds() for t in ans_rcv_miliseconds]
+plt.plot(ans_snd_miliseconds, ans_snd_response, 'b.', alpha=0.5, label="SEND (message send) - total: "+str(len(ans_snd_response)))
+plt.plot(ans_rcv_miliseconds, ans_rcv_response, 'g.', alpha=0.5, label="RECEIVE (message peak/pop) - total: " +str(len(ans_rcv_response)))
+plt.xlabel('Time since start of measurement [in seconds]')
+plt.ylabel('Response time [in milliseconds]')
 plt.title('Response time')
 plt.legend(loc='upper right')
 plt.grid(True)
 plt.savefig(experimentId+"/experiment_"+experimentId+"_response_time.png")
-plt.show()
+#plt.show()
+plt.clf()
+########################################
+#
+# RESPONSE TIME (histogram)
+#
+########################################
+weights1 = np.ones_like(ans_snd_response)/float(len(ans_snd_response))
+weights2 = np.ones_like(ans_rcv_response)/float(len(ans_rcv_response))
+common_params = dict(bins=50,
+                     range=(0, 10),
+             #        normed=True,
+                     alpha=0.5,
+                     weights=(weights1,weights2),
+                     label=("SEND","RECEIVE"))
+
+plt.subplots_adjust(hspace=.4)
+#plt.subplot(2, 1, 1)
+n, bins, patches = plt.hist((ans_snd_response,ans_rcv_response), **common_params)
+y1 = mlab.normpdf(bins, mean_ans_snd_response, stdev_ans_snd_response)
+y2 = mlab.normpdf(bins, mean_ans_rcv_response, stdev_ans_rcv_response)
+plt.plot(bins, y1, 'b--', label="SEND $\mu=" + str(round(mean_ans_snd_response,2))+"$, $\sigma="+str(round(stdev_ans_snd_response,2))+"$")
+plt.plot(bins, y2, 'g--', label="RECEIVE $\mu=" + str(round(mean_ans_rcv_response,2))+"$, $\sigma="+str(round(stdev_ans_rcv_response,2))+"$")
+plt.xlabel('Response time [in milliseconds]')
+plt.ylabel('Percentage of messages')
+plt.xticks(np.linspace(0,10,11))
+plt.legend(loc='upper right')
+formatter = FuncFormatter(to_percent)
+plt.gca().yaxis.set_major_formatter(formatter)
+#plt.title(r'Histogram of IQ: $\mu=100$, $\sigma=15$')
+plt.savefig(experimentId+"/experiment_"+experimentId+"_hist_response_time.png")
+plt.clf()
+########################################
+#
+# Throughput over time
+#
+########################################
+timestamps = np.array(range(int(total_seconds)+2))
+throughput_values = np.zeros(int(total_seconds)+2)
+#print(timestamps)
+low_water_mark = 0
+for i in range(0,len(ans_snd_miliseconds)):
+    if ans_snd_miliseconds[i] < timestamps[low_water_mark+1]:
+        throughput_values[low_water_mark] += 1
+    else:
+        low_water_mark = low_water_mark+1
+        throughput_values[low_water_mark] += 1
+low_water_mark = 0
+for i in range(0,len(ans_rcv_miliseconds)):
+    if ans_rcv_miliseconds[i] < timestamps[low_water_mark+1]:
+        throughput_values[low_water_mark] += 1
+    else:
+        low_water_mark = low_water_mark+1
+        throughput_values[low_water_mark] += 1
+#print(throughput_values)
+plt.plot(timestamps[0:len(timestamps)-3],throughput_values[0:len(timestamps)-3], 'b-', label="Throughput over time")
+plt.xlabel('Time since start of measurement [in seconds]')
+plt.ylabel('Average throughput [in messages/second] - 1s slots')
+plt.savefig(experimentId+"/experiment_"+experimentId+"_throughput_overtime.png")
+plt.clf()
+########################################
+#
+# Response time over time
+#
+########################################
+timestamps = np.array(range(int(total_seconds)+2))
+response_time_value = np.zeros(int(total_seconds)+2)
+#print(timestamps)
+low_water_mark = 0
+counter = 0
+for i in range(0,len(ans_snd_miliseconds)):
+    if ans_snd_miliseconds[i] < timestamps[low_water_mark+1]:
+        response_time_value[low_water_mark] += ans_snd_response[i]
+        counter += 1
+    else:
+        response_time_value[low_water_mark] = response_time_value[low_water_mark]/counter
+        counter = 1
+        low_water_mark = low_water_mark+1
+        response_time_value[low_water_mark] += ans_snd_response[i]
+low_water_mark = 0
+counter = 0
+for i in range(0,len(ans_rcv_miliseconds)):
+    if ans_rcv_miliseconds[i] < timestamps[low_water_mark+1]:
+        response_time_value[low_water_mark] += ans_rcv_response[i]
+        counter += 1
+    else:
+        response_time_value[low_water_mark] = response_time_value[low_water_mark]/counter
+        counter = 1
+        low_water_mark = low_water_mark+1
+        response_time_value[low_water_mark] += ans_rcv_response[i]
+#print(throughput_values)
+plt.plot(timestamps[0:len(timestamps)-3],response_time_value[0:len(timestamps)-3], 'b-', label="Response time over time")
+plt.xlabel('Time since start of measurement [in seconds]')
+plt.ylabel('Average response time [in milliseconds] - 1s slots')
+plt.savefig(experimentId+"/experiment_"+experimentId+"_response_time_overtime.png")
