@@ -50,7 +50,7 @@ elif [ "$command" == "stop" ]
 then
     echo -ne "  Sending shut down signal to database..."
     ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "screen -X -S postgres quit"
-    ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "killall postgres"
+    ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "killall -u $remoteUserName postgres"
     echo "OK"
 elif [ "$command" == "clean" ]
 then
