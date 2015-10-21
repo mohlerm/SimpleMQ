@@ -1,5 +1,5 @@
 #!/bin/bash
-# usage: sh experiment.sh --dbMachine=52.28.240.101 --serverMachines=52.29.50.196 --serverWorkerTotal=8 --clientMachines=52.29.49.29 --clientTotal=10 --clientWorkload=staticsmall --clientRunTime=100 --remoteUserName=ubuntu --experimentId=2
+# usage: bash experiment.sh --dbMachine=52.28.240.101 --serverMachines=52.29.50.196 --serverWorkerTotal=8 --clientMachines=52.29.49.29 --clientTotal=10 --clientWorkload=staticsmall --clientRunTime=100 --remoteUserName=ubuntu --experimentId=2
 # db:    /mnt/local/mohlerm/postgres/bin/postgres -D /mnt/local/mohlerm/postgres/db/ -p 51230 -i -k /mnt/local/mohlerm/
 # ./createdb -h 127.0.0.1 -p 51230 -U testdb testdb
 # ./createuser -h 127.0.0.1 -p 51230 --interactive
@@ -114,7 +114,7 @@ echo ${clients[*]}
 #####################################
 rm -R $experimentId
 mkdir -p $experimentId
-echo -e "#!/bin/bash\nsh experiment.sh --dbMachine=$dbMachine --dbPersistent=$dbPersistent --serverMachines=$serverMachines --serverWorkerTotal=$serverWorkerTotal --clientMachines=$clientMachines --clientTotal=$clientTotal --clientWorkload=$clientWorkload --clientRunTime=$clientRunTime --remoteUserName=$remoteUserName --experimentId=$experimentId" > $experimentId/experiment_$experimentId.sh
+echo -e "#!/bin/bash\nbash experiment.sh --dbMachine=$dbMachine --dbPersistent=$dbPersistent --serverMachines=$serverMachines --serverWorkerTotal=$serverWorkerTotal --clientMachines=$clientMachines --clientTotal=$clientTotal --clientWorkload=$clientWorkload --clientRunTime=$clientRunTime --remoteUserName=$remoteUserName --experimentId=$experimentId" > $experimentId/experiment_$experimentId.sh
 
 #####################################
 #
@@ -227,7 +227,7 @@ for client in "${clients[@]}"
 do
     echo "  Start the clients on the client machine: $client"
     # we use all servermachines
-    sh experiment_sub.sh $remoteUserName $client $executionDir $serverMachines $serverPort $idStart $idEnd $clientWorkload $clientRunTime &
+    bash experiment_sub.sh $remoteUserName $client $executionDir $serverMachines $serverPort $idStart $idEnd $clientWorkload $clientRunTime &
     # Run the clients
     idStart=$(($idStart+$idStep))
     idEnd=$(($idEnd+$idStep))
@@ -235,7 +235,7 @@ done
 
 echo -ne "  Waiting for the clients to finish ..."
 sleep 1
-while [ `ps aux | grep "sh experiment_sub.sh" | grep $(whoami) | wc -l` != 1 ]
+while [ `ps aux | grep "bash experiment_sub.sh" | grep $(whoami) | wc -l` != 1 ]
 do
 	sleep 1
 	echo -ne "..."
@@ -341,4 +341,4 @@ cat $experimentId/client* | sort -n > $experimentId/allclients.log
 #EOF
 
 echo "  Parse with python and generate graphs using matplotlib"
-python graphs.py $clientCount $experimentId allclients.log | tee "$experimentId/experiment_$experimentId.txt"
+python3 graphs.py $clientCount $experimentId allclients.log | tee "$experimentId/experiment_$experimentId.txt"
