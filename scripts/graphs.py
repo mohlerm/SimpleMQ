@@ -228,7 +228,7 @@ plt.clf()
 ########################################
 timestamps = np.array(range(int(total_seconds)+2))
 ans_snd_response_time_value = np.zeros(int(total_seconds)+2)
-print(timestamps)
+#print(timestamps)
 low_water_mark = 0
 counter = 0
 for i in range(0,len(ans_snd_miliseconds)):
