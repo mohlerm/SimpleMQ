@@ -81,24 +81,27 @@ for line in inputfile:
             ans_snd_response.append(float(m.group(3)))
             found = True
         # if message is a peek/pop answer
-        m = re.search(r"(\d*-\d*-\d*\s\d*:\d*:\d*,\d*)\s*\S*\s*\S*\s*ANS\|(Pop|Peek)Queue\|(\d*)\|\d*\|\d*\|(small|medium|large)Message\|\|[-+]?([0-9]*\.[0-9]+|[0-9]+)",line)
-        if m is not None:
-            ans_rcv_time.append(m.group(1))
-            # match group 2 is peek/pop which isn't used currently
-            ans_rcv_index.append(m.group(3))
-            ans_rcv_response.append(float(m.group(5)))
-            found = True
-        # if message is a send request
-        m = re.search(r"(\d*-\d*-\d*\s\d*:\d*:\d*,\d*)\s*\S*\s*\S*\s*REQ\|SendMessageToAll\|(\d*)\|\d*\|\d*\|\d*\|(small|medium|large)Message",line)
-        if m is not None:
-            req_snd_time.append(m.group(1))
-            req_snd_index.append(m.group(2))
-            found = True
-        m = re.search(r"(\d*-\d*-\d*\s\d*:\d*:\d*,\d*)\s*\S*\s*\S*\s*REQ\|(Peek|Pop)Queue\|(\d*)\|\d*\|\d*\|\d*\|null",line)
-        if m is not None:
-            req_rcv_time.append(m.group(1))
-            req_rcv_index.append(m.group(3))
-            found = True
+        if found == False:
+            m = re.search(r"(\d*-\d*-\d*\s\d*:\d*:\d*,\d*)\s*\S*\s*\S*\s*ANS\|(Pop|Peek)Queue\|(\d*)\|\d*\|\d*\|(small|medium|large)Message\|\|[-+]?([0-9]*\.[0-9]+|[0-9]+)",line)
+            if m is not None:
+                ans_rcv_time.append(m.group(1))
+                # match group 2 is peek/pop which isn't used currently
+                ans_rcv_index.append(m.group(3))
+                ans_rcv_response.append(float(m.group(5)))
+                found = True
+            # if message is a send request
+        if found == False:
+            m = re.search(r"(\d*-\d*-\d*\s\d*:\d*:\d*,\d*)\s*\S*\s*\S*\s*REQ\|SendMessageToAll\|(\d*)\|\d*\|\d*\|\d*\|(small|medium|large)Message",line)
+            if m is not None:
+                req_snd_time.append(m.group(1))
+                req_snd_index.append(m.group(2))
+                found = True
+        if found == False:
+            m = re.search(r"(\d*-\d*-\d*\s\d*:\d*:\d*,\d*)\s*\S*\s*\S*\s*REQ\|(Peek|Pop)Queue\|(\d*)\|\d*\|\d*\|\d*\|null",line)
+            if m is not None:
+                req_rcv_time.append(m.group(1))
+                req_rcv_index.append(m.group(3))
+                found = True
    # if found == False:
        # print(line)
 
@@ -171,7 +174,7 @@ plt.clf()
 weights1 = np.ones_like(ans_snd_response)/float(len(ans_snd_response))
 weights2 = np.ones_like(ans_rcv_response)/float(len(ans_rcv_response))
 common_params = dict(bins=50,
-                     range=(0, 10),
+                     range=(0, 50),
              #        normed=True,
                      alpha=0.5,
                      weights=(weights1,weights2),
@@ -186,7 +189,7 @@ plt.plot(bins, y1, 'b--', label="SEND $\mu=" + str(round(mean_ans_snd_response,2
 plt.plot(bins, y2, 'g--', label="RECEIVE $\mu=" + str(round(mean_ans_rcv_response,2))+"$, $\sigma="+str(round(stdev_ans_rcv_response,2))+"$")
 plt.xlabel('Response time [in milliseconds]')
 plt.ylabel('Percentage of messages')
-plt.xticks(np.linspace(0,10,11))
+plt.xticks(np.linspace(0,50,26))
 plt.legend(loc='upper right')
 formatter = FuncFormatter(to_percent)
 plt.gca().yaxis.set_major_formatter(formatter)
