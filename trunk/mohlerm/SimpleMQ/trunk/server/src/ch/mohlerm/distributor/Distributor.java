@@ -32,12 +32,11 @@ public class Distributor implements Runnable {
 
 
     public Distributor() throws IOException{
-        int cpus = Runtime.getRuntime().availableProcessors();
-        workerQueue = new ArrayBlockingQueue<Worker>(Config.CPUWORKERSCALING * cpus);
-        for (int i = 0; i < Config.CPUWORKERSCALING * cpus; i++) {
+        workerQueue = new ArrayBlockingQueue<Worker>(Config.SERVERWORKER);
+        for (int i = 0; i < Config.SERVERWORKER; i++) {
             workerQueue.add(new Worker(i));
         }
-        log.debug("Initialized " + workerQueue.size() + " workers");
+        log.info("Initialized " + workerQueue.size() + " workers");
         this.selector = this.initSelector();
         //  distributor.setSelector(selector);
     }

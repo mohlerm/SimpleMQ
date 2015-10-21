@@ -35,8 +35,8 @@ public class Main {
             log.info("Using server id: " + String.valueOf(Config.SERVERID));
             Config.SERVERPORT = Integer.parseInt(args[1]);
             log.info("Using server port: " + String.valueOf(Config.SERVERPORT));
-            Config.CPUWORKERSCALING = Integer.parseInt(args[2]);
-            log.info("Using worker per core: " + String.valueOf(Config.CPUWORKERSCALING));
+            Config.SERVERWORKER = Integer.parseInt(args[2]);
+            log.info("Using worker: " + String.valueOf(Config.SERVERWORKER));
             Config.DBURL = args[3];
             log.info("Using db ip: " + Config.DBURL);
             Config.DBPORT = args[4];
@@ -111,7 +111,7 @@ public class Main {
             try {
                 distributor = new Distributor();
             } catch (IOException e) {
-                log.info("Failed to initialize Initializer");
+                log.info("Failed to initialize Distributor");
                 e.printStackTrace();
             }
 
