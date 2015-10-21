@@ -73,16 +73,13 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION pop_queue(queue_id2 INTEGER, client_id2 INTEGER)
 RETURNS messages AS $$
-        DECLARE res_id INTEGER;
-                res_messages messages%ROWTYPE;
+        DECLARE res_messages messages%ROWTYPE;
         BEGIN
-                SELECT INTO res_id id FROM messages
-                WHERE queue_id = queue_id2
+                SELECT INTO res_messages * FROM messages WHERE queue_id = queue_id2
                 AND (receiver_id = client_id2 OR receiver_id = 0)
                 ORDER BY id ASC
                 LIMIT 1;
-
-                DELETE FROM messages WHERE id = res_id RETURNING * INTO res_messages;
+                DELETE FROM messages WHERE messages.id = res_messages.id;
                 RETURN res_messages;
         END;
 $$ LANGUAGE plpgsql;
