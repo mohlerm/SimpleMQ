@@ -1,5 +1,5 @@
 #!/bin/bash
-# usage: sh experiment.sh --dbMachine=52.28.240.101 --serverMachines=52.29.50.196 --serverWorkerPerCore=8 --clientMachines=52.29.49.29 --clientTotal=10 --clientWorkload=staticsmall --clientRunTime=100 --remoteUserName=ubuntu --experimentId=2
+# usage: sh experiment.sh --dbMachine=52.28.240.101 --serverMachines=52.29.50.196 --serverWorkerTotal=8 --clientMachines=52.29.49.29 --clientTotal=10 --clientWorkload=staticsmall --clientRunTime=100 --remoteUserName=ubuntu --experimentId=2
 # db:    /mnt/local/mohlerm/postgres/bin/postgres -D /mnt/local/mohlerm/postgres/db/ -p 51230 -i -k /mnt/local/mohlerm/
 # ./createdb -h 127.0.0.1 -p 51230 -U testdb testdb
 # ./createuser -h 127.0.0.1 -p 51230 --interactive
@@ -28,14 +28,14 @@
 
 function usage() {
 	local programName=$1
-	echo "Usage: $programName --dbMachine=<address> --dbPersistent=<true/false> --serverMachines=<address> --serverWorkerPerCore=<int> --clientMachines=<address> --clientTotal=<int> --clientWorkload=<string> --clientRunTime=<seconds>--remoteUserName=<username> --experimentId=<id>"
+	echo "Usage: $programName --dbMachine=<address> --dbPersistent=<true/false> --serverMachines=<address> --serverWorkerTotal=<int> --clientMachines=<address> --clientTotal=<int> --clientWorkload=<string> --clientRunTime=<seconds>--remoteUserName=<username> --experimentId=<id>"
 	exit -1
 }
 
 dbMachine=""
 dbPersistent=""
 serverMachines=""
-serverWorkerPerCore=""
+serverWorkerTotal=""
 clientMachines=""
 clientWorkload=""
 clientTotal=""
@@ -50,7 +50,7 @@ executionDir="/home/ubuntu/simplemq"
 serverStartMessage="Using server id: "
 
 # Extract command line arguments
-TEMP=`getopt -o b: --long dbMachine:,dbPersistent:,serverMachines:,serverWorkerPerCore:,clientMachines:,clientTotal:,clientWorkload:,clientRunTime:,remoteUserName:,experimentId: \
+TEMP=`getopt -o b: --long dbMachine:,dbPersistent:,serverMachines:,serverWorkerTotal:,clientMachines:,clientTotal:,clientWorkload:,clientRunTime:,remoteUserName:,experimentId: \
      -n 'experiment.sh' -- "$@"`
 
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
@@ -63,7 +63,7 @@ while true ; do
         		--dbMachine) dbMachine="$2" ; shift 2 ;;
         		--dbPersistent) dbPersistent="$2" ; shift 2 ;;
                 --serverMachines) serverMachines="$2" ; shift 2 ;;
-                --serverWorkerPerCore) serverWorkerPerCore="$2" ; shift 2 ;;
+                --serverWorkerTotal) serverWorkerTotal="$2" ; shift 2 ;;
                 --clientMachines) clientMachines="$2" ; shift 2 ;;
                 --clientTotal) clientTotal="$2" ; shift 2 ;;
                 --clientWorkload) clientWorkload="$2" ; shift 2 ;;
@@ -76,7 +76,7 @@ while true ; do
 done
 
 # Check for correctness of the commandline arguments
-if [[ $dbMachine == "" || dbPersistent == "" || $serverMachines == "" || $serverWorkerPerCore == "" || $clientMachines == "" || $clientTotal == "" || $clientWorkload == "" || $clientRunTime == "" || $remoteUserName == "" || $experimentId == "" ]]
+if [[ $dbMachine == "" || dbPersistent == "" || $serverMachines == "" || $serverWorkerTotal == "" || $clientMachines == "" || $clientTotal == "" || $clientWorkload == "" || $clientRunTime == "" || $remoteUserName == "" || $experimentId == "" ]]
 then
 	usage $1
 fi
@@ -114,7 +114,7 @@ echo ${clients[*]}
 #####################################
 rm -R $experimentId
 mkdir -p $experimentId
-echo -e "#!/bin/bash\nsh experiment.sh --dbMachine=$dbMachine --dbPersistent=$dbPersistent --serverMachines=$serverMachines --serverWorkerPerCore=$serverWorkerPerCore --clientMachines=$clientMachines --clientTotal=$clientTotal --clientWorkload=$clientWorkload --clientRunTime=$clientRunTime --remoteUserName=$remoteUserName --experimentId=$experimentId" > $experimentId/experiment_$experimentId.sh
+echo -e "#!/bin/bash\nsh experiment.sh --dbMachine=$dbMachine --dbPersistent=$dbPersistent --serverMachines=$serverMachines --serverWorkerTotal=$serverWorkerTotal --clientMachines=$clientMachines --clientTotal=$clientTotal --clientWorkload=$clientWorkload --clientRunTime=$clientRunTime --remoteUserName=$remoteUserName --experimentId=$experimentId" > $experimentId/experiment_$experimentId.sh
 
 #####################################
 #
@@ -202,11 +202,12 @@ fi
 
 # Run server
 i=1
+serverWorker=$(($serverWorkerTotal/$serverCount))
 for server in "${servers[@]}"
 do
     echo "  Starting the server $server"
     #port=$(($serverPort+$i))
-    ssh -i ~/.ssh/id_aws $remoteUserName@$server "java -jar $executionDir/SimpleMQ_server.jar $i $serverPort $serverWorkerPerCore $dbMachine $dbPort 2>&1 > $executionDir/server_$i.log" &
+    ssh -i ~/.ssh/id_aws $remoteUserName@$server "java -jar $executionDir/SimpleMQ_server.jar $i $serverPort $serverWorker $dbMachine $dbPort 2>&1 > $executionDir/server_$i.log" &
 
     # Wait for the server to start up
     echo -ne "  Waiting for the server to start up..."

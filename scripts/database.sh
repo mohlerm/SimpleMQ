@@ -9,7 +9,7 @@ remoteUserName=""
 
 dbPort=51230
 executionDir="/home/ubuntu/simplemq"
-
+#executionDir="/mnt/local/mohlerm"
 
 # Extract command line arguments
 TEMP=`getopt -o b: --long dbMachine:,remoteUserName:,command: \
