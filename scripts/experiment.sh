@@ -207,7 +207,7 @@ for server in "${servers[@]}"
 do
     echo "  Starting the server $server"
     #port=$(($serverPort+$i))
-    ssh -i ~/.ssh/id_aws $remoteUserName@$server "java -jar $executionDir/SimpleMQ_server.jar $i $serverPort $serverWorker $dbMachine $dbPort 2>&1 > $executionDir/server_$i.log" &
+    screen -dmS server$i ssh -i ~/.ssh/id_aws $remoteUserName@$server "java -jar $executionDir/SimpleMQ_server.jar $i $serverPort $serverWorker $dbMachine $dbPort 2>&1 > $executionDir/server_$i.log"
 
     # Wait for the server to start up
     echo -ne "  Waiting for the server to start up..."
@@ -246,7 +246,7 @@ if [ "$dbPersistent" == "false" ]
 then
     echo -ne "  Sending shut down signal to database..."
     ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "screen -X -S postgres quit"
-    ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "killall postgres"
+    ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "killall -u $remoteUserName postgres"
     echo "OK"
 else
     echo "  Do not shut down database"
@@ -258,7 +258,7 @@ fi
 for server in "${servers[@]}"
 do
     echo -ne "  Sending shut down signal to server $server..."
-    ssh -i ~/.ssh/id_aws $remoteUserName@$server "killall java"
+    ssh -i ~/.ssh/id_aws $remoteUserName@$server "killall -u $remoteUserName java"
     echo "OK"
 done
 
@@ -296,7 +296,7 @@ i=1
 for server in "${servers[@]}"
 do
     echo "  Taring log file from server $server"
-    ssh -i ~/.ssh/id_aws $remoteUserName@$server "tar czf $executionDir/server_$i.tar.gz $executionDir/server_$i.log"
+    ssh -i ~/.ssh/id_aws $remoteUserName@$server "cd $executionDir; tar czf server_$i.tar.gz server_$i.log"
     echo "  Copying log files from server $server"
     scp -i ~/.ssh/id_aws $remoteUserName@$server:$executionDir/server_$i.tar.gz ./$experimentId/
     ((i++))
