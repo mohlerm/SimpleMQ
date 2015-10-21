@@ -34,12 +34,12 @@ public class StaticTrafficGenerator extends TrafficGenerator {
         while(messageCounter < numberOfRequests+1) {
 
             // always send a message and then query for one
-            if(messageCounter%4 == 1) {
+            if(messageCounter%3 == 1) {
                 request = new SerializableRequest(MessagePassingProtocol.RequestType.SENDMESSAGETOALL, messageCounter, Config.CLIENTID, 0, 1, fixMessage);
-            } else if (messageCounter%4 == 2){
+            } else if (messageCounter%3 == 2){
                 request = new SerializableRequest(MessagePassingProtocol.RequestType.PEEKQUEUE, messageCounter, Config.CLIENTID, 0, 1, "");
-            } else if (messageCounter%4 == 3) {
-                request = new SerializableRequest(MessagePassingProtocol.RequestType.SENDMESSAGETOALL, messageCounter, Config.CLIENTID, 0, 1, fixMessage);
+//            } else if (messageCounter%3 == 3) {
+//                request = new SerializableRequest(MessagePassingProtocol.RequestType.SENDMESSAGETOALL, messageCounter, Config.CLIENTID, 0, 1, fixMessage);
             } else {
                 request = new SerializableRequest(MessagePassingProtocol.RequestType.POPQUEUE, messageCounter, Config.CLIENTID, 0, 1, "");
             }
