@@ -227,32 +227,35 @@ plt.clf()
 #
 ########################################
 timestamps = np.array(range(int(total_seconds)+2))
-response_time_value = np.zeros(int(total_seconds)+2)
-#print(timestamps)
+ans_snd_response_time_value = np.zeros(int(total_seconds)+2)
+print(timestamps)
 low_water_mark = 0
 counter = 0
 for i in range(0,len(ans_snd_miliseconds)):
     if ans_snd_miliseconds[i] < timestamps[low_water_mark+1]:
-        response_time_value[low_water_mark] += ans_snd_response[i]
+        ans_snd_response_time_value[low_water_mark] += ans_snd_response[i]
         counter += 1
     else:
-        response_time_value[low_water_mark] = response_time_value[low_water_mark]/counter
+        if counter > 0:
+            ans_snd_response_time_value[low_water_mark] = ans_snd_response_time_value[low_water_mark]/counter
         counter = 1
         low_water_mark = low_water_mark+1
-        response_time_value[low_water_mark] += ans_snd_response[i]
+        ans_snd_response_time_value[low_water_mark] += ans_snd_response[i]
+ans_rcv_response_time_value = np.zeros(int(total_seconds)+2)
 low_water_mark = 0
 counter = 0
 for i in range(0,len(ans_rcv_miliseconds)):
     if ans_rcv_miliseconds[i] < timestamps[low_water_mark+1]:
-        response_time_value[low_water_mark] += ans_rcv_response[i]
+        ans_rcv_response_time_value[low_water_mark] += ans_rcv_response[i]
         counter += 1
     else:
-        response_time_value[low_water_mark] = response_time_value[low_water_mark]/counter
+        ans_rcv_response_time_value[low_water_mark] = ans_rcv_response_time_value[low_water_mark]/counter
         counter = 1
         low_water_mark = low_water_mark+1
-        response_time_value[low_water_mark] += ans_rcv_response[i]
+        ans_rcv_response_time_value[low_water_mark] += ans_rcv_response[i]
 #print(throughput_values)
-plt.plot(timestamps[0:len(timestamps)-3],response_time_value[0:len(timestamps)-3], 'b-', label="Response time over time")
+plt.plot(timestamps[0:len(timestamps)-3],ans_snd_response_time_value[0:len(timestamps)-3], 'b-', label="Response time over time")
+plt.plot(timestamps[0:len(timestamps)-3],ans_rcv_response_time_value[0:len(timestamps)-3], 'g-', label="Response time over time")
 plt.xlabel('Time since start of measurement [in seconds]')
 plt.ylabel('Average response time [in milliseconds] - 1s slots')
 plt.savefig(experimentId+"/experiment_"+experimentId+"_response_time_overtime.png")
