@@ -225,9 +225,9 @@ idStep=$(($clientTotal/$clientCount))
 idEnd=$idStep
 for client in "${clients[@]}"
 do
-    echo "  Start the clients on the client machine: $client"
+    echo "  Start the clients id$idStart to id$idEnd on the client machine: $client"
     # we use all servermachines
-    bash experiment_sub.sh $remoteUserName $client $executionDir $serverMachines $serverPort $idStart $idEnd $clientWorkload $clientRunTime &
+    screen -dmS client_sub$idStart_$idEnd bash experiment_sub.sh $remoteUserName $client $executionDir $serverMachines $serverPort $idStart $idEnd $clientWorkload $clientRunTime
     # Run the clients
     idStart=$(($idStart+$idStep))
     idEnd=$(($idEnd+$idStep))

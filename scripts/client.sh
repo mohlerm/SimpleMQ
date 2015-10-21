@@ -35,7 +35,7 @@ for clientId in $clientIds
 do
 	serverId=$((clientId%serverCount))
 	echo "    Start client: $clientId on server: ${servers[$serverId]}"
-	screen -dmSl client$clientId java -jar SimpleMQ_client.jar $clientId ${servers[$serverId]} $serverPort $clientWorkload $clientRunTime
+	screen -dmS client$clientId java -jar SimpleMQ_client.jar $clientId ${servers[$serverId]} $serverPort $clientWorkload $clientRunTime
 done
 
 #echo -ne "  Waiting for the clients to finish ... "
