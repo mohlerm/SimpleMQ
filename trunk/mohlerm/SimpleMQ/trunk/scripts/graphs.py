@@ -5,7 +5,7 @@ import statistics
 import datetime
 
 import matplotlib
-#matplotlib.use('Agg')
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.mlab as mlab
@@ -32,14 +32,14 @@ def to_percent(y, position):
 #
 ########################################
 if(len(sys.argv) != 4):
-    print("Please supply clientAmount, experimentId and log file")
+    print("Please supply clientAmount, experimentId")
     sys.exit(1)
 
 clientAmount = int(sys.argv[1])
 experimentId = sys.argv[2]
 print("Using experimentID="+experimentId)
 # import log file
-inputfile = open(experimentId+'/'+sys.argv[3])
+inputfile = open(experimentId+'/allclients.log')
 # parse log file into datastructure
 ans_snd_time = []
 ans_snd_index = []
@@ -68,9 +68,10 @@ for line in inputfile:
     # as long as all clients have not registered look for registration messages and
     # don't include these measurements yet (since we're still in warmup)
     if currentClients < clientAmount:
-        m = re.search(r"(\d*-\d*-\d*\s\d*:\d*:\d*,\d*)\s*\S*\s*\S*\s*Registered",line)
+        m = re.search(r"(\d*-\d*-\d*\s\d*:\d*:\d*,\d*)\s*\S*\s*(\S*)\s*Registered",line)
         if m is not None:
             currentClients = currentClients+1
+      #      print(m.group(2)+" registered")
     else:
         # TODO exclude the acks for 0 messages (where insert did not return a valid message id)
         # If message is a send answer
@@ -102,8 +103,8 @@ for line in inputfile:
                 req_rcv_time.append(m.group(1))
                 req_rcv_index.append(m.group(3))
                 found = True
-   # if found == False:
-       # print(line)
+        # if found == False:
+        #     print(line)
 
 ########################################
 #
@@ -257,8 +258,9 @@ for i in range(0,len(ans_rcv_miliseconds)):
         low_water_mark = low_water_mark+1
         ans_rcv_response_time_value[low_water_mark] += ans_rcv_response[i]
 #print(throughput_values)
-plt.plot(timestamps[0:len(timestamps)-3],ans_snd_response_time_value[0:len(timestamps)-3], 'b-', label="Response time over time")
-plt.plot(timestamps[0:len(timestamps)-3],ans_rcv_response_time_value[0:len(timestamps)-3], 'g-', label="Response time over time")
+plt.plot(timestamps[0:len(timestamps)-3],ans_snd_response_time_value[0:len(timestamps)-3], 'b-', label="SEND")
+plt.plot(timestamps[0:len(timestamps)-3],ans_rcv_response_time_value[0:len(timestamps)-3], 'g-', label="RECEIVE")
 plt.xlabel('Time since start of measurement [in seconds]')
 plt.ylabel('Average response time [in milliseconds] - 1s slots')
+plt.legend(loc='upper right')
 plt.savefig(experimentId+"/experiment_"+experimentId+"_response_time_overtime.png")
