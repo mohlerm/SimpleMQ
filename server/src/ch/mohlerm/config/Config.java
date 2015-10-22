@@ -13,6 +13,4 @@ public class Config {
     public static int SERVERID = 0;
    // public static InetAddress SERVERIP;
     public static int SERVERWORKER = 8;
-    public static int REQUESTBUFFERSIZE = 4096;
-    public static int ANSWERBUFFERSIZE = 4096;
 }

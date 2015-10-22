@@ -4,7 +4,6 @@ import ch.mohlerm.config.Config;
 import ch.mohlerm.protocol.MessagePassingProtocol;
 import ch.mohlerm.protocol.SerializableAnswer;
 import ch.mohlerm.protocol.SerializableRequest;
-import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
@@ -19,7 +18,7 @@ public class StaticTrafficGenerator extends TrafficGenerator {
     public StaticTrafficGenerator(SocketChannel socketChannel, String fixMessage) throws IOException {
         super(socketChannel);
         this.fixMessage = fixMessage;
-        //this.log = Logger.getLogger("Client["+ String.valueOf(Config.CLIENTID)+"]");
+        //this.log = Logger.getLogger("Client["+ String.valueOf(GlobalConfig.CLIENTID)+"]");
     }
 
     @Override
@@ -39,7 +38,7 @@ public class StaticTrafficGenerator extends TrafficGenerator {
             } else if (messageCounter%3 == 2){
                 request = new SerializableRequest(MessagePassingProtocol.RequestType.PEEKQUEUE, messageCounter, Config.CLIENTID, 0, 1, "");
 //            } else if (messageCounter%3 == 3) {
-//                request = new SerializableRequest(MessagePassingProtocol.RequestType.SENDMESSAGETOALL, messageCounter, Config.CLIENTID, 0, 1, fixMessage);
+//                request = new SerializableRequest(MessagePassingProtocol.RequestType.SENDMESSAGETOALL, messageCounter, GlobalConfig.CLIENTID, 0, 1, fixMessage);
             } else {
                 request = new SerializableRequest(MessagePassingProtocol.RequestType.POPQUEUE, messageCounter, Config.CLIENTID, 0, 1, "");
             }

@@ -15,6 +15,4 @@ public class Config {
     public static int CLIENTPAUSE = 0;
     public static int INITWAIT = 0;
 
-    public static int REQUESTBUFFERSIZE = 4096;
-    public static int ANSWERBUFFERSIZE = 4096;
 }
