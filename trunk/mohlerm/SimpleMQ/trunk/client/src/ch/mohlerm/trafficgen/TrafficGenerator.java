@@ -1,6 +1,7 @@
 package ch.mohlerm.trafficgen;
 
 import ch.mohlerm.config.Config;
+import ch.mohlerm.config.GlobalConfig;
 import ch.mohlerm.protocol.MessagePassingProtocol;
 import ch.mohlerm.protocol.SerializableAnswer;
 import ch.mohlerm.protocol.SerializableRequest;
@@ -42,7 +43,7 @@ public abstract class TrafficGenerator implements Runnable {
         /*
             send client id to initialize on the server and wait for ack (message ID 0)
          */
-        ByteBuffer requestBuffer = ByteBuffer.allocate(Config.REQUESTBUFFERSIZE);
+        ByteBuffer requestBuffer = ByteBuffer.allocate(GlobalConfig.REQUESTBUFFERSIZE);
 
 
         ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
@@ -68,7 +69,7 @@ public abstract class TrafficGenerator implements Runnable {
         }
     }
     protected SerializableAnswer getAnswer() throws NoAnswerException {
-        ByteBuffer answerBuffer = ByteBuffer.allocate(Config.ANSWERBUFFERSIZE);
+        ByteBuffer answerBuffer = ByteBuffer.allocate(GlobalConfig.ANSWERBUFFERSIZE);
         // Attempt to read off the channel
         //log.debug("Attempt to read off channel");
         int numRead;

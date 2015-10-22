@@ -1,6 +1,7 @@
 package ch.mohlerm.worker;
 
 import ch.mohlerm.config.Config;
+import ch.mohlerm.config.GlobalConfig;
 import ch.mohlerm.distributor.Distributor;
 import ch.mohlerm.domain.psql.PsqlMessage;
 import ch.mohlerm.protocol.MessagePassingProtocol;
@@ -67,7 +68,7 @@ public class Worker implements Runnable {
     public void run() {
         log.debug("Got request");
         long startTime = System.nanoTime();
-        ByteBuffer requestBuffer = ByteBuffer.allocate(Config.REQUESTBUFFERSIZE);
+        ByteBuffer requestBuffer = ByteBuffer.allocate(GlobalConfig.REQUESTBUFFERSIZE);
         // Attempt to read off the channel
         int numRead;
         try {
@@ -208,7 +209,7 @@ public class Worker implements Runnable {
             }
 
 
-            ByteBuffer answerBuffer = ByteBuffer.allocate(Config.ANSWERBUFFERSIZE);
+            ByteBuffer answerBuffer = ByteBuffer.allocate(GlobalConfig.ANSWERBUFFERSIZE);
 
             ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
             try {
