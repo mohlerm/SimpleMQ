@@ -22,10 +22,12 @@ public abstract class TrafficGenerator implements Runnable {
     protected int numberOfRequests = Config.CLIENTAMOUNT;
     protected Logger log;
     protected int messageCounter;
+    private ByteBuffer messageBuffer;
 
     public TrafficGenerator(SocketChannel socketChannel) {
         this.socketChannel = socketChannel;
         this.messageCounter = 0;
+        this.messageBuffer = ByteBuffer.allocate(GlobalConfig.BUFFERSIZE);
         this.log = Logger.getLogger("Client["+ String.valueOf(Config.CLIENTID)+"]");
     }
 
@@ -43,8 +45,7 @@ public abstract class TrafficGenerator implements Runnable {
         /*
             send client id to initialize on the server and wait for ack (message ID 0)
          */
-        ByteBuffer requestBuffer = ByteBuffer.allocate(GlobalConfig.REQUESTBUFFERSIZE);
-
+        messageBuffer.clear();
 
         ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
         try {
@@ -55,26 +56,26 @@ public abstract class TrafficGenerator implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        requestBuffer.put(byteOutputStream.toByteArray());
+        messageBuffer.put(byteOutputStream.toByteArray());
 
-        requestBuffer.flip();
+        messageBuffer.flip();
 
-        while (requestBuffer.hasRemaining()) {
+        while (messageBuffer.hasRemaining()) {
             try {
                 //log.info("Write message [" + counter + "] to buffer");
-                socketChannel.write(requestBuffer);
+                socketChannel.write(messageBuffer);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
     protected SerializableAnswer getAnswer() throws NoAnswerException {
-        ByteBuffer answerBuffer = ByteBuffer.allocate(GlobalConfig.ANSWERBUFFERSIZE);
+        messageBuffer.clear();
         // Attempt to read off the channel
         //log.debug("Attempt to read off channel");
         int numRead;
         try {
-            numRead = socketChannel.read(answerBuffer);
+            numRead = socketChannel.read(messageBuffer);
 
         } catch (IOException e) {
             // The remote forcibly closed the connection, cancel
@@ -99,7 +100,7 @@ public abstract class TrafficGenerator implements Runnable {
             throw new NoAnswerException("Cleanly closed");
         }
         if (numRead > 0) {
-            return MessagePassingProtocol.parseAnswer(answerBuffer.array(), numRead);
+            return MessagePassingProtocol.parseAnswer(messageBuffer.array(), numRead);
 
         }
         throw new NoAnswerException("No answer");
