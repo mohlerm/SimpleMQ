@@ -1,4 +1,4 @@
-package ch.mohlerm.queries;
+package ch.mohlerm.queries.psql;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -7,7 +7,7 @@ import java.sql.SQLException;
 /**
  * Created by marcel on 10/13/15.
  */
-public class DeleteQueries {
+public class PsqlDeleteQueries {
     public static int deleteClient(Connection connection, int clientId) throws SQLException {
         String callableSQL = "{call delete_client(?)}";
         CallableStatement callableStatement = connection.prepareCall(callableSQL);

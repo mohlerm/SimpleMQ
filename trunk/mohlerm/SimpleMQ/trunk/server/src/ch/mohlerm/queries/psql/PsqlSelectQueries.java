@@ -1,4 +1,4 @@
-package ch.mohlerm.queries;
+package ch.mohlerm.queries.psql;
 
 import ch.mohlerm.domain.psql.PsqlMessage;
 
@@ -10,7 +10,7 @@ import java.sql.SQLException;
 /**
  * Created by marcel on 9/23/15.
  */
-public class SelectQueries {
+public class PsqlSelectQueries {
     public static PsqlMessage popQueue(Connection connection, int queueId, int clientId) throws SQLException {
         String callableSQL = "{call pop_queue(?,?)}";
         CallableStatement callableStatement = connection.prepareCall(callableSQL);
