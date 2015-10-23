@@ -33,6 +33,7 @@ public class Worker implements Runnable {
         this.id = id;
         this.request = null;
         this.answer = null;
+        this.messageBuffer = ByteBuffer.allocate(GlobalConfig.BUFFERSIZE);
         log = Logger.getLogger("Server["+String.valueOf(Config.SERVERID)+"]Worker["+String.valueOf(id)+"]");
         setupDBConnection();
     }
@@ -46,6 +47,7 @@ public class Worker implements Runnable {
     Logger log;
     SerializableRequest request;
     SerializableAnswer answer;
+    ByteBuffer messageBuffer;
 
     //    public void setConnection(Connection connection) {
 //        this.connection = connection;
@@ -68,11 +70,12 @@ public class Worker implements Runnable {
     public void run() {
         log.debug("Got request");
         long startTime = System.nanoTime();
-        ByteBuffer requestBuffer = ByteBuffer.allocate(GlobalConfig.REQUESTBUFFERSIZE);
+
+        messageBuffer.clear();
         // Attempt to read off the channel
         int numRead;
         try {
-            numRead = socketChannel.read(requestBuffer);
+            numRead = socketChannel.read(messageBuffer);
         } catch (IOException e) {
             log.debug("Forced close");
             // The remote forcibly closed the connection, cancel
@@ -102,7 +105,7 @@ public class Worker implements Runnable {
         }
         if (numRead > 0) {
             //log.debug(requestBuffer.array());
-            request = MessagePassingProtocol.parseRequest(requestBuffer.array(), numRead);
+            request = MessagePassingProtocol.parseRequest(messageBuffer.array(), numRead);
             // split on request type and create appropriate answer
             MessagePassingProtocol.logRequest(request, log);
             int newid;
@@ -207,9 +210,7 @@ public class Worker implements Runnable {
                 default:
                     break;
             }
-
-
-            ByteBuffer answerBuffer = ByteBuffer.allocate(GlobalConfig.ANSWERBUFFERSIZE);
+            messageBuffer.clear();
 
             ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
             try {
@@ -220,18 +221,18 @@ public class Worker implements Runnable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            answerBuffer.put(byteOutputStream.toByteArray());
+            messageBuffer.put(byteOutputStream.toByteArray());
             try {
                 byteOutputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            answerBuffer.flip();
+            messageBuffer.flip();
 
-            while (answerBuffer.hasRemaining()) {
+            while (messageBuffer.hasRemaining()) {
                 try {
-                    socketChannel.write(answerBuffer);
+                    socketChannel.write(messageBuffer);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
