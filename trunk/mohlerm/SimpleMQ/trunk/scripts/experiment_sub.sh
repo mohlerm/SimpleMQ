@@ -10,6 +10,7 @@ idStart=$6
 idEnd=$7
 clientWorkload=$8
 clientRunTime=$9
-
+echo "starting sub script $client"
 scp -i ~/.ssh/id_aws client.sh $remoteUserName@$client:$executionDir
 ssh -i ~/.ssh/id_aws $remoteUserName@$client "cd $executionDir; bash client.sh $serverMachines $serverPort $idStart $idEnd $clientWorkload $clientRunTime"
+echo "done with sub script $client"
