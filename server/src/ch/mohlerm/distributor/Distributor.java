@@ -1,8 +1,9 @@
 package ch.mohlerm.distributor;
 
-import ch.mohlerm.config.Config;
+import ch.mohlerm.config.server.Config;
 import ch.mohlerm.worker.Worker;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -20,7 +21,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  */
 
 public class Distributor implements Runnable {
-    private static Logger log = Logger.getLogger(Distributor.class.getName());
+    private static Logger log = LogManager.getLogger(Distributor.class.getName());
     // number of connected clients
     private volatile int nrOfClients = 0;
     // The selector we'll be monitoring

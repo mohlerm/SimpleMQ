@@ -1,6 +1,6 @@
 package ch.mohlerm.worker;
 
-import ch.mohlerm.config.Config;
+import ch.mohlerm.config.server.Config;
 import ch.mohlerm.config.GlobalConfig;
 import ch.mohlerm.distributor.Distributor;
 import ch.mohlerm.domain.psql.PsqlMessage;
@@ -10,7 +10,8 @@ import ch.mohlerm.protocol.SerializableRequest;
 import ch.mohlerm.queries.psql.PsqlDeleteQueries;
 import ch.mohlerm.queries.psql.PsqlInsertQueries;
 import ch.mohlerm.queries.psql.PsqlSelectQueries;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -34,7 +35,7 @@ public class Worker implements Runnable {
         this.request = null;
         this.answer = null;
         this.messageBuffer = ByteBuffer.allocate(GlobalConfig.BUFFERSIZE);
-        log = Logger.getLogger("Server["+String.valueOf(Config.SERVERID)+"]Worker["+String.valueOf(id)+"]");
+        log = LogManager.getLogger("Server["+String.valueOf(Config.SERVERID)+"]Worker["+String.valueOf(id)+"]");
         setupDBConnection();
     }
     // worker id

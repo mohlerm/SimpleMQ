@@ -1,11 +1,12 @@
 package ch.mohlerm.trafficgen;
 
-import ch.mohlerm.config.Config;
+import ch.mohlerm.config.client.Config;
 import ch.mohlerm.config.GlobalConfig;
 import ch.mohlerm.protocol.MessagePassingProtocol;
 import ch.mohlerm.protocol.SerializableAnswer;
 import ch.mohlerm.protocol.SerializableRequest;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -28,7 +29,7 @@ public abstract class TrafficGenerator implements Runnable {
         this.socketChannel = socketChannel;
         this.messageCounter = 0;
         this.messageBuffer = ByteBuffer.allocate(GlobalConfig.BUFFERSIZE);
-        this.log = Logger.getLogger("Client["+ String.valueOf(Config.CLIENTID)+"]");
+        this.log = LogManager.getLogger("Client["+ String.valueOf(Config.CLIENTID)+"]");
     }
 
 
