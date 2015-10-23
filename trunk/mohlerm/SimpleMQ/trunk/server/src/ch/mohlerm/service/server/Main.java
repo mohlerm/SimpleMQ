@@ -4,10 +4,13 @@ package ch.mohlerm.service.server;
  * Created by marcel on 9/21/15.
  */
 
-import ch.mohlerm.config.Config;
+import ch.mohlerm.config.server.Config;
+import ch.mohlerm.config.server.CustomConfigurationFactory;
 import ch.mohlerm.distributor.Distributor;
 import ch.mohlerm.queries.psql.PsqlSetupQueries;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.config.ConfigurationFactory;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -15,9 +18,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Main {
-
-    static Logger log = Logger.getLogger(Main.class.getName());
-
     public static void main(String[] args) {
 
         if (args.length < 5) {
@@ -32,6 +32,8 @@ public class Main {
 //            fa.setAppend(true);
 //            fa.activateOptions();
 //            Logger.getRootLogger().addAppender(fa);
+            ConfigurationFactory.setConfigurationFactory(new CustomConfigurationFactory());
+            Logger log = LogManager.getLogger(Main.class.getName());
             log.info("Using server id: " + String.valueOf(Config.SERVERID));
             Config.SERVERPORT = Integer.parseInt(args[1]);
             log.info("Using server port: " + String.valueOf(Config.SERVERPORT));

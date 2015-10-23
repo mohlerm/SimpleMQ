@@ -1,13 +1,15 @@
 package ch.mohlerm.service.client;
 
-import ch.mohlerm.config.Config;
+import ch.mohlerm.config.client.Config;
+import ch.mohlerm.config.client.CustomConfigurationFactory;
 import ch.mohlerm.trafficgen.TrafficGenerator;
 import ch.mohlerm.trafficgen.TrafficGeneratorFactory;
 import ch.mohlerm.trafficgen.TrafficGeneratorNotFoundException;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.config.ConfigurationFactory;
+
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -19,7 +21,7 @@ import java.nio.channels.SocketChannel;
  */
 public class Main {
 
-    static Logger log = Logger.getLogger(Main.class.getName());
+   // static Logger log = LogManager.getLogger(Main.class.getName());
 
     public static void main(String[] args) throws IOException {
 
@@ -33,14 +35,8 @@ public class Main {
             } else {
                 Config.CLIENTID = Integer.parseInt(args[0]);
 
-                FileAppender fa = new FileAppender();
-                fa.setName("FileLogger");
-                fa.setFile("logs/client_" + Config.CLIENTID + ".log");
-                fa.setLayout(new PatternLayout("%d %-5p %c{1} %m%n"));
-                fa.setThreshold(Level.INFO);
-                fa.setAppend(true);
-                fa.activateOptions();
-                Logger.getRootLogger().addAppender(fa);
+                ConfigurationFactory.setConfigurationFactory(new CustomConfigurationFactory());
+                Logger log = LogManager.getLogger(Main.class.getName());
 
                 Config.SERVERIP = InetAddress.getByName(args[1]);
                 log.info("Using server ip: " + args[1]);

@@ -1,6 +1,6 @@
 package ch.mohlerm.trafficgen;
 
-import ch.mohlerm.config.Config;
+import ch.mohlerm.config.client.Config;
 import ch.mohlerm.protocol.MessagePassingProtocol;
 import ch.mohlerm.protocol.SerializableAnswer;
 import ch.mohlerm.protocol.SerializableRequest;
