@@ -7,9 +7,9 @@ import ch.mohlerm.domain.psql.PsqlMessage;
 import ch.mohlerm.protocol.MessagePassingProtocol;
 import ch.mohlerm.protocol.SerializableAnswer;
 import ch.mohlerm.protocol.SerializableRequest;
-import ch.mohlerm.queries.DeleteQueries;
-import ch.mohlerm.queries.InsertQueries;
-import ch.mohlerm.queries.SelectQueries;
+import ch.mohlerm.queries.psql.PsqlDeleteQueries;
+import ch.mohlerm.queries.psql.PsqlInsertQueries;
+import ch.mohlerm.queries.psql.PsqlSelectQueries;
 import org.apache.log4j.Logger;
 
 import java.io.ByteArrayOutputStream;
@@ -110,7 +110,7 @@ public class Worker implements Runnable {
             switch (request.getType()) {
                 case CREATECLIENT:
                     try {
-                        newid = InsertQueries.insertClient(dbConnection, request.getSource());
+                        newid = PsqlInsertQueries.insertClient(dbConnection, request.getSource());
                         answer = new SerializableAnswer(MessagePassingProtocol.RequestType.CREATECLIENT, request.getId(), request.getSource(), newid, "OK");
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -119,7 +119,7 @@ public class Worker implements Runnable {
                     break;
                 case DELETECLIENT:
                     try {
-                        newid = DeleteQueries.deleteClient(dbConnection, request.getSource());
+                        newid = PsqlDeleteQueries.deleteClient(dbConnection, request.getSource());
                         answer = new SerializableAnswer(MessagePassingProtocol.RequestType.DELETECLIENT, request.getId(), request.getSource(), newid, "OK");
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -131,7 +131,7 @@ public class Worker implements Runnable {
                     break;
                 case CREATEQUEUE:
                     try {
-                        newid = InsertQueries.insertQueue(dbConnection);
+                        newid = PsqlInsertQueries.insertQueue(dbConnection);
                         answer = new SerializableAnswer(MessagePassingProtocol.RequestType.CREATEQUEUE, request.getId(), request.getSource(),newid, "OK");
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -140,7 +140,7 @@ public class Worker implements Runnable {
                     break;
                 case DELETEQUEUE:
                     try {
-                        newid = DeleteQueries.deleteQueue(dbConnection, request.getQueue());
+                        newid = PsqlDeleteQueries.deleteQueue(dbConnection, request.getQueue());
                         answer = new SerializableAnswer(MessagePassingProtocol.RequestType.DELETEQUEUE, request.getId(), request.getSource(), newid, "OK");
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -155,7 +155,7 @@ public class Worker implements Runnable {
                     try {
                         // override receiver
                         psqlMessage.setReceiver(0);
-                        newid = InsertQueries.insertMessage(dbConnection, psqlMessage);
+                        newid = PsqlInsertQueries.insertMessage(dbConnection, psqlMessage);
                         answer = new SerializableAnswer(MessagePassingProtocol.RequestType.SENDMESSAGETOALL, request.getId(), request.getSource(), newid,"OK");
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -165,7 +165,7 @@ public class Worker implements Runnable {
                 case SENDMESSAGETORECEIVER:
                     psqlMessage = new PsqlMessage(request, new Timestamp(System.currentTimeMillis()));
                     try {
-                        newid = InsertQueries.insertMessage(dbConnection, psqlMessage);
+                        newid = PsqlInsertQueries.insertMessage(dbConnection, psqlMessage);
                         answer = new SerializableAnswer(MessagePassingProtocol.RequestType.SENDMESSAGETORECEIVER, request.getId(), request.getSource(), newid,"OK");
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -174,7 +174,7 @@ public class Worker implements Runnable {
                     break;
                 case POPQUEUE:
                     try {
-                        psqlMessage = SelectQueries.popQueue(dbConnection, request.getQueue(), request.getSource());
+                        psqlMessage = PsqlSelectQueries.popQueue(dbConnection, request.getQueue(), request.getSource());
                         if(psqlMessage.getId() > 0) {
                             answer = new SerializableAnswer(MessagePassingProtocol.RequestType.POPQUEUE, request.getId(), request.getSource(), psqlMessage.getId(), psqlMessage.getMessage());
                         } else {
@@ -187,7 +187,7 @@ public class Worker implements Runnable {
                     break;
                 case PEEKQUEUE:
                     try {
-                        psqlMessage = SelectQueries.peekQueue(dbConnection, request.getQueue(), request.getSource());
+                        psqlMessage = PsqlSelectQueries.peekQueue(dbConnection, request.getQueue(), request.getSource());
                         if(psqlMessage.getId() > 0) {
                             answer = new SerializableAnswer(MessagePassingProtocol.RequestType.PEEKQUEUE, request.getId(), request.getSource(), psqlMessage.getId(), psqlMessage.getMessage());
                         } else {

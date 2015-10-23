@@ -1,4 +1,4 @@
-package ch.mohlerm.queries;
+package ch.mohlerm.queries.psql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -6,7 +6,7 @@ import java.sql.SQLException;
 /**
  * Created by marcel on 9/27/15.
  */
-public class SetupQueries {
+public class PsqlSetupQueries {
     /**
      * sets up the database
      *
@@ -14,7 +14,7 @@ public class SetupQueries {
      * @return true if successful
      * @throws SQLException
      */
-    public void setupDB(Connection connection) throws SQLException {
+    public static void setupDB(Connection connection) throws SQLException {
 //        String queryString = "DROP TABLE IF EXISTS messages, queues, message_queues;";
 //        Statement statement = connection.createStatement();
 //        queryString = "CREATE TABLE IF NOT EXISTS messages (id integer NOT NULL, sender_id integer, receiver_id integer, queue_id integer, timestamp date, message VARCHAR(25), Constraint message_pkey Primary Key (id));";
@@ -27,8 +27,8 @@ public class SetupQueries {
 //        statement = connection.createStatement();
 //        statement.execute(queryString);
         // create the 0 client (catchall)
-          InsertQueries.insertClient(connection, 0);
+          PsqlInsertQueries.insertClient(connection, 0);
         // create initial queue
-          InsertQueries.insertQueue(connection);
+          PsqlInsertQueries.insertQueue(connection);
     }
 }

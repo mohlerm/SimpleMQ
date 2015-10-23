@@ -6,7 +6,7 @@ package ch.mohlerm.service.server;
 
 import ch.mohlerm.config.Config;
 import ch.mohlerm.distributor.Distributor;
-import ch.mohlerm.queries.SetupQueries;
+import ch.mohlerm.queries.psql.PsqlSetupQueries;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -79,8 +79,7 @@ public class Main {
             try {
                 // only the first server does this
                 if (Config.SERVERID == 1) {
-                    SetupQueries setupQueries = new SetupQueries();
-                    setupQueries.setupDB(connection);
+                    PsqlSetupQueries.setupDB(connection);
                     log.info("Executed setup queries");
                 }
             } catch (SQLException e) {

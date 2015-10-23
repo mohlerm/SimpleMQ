@@ -1,4 +1,4 @@
-package ch.mohlerm.queries;
+package ch.mohlerm.queries.psql;
 
 import ch.mohlerm.domain.psql.PsqlMessage;
 
@@ -10,7 +10,7 @@ import java.sql.SQLException;
 /**
  * Created by marcel on 9/23/15.
  */
-public class InsertQueries {
+public class PsqlInsertQueries {
     /**
      * @param connection the database connection
      * @param message the message to insert
