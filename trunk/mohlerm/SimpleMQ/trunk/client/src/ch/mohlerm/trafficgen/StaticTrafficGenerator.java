@@ -63,11 +63,11 @@ public class StaticTrafficGenerator extends TrafficGenerator {
                 // (messageCounter%Config.CLIENTTOTAL)+1 sends a message to each client and wraps around
                 request = new SerializableRequest(MessagePassingProtocol.RequestType.SENDMESSAGETORECEIVER, messageCounter, Config.CLIENTID, (messageCounter%Config.CLIENTTOTAL)+1, 1, fixMessage);
             } else if (messageCounter%3 == 2){
-                request = new SerializableRequest(MessagePassingProtocol.RequestType.PEEKQUEUE, messageCounter, Config.CLIENTID, Config.CLIENTID, queueNumber, "");
+                request = new SerializableRequest(MessagePassingProtocol.RequestType.PEEKQUEUE, messageCounter, Config.CLIENTID, Config.CLIENTID, 1, "");
 //            } else if (messageCounter%3 == 3) {
 //                request = new SerializableRequest(MessagePassingProtocol.RequestType.SENDMESSAGETOALL, messageCounter, GlobalConfig.CLIENTID, 0, 1, fixMessage);
             } else {
-                request = new SerializableRequest(MessagePassingProtocol.RequestType.POPQUEUE, messageCounter, Config.CLIENTID, Config.CLIENTID, queueNumber, "");
+                request = new SerializableRequest(MessagePassingProtocol.RequestType.POPQUEUE, messageCounter, Config.CLIENTID, Config.CLIENTID, 1, "");
             }
             startTime = System.nanoTime();
             postRequest(request);
