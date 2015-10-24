@@ -5,7 +5,8 @@
 #
 ###############################
 
-#sh client.sh $serverMachines $serverPort $clientTotal $idStart $idEnd $clientWorkload $clientRunTime $clientRunCount"
+#bash client.sh $serverMachines $serverPort $clientTotal $idStart $idEnd $clientWorkload $clientRunTime $clientRunCount"
+#                    1               2           3          4       5           6              7             8
 serverMachines=$1
 serverPort=$2
 clientTotal=$3
