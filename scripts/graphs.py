@@ -75,7 +75,7 @@ for line in inputfile:
     else:
         # TODO exclude the acks for 0 messages (where insert did not return a valid message id)
         # If message is a send answer
-        m = re.search(r"(\d*-\d*-\d*\s\d*:\d*:\d*,\d*)\s*\S*\s*\S*\s*ANS\|SendMessageToAll\|(\d*)\|\d*\|\d*\|\S*\|\|[-+]?([0-9]*\.[0-9]+|[0-9]+)",line)
+        m = re.search(r"(\d*-\d*-\d*\s\d*:\d*:\d*,\d*)\s*\S*\s*\S*\s*ANS\|SendMessageToReceiver\|(\d*)\|\d*\|\d*\|\S*\|\|[-+]?([0-9]*\.[0-9]+|[0-9]+)",line)
         if m is not None:
             ans_snd_time.append(m.group(1))
             ans_snd_index.append(m.group(2))
@@ -92,7 +92,7 @@ for line in inputfile:
                 found = True
             # if message is a send request
         if found == False:
-            m = re.search(r"(\d*-\d*-\d*\s\d*:\d*:\d*,\d*)\s*\S*\s*\S*\s*REQ\|SendMessageToAll\|(\d*)\|\d*\|\d*\|\d*\|(small|medium|large)Message",line)
+            m = re.search(r"(\d*-\d*-\d*\s\d*:\d*:\d*,\d*)\s*\S*\s*\S*\s*REQ\|SendMessageToReceiver\|(\d*)\|\d*\|\d*\|\d*\|(small|medium|large)Message",line)
             if m is not None:
                 req_snd_time.append(m.group(1))
                 req_snd_index.append(m.group(2))

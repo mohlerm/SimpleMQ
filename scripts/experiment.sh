@@ -1,5 +1,5 @@
 #!/bin/bash
-# usage: bash experiment.sh --dbMachine=52.28.240.101 --serverMachines=52.29.50.196 --serverWorkerTotal=8 --clientMachines=52.29.49.29 --clientTotal=10 --clientWorkload=staticsmall --clientRunTime=100 --remoteUserName=ubuntu --experimentId=2
+# usage: bash experiment.sh --dbMachine=52.28.240.101 --serverMachines=52.29.50.196 --serverWorkerTotal=8 --clientMachines=52.29.49.29 --clientTotal=10 --clientWorkload=staticsmall --clientRunTime=100 --clientRunCount=100 --remoteUserName=ubuntu --experimentId=2
 # db:    /mnt/local/mohlerm/postgres/bin/postgres -D /mnt/local/mohlerm/postgres/db/ -p 51230 -i -k /mnt/local/mohlerm/
 # ./createdb -h 127.0.0.1 -p 51230 -U testdb testdb
 # ./createuser -h 127.0.0.1 -p 51230 --interactive
@@ -28,7 +28,7 @@
 
 function usage() {
 	local programName=$1
-	echo "Usage: $programName --dbMachine=<address> --dbPersistent=<true/false> --serverMachines=<address> --serverWorkerTotal=<int> --clientMachines=<address> --clientTotal=<int> --clientWorkload=<string> --clientRunTime=<seconds>--remoteUserName=<username> --experimentId=<id>"
+	echo "Usage: $programName --dbMachine=<address> --dbPersistent=<true/false> --serverMachines=<address> --serverWorkerTotal=<int> --clientMachines=<address> --clientTotal=<int> --clientWorkload=<string> --clientRunTime=<seconds> --clientRunCount=<int> --remoteUserName=<username> --experimentId=<id>"
 	exit -1
 }
 
@@ -40,6 +40,7 @@ clientMachines=""
 clientWorkload=""
 clientTotal=""
 clientRunTime=""
+clientRunCount=""
 remoteUserName=""
 experimentId=""
 
@@ -50,7 +51,7 @@ executionDir="/home/ubuntu/simplemq"
 serverStartMessage="Using server id: "
 
 # Extract command line arguments
-TEMP=`getopt -o b: --long dbMachine:,dbPersistent:,serverMachines:,serverWorkerTotal:,clientMachines:,clientTotal:,clientWorkload:,clientRunTime:,remoteUserName:,experimentId: \
+TEMP=`getopt -o b: --long dbMachine:,dbPersistent:,serverMachines:,serverWorkerTotal:,clientMachines:,clientTotal:,clientWorkload:,clientRunTime:,clientRunCount:,remoteUserName:,experimentId: \
      -n 'experiment.sh' -- "$@"`
 
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
@@ -68,6 +69,7 @@ while true ; do
                 --clientTotal) clientTotal="$2" ; shift 2 ;;
                 --clientWorkload) clientWorkload="$2" ; shift 2 ;;
                 --clientRunTime) clientRunTime="$2" ; shift 2 ;;
+                --clientRunCount) clientRunCount="$" ; shift 2 ;;
                 --remoteUserName) remoteUserName="$2" ; shift 2 ;;
                 --experimentId) experimentId="$2" ; shift 2 ;;
                 --) shift ; break ;;
@@ -76,7 +78,7 @@ while true ; do
 done
 
 # Check for correctness of the commandline arguments
-if [[ $dbMachine == "" || dbPersistent == "" || $serverMachines == "" || $serverWorkerTotal == "" || $clientMachines == "" || $clientTotal == "" || $clientWorkload == "" || $clientRunTime == "" || $remoteUserName == "" || $experimentId == "" ]]
+if [[ $dbMachine == "" || dbPersistent == "" || $serverMachines == "" || $serverWorkerTotal == "" || $clientMachines == "" || $clientTotal == "" || $clientWorkload == "" || $clientRunTime == "" || $clientRunCount == "" || $remoteUserName == "" || $experimentId == "" ]]
 then
 	usage $1
 fi
@@ -227,7 +229,7 @@ for client in "${clients[@]}"
 do
     echo "  Start the clients id$idStart to id$idEnd on the client machine: $client"
     # we use all servermachines
-    screen -dmS client_sub$idStart_$idEnd bash experiment_sub.sh $remoteUserName $client $executionDir $serverMachines $serverPort $idStart $idEnd $clientWorkload $clientRunTime
+    screen -dmS client_sub$idStart_$idEnd bash experiment_sub.sh $remoteUserName $client $executionDir $serverMachines $serverPort $clientTotal $idStart $idEnd $clientWorkload $clientRunTime $clientRunCount
     # Run the clients
     idStart=$(($idStart+$idStep))
     idEnd=$(($idEnd+$idStep))

@@ -5,13 +5,15 @@
 #
 ###############################
 
-#sh client.sh $serverMachines $serverPort $idStart $idEnd $clientWorkload $clientRunTime"
+#sh client.sh $serverMachines $serverPort $clientTotal $idStart $idEnd $clientWorkload $clientRunTime $clientRunCount"
 serverMachines=$1
 serverPort=$2
-idStart=$3
-idEnd=$4
-clientWorkload=$5
-clientRunTime=$6
+clientTotal=$3
+idStart=$4
+idEnd=$5
+clientWorkload=$6
+clientRunTime=$7
+clientRunCount=$8
 username=$(whoami)
 
 
@@ -35,7 +37,7 @@ for clientId in $clientIds
 do
 	serverId=$((clientId%serverCount))
 	echo "    Start client: $clientId on server: ${servers[$serverId]}"
-	screen -dmS client$clientId java -jar SimpleMQ_client.jar $clientId ${servers[$serverId]} $serverPort $clientWorkload $clientRunTime
+	screen -dmS client$clientId java -jar SimpleMQ_client.jar $clientId ${servers[$serverId]} $serverPort $clientTotal $clientWorkload $clientRunTime $clientRunCount
 done
 
 #echo -ne "  Waiting for the clients to finish ... "
