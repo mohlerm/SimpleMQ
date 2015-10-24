@@ -61,7 +61,7 @@ public class StaticTrafficGenerator extends TrafficGenerator {
             // always send a message and then query for one
             if(messageCounter%3 == 1) {
                 // (messageCounter%Config.CLIENTTOTAL)+1 sends a message to each client and wraps around
-                request = new SerializableRequest(MessagePassingProtocol.RequestType.SENDMESSAGETORECEIVER, messageCounter, Config.CLIENTID, (messageCounter%Config.CLIENTTOTAL)+1, queueNumber, fixMessage);
+                request = new SerializableRequest(MessagePassingProtocol.RequestType.SENDMESSAGETORECEIVER, messageCounter, Config.CLIENTID, (messageCounter%Config.CLIENTTOTAL)+1, 1, fixMessage);
             } else if (messageCounter%3 == 2){
                 request = new SerializableRequest(MessagePassingProtocol.RequestType.PEEKQUEUE, messageCounter, Config.CLIENTID, Config.CLIENTID, queueNumber, "");
 //            } else if (messageCounter%3 == 3) {
