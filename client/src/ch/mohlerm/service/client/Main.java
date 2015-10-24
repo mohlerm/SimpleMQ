@@ -38,9 +38,6 @@ public class Main {
                 ConfigurationFactory.setConfigurationFactory(new CustomConfigurationFactory());
                 Logger log = LogManager.getLogger(Main.class.getName());
 
-                for(int i = 0;i<args.length;i++) {
-                    log.info(args[i]);
-                }
                 Config.SERVERIP = InetAddress.getByName(args[1]);
                 log.info("Using server ip: " + args[1]);
                 Config.SERVERPORT = Integer.parseInt(args[2]);
