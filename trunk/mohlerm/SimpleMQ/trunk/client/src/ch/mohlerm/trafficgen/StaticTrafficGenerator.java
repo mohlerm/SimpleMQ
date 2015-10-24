@@ -56,12 +56,23 @@ public class StaticTrafficGenerator extends TrafficGenerator {
         }
         messageCounter++;
         // +2 because we start with 2 (0 is the register message, 1, the queue create, n+2 is the queue delete, n+3 is the deregister message)
+        int receiver = 1;
         while(messageCounter < numberOfRequests+2) {
-
+            if(receiver==Config.CLIENTID) {
+                receiver++;
+            }
+            if(receiver>Config.CLIENTTOTAL) {
+                if(Config.CLIENTID==1) {
+                    receiver = 2;
+                } else {
+                    receiver = 1;
+                }
+            }
             // always send a message and then query for one
             if(messageCounter%3 == 1) {
                 // (messageCounter%Config.CLIENTTOTAL)+1 sends a message to each client and wraps around
-                request = new SerializableRequest(MessagePassingProtocol.RequestType.SENDMESSAGETORECEIVER, messageCounter, Config.CLIENTID, (messageCounter%Config.CLIENTTOTAL)+1, 1, fixMessage);
+                request = new SerializableRequest(MessagePassingProtocol.RequestType.SENDMESSAGETORECEIVER, messageCounter, Config.CLIENTID, receiver, 1, fixMessage);
+                receiver++;
             } else if (messageCounter%3 == 2){
                 request = new SerializableRequest(MessagePassingProtocol.RequestType.PEEKQUEUE, messageCounter, Config.CLIENTID, Config.CLIENTID, 1, "");
 //            } else if (messageCounter%3 == 3) {
