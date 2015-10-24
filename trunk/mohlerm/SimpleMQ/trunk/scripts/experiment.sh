@@ -69,7 +69,7 @@ while true ; do
                 --clientTotal) clientTotal="$2" ; shift 2 ;;
                 --clientWorkload) clientWorkload="$2" ; shift 2 ;;
                 --clientRunTime) clientRunTime="$2" ; shift 2 ;;
-                --clientRunCount) clientRunCount="$" ; shift 2 ;;
+                --clientRunCount) clientRunCount="$2" ; shift 2 ;;
                 --remoteUserName) remoteUserName="$2" ; shift 2 ;;
                 --experimentId) experimentId="$2" ; shift 2 ;;
                 --) shift ; break ;;
@@ -116,7 +116,7 @@ echo ${clients[*]}
 #####################################
 rm -R $experimentId
 mkdir -p $experimentId
-echo -e "#!/bin/bash\nbash experiment.sh --dbMachine=$dbMachine --dbPersistent=$dbPersistent --serverMachines=$serverMachines --serverWorkerTotal=$serverWorkerTotal --clientMachines=$clientMachines --clientTotal=$clientTotal --clientWorkload=$clientWorkload --clientRunTime=$clientRunTime --remoteUserName=$remoteUserName --experimentId=$experimentId" > $experimentId/experiment_$experimentId.sh
+echo -e "#!/bin/bash\nbash experiment.sh --dbMachine=$dbMachine --dbPersistent=$dbPersistent --serverMachines=$serverMachines --serverWorkerTotal=$serverWorkerTotal --clientMachines=$clientMachines --clientTotal=$clientTotal --clientWorkload=$clientWorkload --clientRunTime=$clientRunTime --clientRunCount=$clientRunCount --remoteUserName=$remoteUserName --experimentId=$experimentId" > $experimentId/experiment_$experimentId.sh
 
 #####################################
 #
