@@ -100,7 +100,7 @@ CREATE OR REPLACE FUNCTION pop_queue(p_queue_id INTEGER, p_client_id INTEGER)
     r_id INTEGER;
     r_message messages%ROWTYPE;
   BEGIN
-    SELECT INTO r_id id FROM messages WHERE queue_id = p_queue_id AND (receiver_id = p_client_id OR receiver_id = 0)
+    SELECT INTO r_id id FROM messages WHERE (receiver_id = p_client_id OR receiver_id = 0) AND queue_id = p_queue_id
     ORDER BY id ASC
     LIMIT 1;
     DELETE FROM messages WHERE id = r_id
@@ -113,7 +113,7 @@ CREATE OR REPLACE FUNCTION peek_queue(p_queue_id INTEGER, p_client_id INTEGER)
   RETURNS messages AS $$
   DECLARE r_message messages%ROWTYPE;
   BEGIN
-      SELECT INTO r_message * FROM messages WHERE queue_id = p_queue_id AND (receiver_id = p_client_id OR receiver_id = 0)
+      SELECT INTO r_message * FROM messages WHERE (receiver_id = p_client_id OR receiver_id = 0) and queue_id = p_queue_id
       ORDER BY id ASC
       LIMIT 1;
       RETURN r_message;
