@@ -17,7 +17,6 @@ clientRunTime=$7
 clientRunCount=$8
 username=$(whoami)
 
-
 ######################################
 #
 # Run clients
