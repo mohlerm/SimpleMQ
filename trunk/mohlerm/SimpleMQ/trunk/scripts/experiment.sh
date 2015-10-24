@@ -129,6 +129,30 @@ cd ..
 ant >> ant.log
 cd scripts
 echo "OK"
+#####################################
+#
+# Cleanup initially
+#
+#####################################
+# Cleanup
+#echo -ne "  Cleaning up files on client and server machines... "
+#ssh $remoteUserName@$clientMachine "rm $executionDir/logs/.client*"
+#ssh $remoteUserName@$serverMachine "rm $executionDir/server.out"
+#echo "OK"
+echo -ne " Cleanup directories..."
+for server in "${servers[@]}"
+do
+    ssh -i ~/.ssh/id_aws $remoteUserName@$server "rm -Rf $executionDir"
+done
+for client in "${clients[@]}"
+do
+    ssh -i ~/.ssh/id_aws $remoteUserName@$client "rm -Rf $executionDir"
+done
+if [ "$dbPersistent" == "false" ]
+then
+    ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "rm -Rf $executionDir"
+fi
+echo "OK"
 
 #####################################
 #
