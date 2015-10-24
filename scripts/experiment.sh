@@ -134,11 +134,28 @@ echo "OK"
 # Cleanup initially
 #
 #####################################
+if [ "$dbPersistent" == "false" ]
+then
+    echo -ne "  Sending shut down signal to database..."
+    ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "screen -X -S postgres quit"
+    ssh -i ~/.ssh/id_aws $remoteUserName@$dbMachine "killall -u $remoteUserName postgres"
+    echo "OK"
+else
+    echo "  Do not shut down database"
+fi
+for client in "${clients[@]}"
+do
+    echo -ne "  Sending shut down signal to client $client..."
+    ssh -i ~/.ssh/id_aws $remoteUserName@$client "killall -u $remoteUserName java"
+    echo "OK"
+done
+for server in "${servers[@]}"
+do
+    echo -ne "  Sending shut down signal to server $server..."
+    ssh -i ~/.ssh/id_aws $remoteUserName@$server "killall -u $remoteUserName java"
+    echo "OK"
+done
 # Cleanup
-#echo -ne "  Cleaning up files on client and server machines... "
-#ssh $remoteUserName@$clientMachine "rm $executionDir/logs/.client*"
-#ssh $remoteUserName@$serverMachine "rm $executionDir/server.out"
-#echo "OK"
 echo -ne " Cleanup directories..."
 for server in "${servers[@]}"
 do
