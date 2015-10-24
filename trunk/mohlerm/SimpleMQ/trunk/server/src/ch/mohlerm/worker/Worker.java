@@ -111,6 +111,7 @@ public class Worker implements Runnable {
             MessagePassingProtocol.logRequest(request, log);
             int newid;
             PsqlMessage psqlMessage;
+            int result;
             switch (request.getType()) {
                 case CREATECLIENT:
                     try {
@@ -131,6 +132,7 @@ public class Worker implements Runnable {
                     }
                     break;
                 case QUERYCLIENT:
+                    // NOT A REQUIREMENT
                     // TODO QUERYCLIENT
                     break;
                 case CREATEQUEUE:
@@ -152,7 +154,17 @@ public class Worker implements Runnable {
                     }
                     break;
                 case QUERYQUEUESFORRECEIVER:
-                    // TODO QUERYQUEUESFORRRECEIVER
+                    try {
+                        result = PsqlSelectQueries.queryQueues(dbConnection, request.getSource());
+                        if(result > 0) {
+                            answer = new SerializableAnswer(MessagePassingProtocol.RequestType.QUERYQUEUESFORRECEIVER, request.getId(), request.getSource(), result, "Queue: "+String.valueOf(result));
+                        } else {
+                            answer = new SerializableAnswer(MessagePassingProtocol.RequestType.ERROR, request.getId(), request.getSource(), -1, "No message waiting for client "+request.getSource()+"!");
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.ERROR, request.getId(), request.getSource(), -1, "Could not query for client "+request.getSource()+"!");
+                    }
                     break;
                 case SENDMESSAGETOALL:
                     psqlMessage = new PsqlMessage(request, new Timestamp(System.currentTimeMillis()));
@@ -203,10 +215,17 @@ public class Worker implements Runnable {
                     }
                     break;
                 case QUERYMESSAGESFORSENDER:
-                    // TODO QUERYMESSAGESFORSENDER
-                    break;
-                case QUERYMESSAGESFORRECEIVER:
-                    // TODO QUERYMESSAGESFORRECEIVER
+                    try {
+                        psqlMessage = PsqlSelectQueries.popMessage(dbConnection, request.getTarget(), request.getSource());
+                        if(psqlMessage.getId() > 0) {
+                            answer = new SerializableAnswer(MessagePassingProtocol.RequestType.QUERYMESSAGESFORSENDER, request.getId(), request.getSource(), psqlMessage.getId(), psqlMessage.getMessage());
+                        } else {
+                            answer = new SerializableAnswer(MessagePassingProtocol.RequestType.ERROR, request.getId(), request.getSource(), -1, "No message to pop available for sender "+request.getTarget()+"!");
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        answer = new SerializableAnswer(MessagePassingProtocol.RequestType.ERROR, request.getId(), request.getSource(), -1, "Could not pop for sender "+request.getTarget()+"!");
+                    }
                     break;
                 default:
                     break;

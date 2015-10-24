@@ -15,7 +15,7 @@ public class MessagePassingProtocol {
         CREATECLIENT, QUERYCLIENT, DELETECLIENT,
         CREATEQUEUE, DELETEQUEUE, QUERYQUEUESFORRECEIVER,
         SENDMESSAGETOALL, SENDMESSAGETORECEIVER, POPQUEUE, PEEKQUEUE,
-        QUERYMESSAGESFORSENDER, QUERYMESSAGESFORRECEIVER,
+        QUERYMESSAGESFORSENDER,
         ERROR
     }
 
@@ -71,9 +71,6 @@ public class MessagePassingProtocol {
             case QUERYMESSAGESFORSENDER:
                 type = "QueryMessagesForSender";
                 break;
-            case QUERYMESSAGESFORRECEIVER:
-                type = "QueryMessagesForReceiver";
-                break;
             case ERROR:
                 type = "Error";
                 break;
@@ -124,9 +121,6 @@ public class MessagePassingProtocol {
                 break;
             case QUERYMESSAGESFORSENDER:
                 type = "QueryMessagesForSender";
-                break;
-            case QUERYMESSAGESFORRECEIVER:
-                type = "QueryMessagesForReceiver";
                 break;
             case ERROR:
                 type = "Error";
