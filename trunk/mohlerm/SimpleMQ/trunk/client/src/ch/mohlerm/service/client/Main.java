@@ -26,10 +26,10 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         // basic setup
-        if(args.length != 5 ) {
-            System.out.println("Please specify <clientid>, <serverip>, <serverport>, <traffictype>, <amount>!");
+        if(args.length != 7 ) {
+            System.out.println("Please specify <clientid>, <serverip>, <serverport>, <clientTotal>, <traffictype>, <time>, <amount>!");
         } else {
-            String trafficType = args[3];
+            String trafficType = args[4];
             if(!(trafficType.equals("staticsmall")||trafficType.equals("staticmedium")||trafficType.equals("staticlarge"))) {
                 System.out.println("Please specify traffictype: staticsmall, staticmedium or staticlarge");
             } else {
@@ -42,7 +42,11 @@ public class Main {
                 log.info("Using server ip: " + args[1]);
                 Config.SERVERPORT = Integer.parseInt(args[2]);
                 log.info("Using server port: " + String.valueOf(Config.SERVERPORT));
-                Config.CLIENTAMOUNT = Integer.parseInt(args[4]);
+                Config.CLIENTTOTAL = Integer.parseInt(args[3]);
+                log.info("Using total clients: " + String.valueOf(Config.CLIENTTOTAL));
+                Config.CLIENTTIME = Integer.parseInt(args[5]);
+                log.info("Using time for client requests: " + String.valueOf(Config.CLIENTTIME));
+                Config.CLIENTAMOUNT = Integer.parseInt(args[6]);
                 log.info("Using amount of client requests: " + String.valueOf(Config.CLIENTAMOUNT));
                 SocketChannel socketChannel = SocketChannel.open();
                 socketChannel.connect(new InetSocketAddress(Config.SERVERIP, Config.SERVERPORT));
