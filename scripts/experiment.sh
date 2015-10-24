@@ -78,7 +78,7 @@ while true ; do
 done
 
 # Check for correctness of the commandline arguments
-if [[ $dbMachine == "" || dbPersistent == "" || $serverMachines == "" || $serverWorkerTotal == "" || $clientMachines == "" || $clientTotal == "" || $clientWorkload == "" || $clientRunTime == "" || $clientRunCount == "" || $remoteUserName == "" || $experimentId == "" ]]
+if [[ $dbMachine == "" || $dbPersistent == "" || $serverMachines == "" || $serverWorkerTotal == "" || $clientMachines == "" || $clientTotal == "" || $clientWorkload == "" || $clientRunTime == "" || $clientRunCount == "" || $remoteUserName == "" || $experimentId == "" ]]
 then
 	usage $1
 fi
@@ -270,7 +270,7 @@ for client in "${clients[@]}"
 do
     echo "  Start the clients id$idStart to id$idEnd on the client machine: $client"
     # we use all servermachines
-    screen -dmS client_sub$idStart_$idEnd bash experiment_sub.sh $remoteUserName $client $executionDir $serverMachines $serverPort $clientTotal $idStart $idEnd $clientWorkload $clientRunTime $clientRunCount
+    screen -dmS client_sub$idStart_$idEnd bash experiment_sub.sh `$remoteUserName $client $executionDir $serverMachines $serverPort $clientTotal $idStart $idEnd $clientWorkload $clientRunTime $clientRunCount`
     # Run the clients
     idStart=$(($idStart+$idStep))
     idEnd=$(($idEnd+$idStep))
