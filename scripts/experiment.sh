@@ -208,12 +208,13 @@ do
     scp -i ~/.ssh/id_aws ../jar/SimpleMQ_server.jar $remoteUserName@$server:$executionDir
 done
 #echo "OK"
-#echo -ne "  Copying client.jar to client machines: $clientMachine"
+#echo -ne "  Copying client.jar&client.sh to client machines: $clientMachine"
 # Copy jar to client machine
 for client in "${clients[@]}"
 do
     ssh -i ~/.ssh/id_aws $remoteUserName@$client "mkdir -p $executionDir"
     scp -i ~/.ssh/id_aws ../jar/SimpleMQ_client.jar $remoteUserName@$client:$executionDir
+    scp -i ~/.ssh/id_aws client.sh $remoteUserName@$client:$executionDir
 done
 #echo "OK"
 
@@ -270,7 +271,8 @@ for client in "${clients[@]}"
 do
     echo "  Start the clients id$idStart to id$idEnd on the client machine: $client"
     # we use all servermachines
-    screen -dmS client_sub$idStart_$idEnd bash experiment_sub.sh `$remoteUserName $client $executionDir $serverMachines $serverPort $clientTotal $idStart $idEnd $clientWorkload $clientRunTime $clientRunCount`
+    #screen -dmS client_sub$idStart_$idEnd bash experiment_sub.sh `$remoteUserName $client $executionDir $serverMachines $serverPort $clientTotal $idStart $idEnd $clientWorkload $clientRunTime $clientRunCount`
+    screen -dmS client_sub$idStart_$idEnd ssh -i ~/.ssh/id_aws $remoteUserName@$client "cd $executionDir; bash client.sh $serverMachines $serverPort $clientTotal $idStart $idEnd $clientWorkload $clientRunTime $clientRunCount"
     # Run the clients
     idStart=$(($idStart+$idStep))
     idEnd=$(($idEnd+$idStep))
@@ -278,7 +280,7 @@ done
 
 echo -ne "  Waiting for the clients to finish ..."
 sleep 1
-while [ `ps aux | grep "bash experiment_sub.sh" | grep $(whoami) | wc -l` != 1 ]
+while [ `ps aux | grep "bash client.sh" | grep $(whoami) | wc -l` != 1 ]
 do
 	sleep 1
 	echo -ne "..."
