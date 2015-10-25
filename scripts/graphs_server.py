@@ -31,7 +31,7 @@ def to_percent(y, position):
 # parse inputs and setup variables
 #
 ########################################
-if len(sys.argv) != 4:
+if len(sys.argv) != 3:
     print("Please supply clientAmount, experimentId")
     sys.exit(1)
 
