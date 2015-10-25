@@ -165,7 +165,7 @@ plt.ylabel('Response time [in milliseconds]')
 plt.title('Response time')
 plt.legend(loc='upper right')
 plt.grid(True)
-plt.savefig(experimentId+"\experiment_server_"+experimentId+"_response_time.png")
+plt.savefig(experimentId+"/experiment_server_"+experimentId+"_response_time.png")
 #plt.show()
 plt.clf()
 ########################################
@@ -196,7 +196,7 @@ plt.legend(loc='upper right')
 formatter = FuncFormatter(to_percent)
 plt.gca().yaxis.set_major_formatter(formatter)
 #plt.title(r'Histogram of IQ: $\mu=100$, $\sigma=15$')
-plt.savefig(experimentId+"\experiment_server_"+experimentId+"_hist_response_time.png")
+plt.savefig(experimentId+"/experiment_server_"+experimentId+"_hist_response_time.png")
 plt.clf()
 ########################################
 #
@@ -224,7 +224,7 @@ for i in range(0,len(ans_rcv_miliseconds)):
 plt.plot(timestamps[0:len(timestamps)-3],throughput_values[0:len(timestamps)-3], 'b-', label="Throughput over time")
 plt.xlabel('Time since start of measurement [in seconds]')
 plt.ylabel('Average throughput [in messages/second] - 1s slots')
-plt.savefig(experimentId+"\experiment_server_"+experimentId+"_throughput_overtime.png")
+plt.savefig(experimentId+"/experiment_server_"+experimentId+"_throughput_overtime.png")
 plt.clf()
 ########################################
 #
@@ -264,4 +264,4 @@ plt.plot(timestamps[0:len(timestamps)-3],ans_rcv_response_time_value[0:len(times
 plt.xlabel('Time since start of measurement [in seconds]')
 plt.ylabel('Average response time [in milliseconds] - 1s slots')
 plt.legend(loc='upper right')
-plt.savefig(experimentId+"\experiment_server_"+experimentId+"_response_time_overtime.png")
+plt.savefig(experimentId+"/experiment_server_"+experimentId+"_response_time_overtime.png")
