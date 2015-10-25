@@ -344,6 +344,10 @@ do
     ssh -i ~/.ssh/id_aws $remoteUserName@$server "cd $executionDir/logs; tar czf server_$i.tar.gz server_$i.log"
     echo "  Copying log files from server $server"
     scp -i ~/.ssh/id_aws $remoteUserName@$server:$executionDir/logs/server_$i.tar.gz ./$experimentId/
+    cd $experimentId
+    tar xzfm server_$i.tar.gz
+    rm server_$i.tar.gz
+    cd ..
     ((i++))
 done
 
@@ -370,8 +374,14 @@ echo "OK"
 
 
 # Process the log files from the clients
-echo "  Processing log files"
+echo "  Processing client log files"
 cat $experimentId/client* | sort -n > $experimentId/allclients.log
+rm $experimentId/client*
+
+# Process the log files from the server
+echo "  Processing server log files"
+cat $experimentId/server* | sort -n > $experimentId/allservers.log
+rm $experimentId/server*
 
 #echo "  Generating trace.jpg with gnuplot"
 #gnuplot << EOF
@@ -386,4 +396,5 @@ cat $experimentId/client* | sort -n > $experimentId/allclients.log
 #EOF
 
 echo "  Parse with python and generate graphs using matplotlib"
-python3 graphs.py $clientCount $experimentId allclients.log | tee "$experimentId/experiment_$experimentId.txt"
+python3 graphs.py $clientCount $experimentId | tee "$experimentId/experiment_$experimentId.txt"
+python3 graphs_server.py $clientCount $experimentId | tee "$experimentId/experiment_server_$experimentId.txt"
