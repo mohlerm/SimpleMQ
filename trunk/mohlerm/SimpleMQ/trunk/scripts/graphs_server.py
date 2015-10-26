@@ -2,6 +2,7 @@ import re
 import sys
 import statistics
 import datetime
+import logging
 import matplotlib
 import logging
 import matplotlib.pyplot as plt
