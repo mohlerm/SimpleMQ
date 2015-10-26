@@ -38,6 +38,13 @@ public class MessagePassingProtocol {
             logger.info(parseAnswerToString(answer));
         }
     }
+    public static void logAnswerWithQuery(SerializableAnswer answer, Logger logger, long time, long queryTime) {
+        if(time!=-1) {
+            logger.info(parseAnswerToString(answer) + "||" + String.valueOf(time/1e6) + "||" + String.valueOf(queryTime/1e6));
+        } else {
+            logger.info(parseAnswerToString(answer));
+        }
+    }
     private static String parseRequestToString(SerializableRequest request) {
         String type;
         switch (request.type) {
