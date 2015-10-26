@@ -37,7 +37,7 @@ if len(sys.argv) != 3:
     sys.exit(1)
 
 clientAmount = int(sys.argv[1])
-serverAmount = int(sys.argv[2])
+#serverAmount = int(sys.argv[2])
 experimentId = sys.argv[2]
 logging.basicConfig(filename=experimentId+'/experiment_server'+experimentId+'.log',level=logging.DEBUG)
 logging.info("Using experimentID="+experimentId)
