@@ -5,5 +5,5 @@ package ch.mohlerm.config;
  */
 public class GlobalConfig {
     //public static int BUFFERSIZE = 4096;
-    public static int BUFFERSIZE = 8192;
+    public static int BUFFERSIZE = 16384;
 }
