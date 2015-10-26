@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS messages (
         receiver_id INTEGER REFERENCES clients (id) ON DELETE CASCADE,
         queue_id INTEGER NOT NULL REFERENCES queues (id) ON DELETE CASCADE,
         sendtime TIMESTAMP DEFAULT now(),
-        message TEXT);
+        payload TEXT);
 
 CREATE INDEX queue_index ON queues(id);
 CREATE INDEX user_index ON clients(id);
@@ -32,11 +32,11 @@ CREATE INDEX message_sender_index ON messages(sender_id);
 CREATE INDEX message_receiver_index ON messages(receiver_id);
 
 
-CREATE OR REPLACE FUNCTION add_message(sender_id INTEGER, receiver_id INTEGER, queue_id INTEGER, sendtime TIMESTAMP, message TEXT)
+CREATE OR REPLACE FUNCTION add_message(p_sender_id INTEGER, p_receiver_id INTEGER, p_queue_id INTEGER, p_sendtime TIMESTAMP, p_payload TEXT)
   RETURNS INTEGER AS $$
   DECLARE new_id INTEGER;
   BEGIN
-    INSERT INTO messages VALUES (default, sender_id, receiver_id, queue_id, sendtime, message) RETURNING id into new_id;
+    INSERT INTO messages VALUES (default, p_sender_id, p_receiver_id, p_queue_id, p_sendtime, p_payload) RETURNING id into new_id;
     RETURN new_id;
   END;
 $$ LANGUAGE plpgsql;
@@ -50,37 +50,37 @@ CREATE OR REPLACE FUNCTION add_queue()
   END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION delete_queue(queue_id INTEGER)
+CREATE OR REPLACE FUNCTION delete_queue(p_queue_id INTEGER)
   RETURNS void AS $$
   BEGIN
-    DELETE FROM queues WHERE id=queue_id;
+    DELETE FROM queues WHERE id=p_queue_id;
   END;
 $$ LANGUAGE plpgsql;
 
 -- this queries for a queue where a message for a client is waiting
-CREATE OR REPLACE FUNCTION query_queues(client_id INTEGER)
+CREATE OR REPLACE FUNCTION query_queues(p_client_id INTEGER)
   RETURNS INTEGER AS $$
   DECLARE r_queue INTEGER;
   BEGIN
-    SELECT INTO r_queue queue_id from messages WHERE receiver_id = client_id
+    SELECT INTO r_queue queue_id from messages WHERE receiver_id = p_client_id
     LIMIT 1;
     RETURN r_queue;
   END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION add_client(client_id INTEGER)
+CREATE OR REPLACE FUNCTION add_client(p_client_id INTEGER)
   RETURNS INTEGER AS $$
   DECLARE new_id INTEGER;
   BEGIN
-    INSERT INTO clients VALUES (client_id) RETURNING id into new_id;
+    INSERT INTO clients VALUES (p_client_id) RETURNING id into new_id;
     RETURN new_id;
   END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION delete_client(client_id INTEGER)
+CREATE OR REPLACE FUNCTION delete_client(p_client_id INTEGER)
   RETURNS void AS $$
   BEGIN
-    DELETE FROM clients WHERE id=client_id;
+    DELETE FROM clients WHERE id=p_client_id;
   END;
 $$ LANGUAGE plpgsql;
 
