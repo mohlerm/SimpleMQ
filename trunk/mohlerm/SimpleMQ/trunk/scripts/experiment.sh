@@ -396,5 +396,5 @@ rm $experimentId/server*
 #EOF
 
 echo "  Parse with python and generate graphs using matplotlib"
-python3 graphs.py $clientCount $experimentId | tee "$experimentId/experiment_$experimentId.txt"
-python3 graphs_server.py $clientCount $experimentId | tee "$experimentId/experiment_server_$experimentId.txt"
+screen -dmS python_experiment_$experimentId python3 graphs.py $clientCount $experimentId > $experimentId/experiment_$experimentId.txt
+screen -dmS python_experiment_server_$experimentId python3 graphs_server.py $clientCount $experimentId > $experimentId/experiment_server_$experimentId.txt
