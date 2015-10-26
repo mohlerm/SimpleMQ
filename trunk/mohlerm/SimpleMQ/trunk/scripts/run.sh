@@ -1,10 +1,16 @@
-dbMachine=52.29.13.86
-serverMachines=52.29.4.92 #,52.29.76.96
-clientMachines=52.29.43.245 #,52.29.51.163
-experimentConstant=5
+dbMachine=52.29.101.82
+serverMachines=52.29.70.237 #
+clientMachines=52.28.211.221
+experimentConstant=maxclientperinstance1srv
 for i in {5..20..5}
   do
-    bash experiment.sh --dbMachine=$dbMachine --dbPersistent=false --serverMachines=$serverMachines --serverWorkerTotal=32 --clientMachines=$clientMachines --clientTotal=$i --clientWorkload=staticsmall --clientRunTime=300 --clientRunCount=-1 --remoteUserName=ubuntu --experimentId=$experimentConstant$i
+    bash experiment.sh --dbMachine=$dbMachine --dbPersistent=false --serverMachines=$serverMachines --serverWorkerTotal=64 --clientMachines=$clientMachines --clientTotal=$i --clientWorkload=staticsmall --clientRunTime=300 --clientRunCount=-1 --remoteUserName=ubuntu --experimentId=$experimentConstant$i
     ~/tg/bin/telegram-cli -k ~/tg/tg-server.pub -W -e "msg Marcel_Mohler Experiments $experimentConstant$i small done"
-b 
   done
+serverMachines=52.29.70.237,52.28.229.8
+experimentConstant=maxclientperinstance2srv
+for i in {5..20..5}
+  do
+    bash experiment.sh --dbMachine=$dbMachine --dbPersistent=false --serverMachines=$serverMachines --serverWorkerTotal=64 --clientMachines=$clientMachines --clientTotal=$i --clientWorkload=staticsmall --clientRunTime=300 --clientRunCount=-1 --remoteUserName=ubuntu --experimentId=$experimentConstant$i
+    ~/tg/bin/telegram-cli -k ~/tg/tg-server.pub -W -e "msg Marcel_Mohler Experiments $experimentConstant$i small done"
+  done 
