@@ -3,13 +3,14 @@ import sys
 import statistics
 import datetime
 import logging
-import matplotlib
 import logging
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.mlab as mlab
 from matplotlib.ticker import FuncFormatter
-matplotlib.use('Agg')
+
 ########################################
 #
 # custom percentage for y label
