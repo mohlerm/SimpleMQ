@@ -396,5 +396,5 @@ rm $experimentId/server*
 #EOF
 
 echo "  Parse with python and generate graphs using matplotlib"
-screen -dmS python_experiment_$experimentId python3 graphs.py $clientTotal $experimentId
-screen -dmS python_experiment_server_$experimentId python3 graphs_server.py $clientTotal $experimentId
+screen -dmS $experimentId python3 graphs.py $clientTotal $experimentId
+screen -dmS server_$experimentId python3 graphs_server.py $clientTotal $experimentId
