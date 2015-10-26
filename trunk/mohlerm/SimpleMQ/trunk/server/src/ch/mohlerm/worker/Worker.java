@@ -71,7 +71,6 @@ public class Worker implements Runnable {
     public void run() {
         log.debug("Got request");
         long startTime = System.nanoTime();
-
         messageBuffer.clear();
         // Attempt to read off the channel
         int numRead;
@@ -112,6 +111,7 @@ public class Worker implements Runnable {
             int newid;
             PsqlMessage psqlMessage;
             int result;
+            long queryStartTime = System.nanoTime();
             switch (request.getType()) {
                 case CREATECLIENT:
                     try {
@@ -230,6 +230,7 @@ public class Worker implements Runnable {
                 default:
                     break;
             }
+            long queryTime = System.nanoTime() - queryStartTime;
             messageBuffer.clear();
 
             ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
@@ -257,8 +258,8 @@ public class Worker implements Runnable {
                     e.printStackTrace();
                 }
             }
-            long estimatedTime = System.nanoTime() - startTime;
-            MessagePassingProtocol.logAnswer(answer, log, estimatedTime);
+            long fullTime = System.nanoTime() - startTime;
+            MessagePassingProtocol.logAnswerWithQuery(answer, log, fullTime, queryTime);
         }
         log.debug("Finished request");
         callBack.workerCallBack(this);
