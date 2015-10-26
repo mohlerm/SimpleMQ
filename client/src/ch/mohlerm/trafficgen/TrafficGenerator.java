@@ -23,6 +23,8 @@ public abstract class TrafficGenerator implements Runnable {
     protected int numberOfRequests = Config.CLIENTAMOUNT;
     protected Logger log;
     protected int messageCounter;
+    protected SerializableAnswer answer;
+    protected SerializableRequest request;
     private ByteBuffer messageBuffer;
 
     public TrafficGenerator(SocketChannel socketChannel) {
@@ -35,11 +37,56 @@ public abstract class TrafficGenerator implements Runnable {
 
     public void run() {
         register();
+        if(Config.CLIENTTHINKTIME > 0) {
+            // sleep for a predefined time
+            try {
+                Thread.sleep(Config.CLIENTTHINKTIME);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        startTraffic();
+        if(Config.CLIENTTHINKTIME > 0) {
+            // sleep for a predefined time
+            try {
+                Thread.sleep(Config.CLIENTTHINKTIME);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        messageCounter++;
+        long start = System.nanoTime();
+        // +2 because we start with 2 (0 is the register message, 1, the startTraffic , n+2 is the queue delete, n+3 is the endTraffic message)
+        while(System.nanoTime() - start < Config.CLIENTTIME*1E9 && (numberOfRequests == -1 || messageCounter < numberOfRequests+2 )) {
+        //while((numberOfRequests == -1 || messageCounter < numberOfRequests+2 )) {
         generateTraffic();
+            messageCounter++;
+            if(Config.CLIENTTHINKTIME > 0) {
+                // sleep for a predefined time
+                try {
+                    Thread.sleep(Config.CLIENTTHINKTIME);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        log.info("Done sending " + Config.CLIENTAMOUNT + " messages");
+        endTraffic();
+        messageCounter++;
+        if(Config.CLIENTTHINKTIME > 0) {
+            // sleep for a predefined time
+            try {
+                Thread.sleep(Config.CLIENTTHINKTIME);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         deregister();
     }
 
     protected abstract void generateTraffic();
+    protected abstract void startTraffic();
+    protected abstract void endTraffic();
 
 
     protected void postRequest(SerializableRequest request) {
@@ -107,13 +154,13 @@ public abstract class TrafficGenerator implements Runnable {
         throw new NoAnswerException("No answer");
     }
 
-    protected void register() {
-        SerializableRequest request = new SerializableRequest(MessagePassingProtocol.RequestType.CREATECLIENT, messageCounter, Config.CLIENTID, 0, 0, "Empty");
+    private void register() {
+        request = new SerializableRequest(MessagePassingProtocol.RequestType.CREATECLIENT, messageCounter, Config.CLIENTID, 0, 0, "Empty");
         log.debug("Initialize with client id " + Config.CLIENTID + " on server.");
         long startTime = System.nanoTime();
         postRequest(request);
         MessagePassingProtocol.logRequest(request, log);
-        SerializableAnswer answer = null;
+        answer = null;
         try {
             log.debug("Wait for init answer");
             answer = getAnswer();
@@ -132,13 +179,13 @@ public abstract class TrafficGenerator implements Runnable {
         messageCounter++;
     }
 
-    protected void deregister() {
-        SerializableRequest request = new SerializableRequest(MessagePassingProtocol.RequestType.DELETECLIENT, messageCounter, Config.CLIENTID, 0, 0, "Empty");
+    private void deregister() {
+        request = new SerializableRequest(MessagePassingProtocol.RequestType.DELETECLIENT, messageCounter, Config.CLIENTID, 0, 0, "Empty");
         log.debug("Delete client id " + Config.CLIENTID + " on server.");
         long startTime = System.nanoTime();
         postRequest(request);
         MessagePassingProtocol.logRequest(request, log);
-        SerializableAnswer answer = null;
+        answer = null;
         try {
             log.debug("Wait for init answer");
             answer = getAnswer();
