@@ -1,15 +1,14 @@
-import os
 import re
 import sys
 import statistics
 import datetime
-
 import matplotlib
-matplotlib.use('Agg')
+import logging
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.mlab as mlab
 from matplotlib.ticker import FuncFormatter
+matplotlib.use('Agg')
 ########################################
 #
 # custom percentage for y label
@@ -37,7 +36,8 @@ if(len(sys.argv) != 3):
 
 clientAmount = int(sys.argv[1])
 experimentId = sys.argv[2]
-print("Using experimentID="+experimentId)
+logging.basicConfig(filename=experimentId+'/experiment_'+experimentId+'.log',level=logging.DEBUG)
+logging.info("Using experimentID="+experimentId)
 # import log file
 inputfile = open(experimentId+'/allclients.log')
 # parse log file into datastructure
@@ -71,7 +71,7 @@ for line in inputfile:
         m = re.search(r"(\d*-\d*-\d*\s\d*:\d*:\d*,\d*)\s*\S*\s*(\S*)\s*Registered",line)
         if m is not None:
             currentClients = currentClients+1
-      #      print(m.group(2)+" registered")
+      #      logging.info(m.group(2)+" registered")
     else:
         # TODO exclude the acks for 0 messages (where insert did not return a valid message id)
         # If message is a send answer
@@ -104,7 +104,7 @@ for line in inputfile:
                 req_rcv_index.append(m.group(3))
                 found = True
         # if found == False:
-        #     print(line)
+        #     logging.info(line)
 
 ########################################
 #
@@ -118,10 +118,10 @@ stdev_ans_rcv_response = statistics.stdev(ans_rcv_response)
 median_ans_snd_response = statistics.median(ans_snd_response)
 median_ans_rcv_response = statistics.median(ans_rcv_response)
 
-print("Mean SEND acks:         " + str(mean_ans_snd_response) + "+-" + str(2*stdev_ans_snd_response))
-print("Mean RECEIVE acks:      " + str(mean_ans_rcv_response) + "+-" +str(2*stdev_ans_rcv_response))
-print("median SEND acks:       " + str(median_ans_snd_response))
-print("median RECEIVE acks:    " + str(median_ans_rcv_response))
+logging.info("Mean SEND acks:         " + str(mean_ans_snd_response) + "+-" + str(2*stdev_ans_snd_response))
+logging.info("Mean RECEIVE acks:      " + str(mean_ans_rcv_response) + "+-" +str(2*stdev_ans_rcv_response))
+logging.info("median SEND acks:       " + str(median_ans_snd_response))
+logging.info("median RECEIVE acks:    " + str(median_ans_rcv_response))
 
 ans_snd_miliseconds = []
 ans_rcv_miliseconds = []
@@ -132,17 +132,17 @@ for s in ans_rcv_time:
 
 startDate = datetime.datetime.strptime(req_snd_time[0],"%Y-%m-%d %H:%M:%S,%f")
 endDate = datetime.datetime.strptime(ans_snd_time[len(ans_snd_time)-1],"%Y-%m-%d %H:%M:%S,%f")
-print("First request:          " + str(startDate))
-print("Last answer:            " + str(endDate))
+logging.info("First request:          " + str(startDate))
+logging.info("Last answer:            " + str(endDate))
 total_seconds = (endDate-startDate).total_seconds()
-print("Difference:             " + str(total_seconds))
+logging.info("Difference:             " + str(total_seconds))
 
-print("Number of REQ sends:    " + str(len(req_snd_time)))
-print("Number of REQ receives: " + str(len(req_rcv_time)))
-print("Number of ANS sends:    " + str(len(ans_snd_time)))
-print("Number of ANS receives: " + str(len(ans_rcv_time)))
+logging.info("Number of REQ sends:    " + str(len(req_snd_time)))
+logging.info("Number of REQ receives: " + str(len(req_rcv_time)))
+logging.info("Number of ANS sends:    " + str(len(ans_snd_time)))
+logging.info("Number of ANS receives: " + str(len(ans_rcv_time)))
 
-print("Throughput:             " + str( (len(ans_snd_time)+len(ans_rcv_time))/total_seconds) + " messages/s")
+logging.info("Throughput:             " + str( (len(ans_snd_time)+len(ans_rcv_time))/total_seconds) + " messages/s")
 
 
 ########################################
@@ -204,7 +204,7 @@ plt.clf()
 ########################################
 timestamps = np.array(range(int(total_seconds)+2))
 throughput_values = np.zeros(int(total_seconds)+2)
-#print(timestamps)
+#logging.info(timestamps)
 low_water_mark = 0
 for i in range(0,len(ans_snd_miliseconds)):
     if ans_snd_miliseconds[i] < timestamps[low_water_mark+1]:
@@ -219,7 +219,7 @@ for i in range(0,len(ans_rcv_miliseconds)):
     else:
         low_water_mark = low_water_mark+1
         throughput_values[low_water_mark] += 1
-#print(throughput_values)
+#logging.info(throughput_values)
 plt.plot(timestamps[0:len(timestamps)-3],throughput_values[0:len(timestamps)-3], 'b-', label="Throughput over time")
 plt.xlabel('Time since start of measurement [in seconds]')
 plt.ylabel('Average throughput [in messages/second] - 1s slots')
@@ -232,7 +232,7 @@ plt.clf()
 ########################################
 timestamps = np.array(range(int(total_seconds)+2))
 ans_snd_response_time_value = np.zeros(int(total_seconds)+2)
-#print(timestamps)
+#logging.info(timestamps)
 low_water_mark = 0
 counter = 0
 for i in range(0,len(ans_snd_miliseconds)):
@@ -257,7 +257,7 @@ for i in range(0,len(ans_rcv_miliseconds)):
         counter = 1
         low_water_mark = low_water_mark+1
         ans_rcv_response_time_value[low_water_mark] += ans_rcv_response[i]
-#print(throughput_values)
+#logging.info(throughput_values)
 plt.plot(timestamps[0:len(timestamps)-3],ans_snd_response_time_value[0:len(timestamps)-3], 'b-', label="SEND")
 plt.plot(timestamps[0:len(timestamps)-3],ans_rcv_response_time_value[0:len(timestamps)-3], 'g-', label="RECEIVE")
 plt.xlabel('Time since start of measurement [in seconds]')
