@@ -129,6 +129,36 @@ cd ..
 ant >> ant.log
 cd scripts
 echo "OK"
+
+#####################################
+#
+# Check if login works
+#
+#####################################
+
+echo -ne "  Testing passwordless connection to the server and client machines... "
+# Check if command can be run on server and client
+for server in "${servers[@]}"
+do
+    success=$( ssh -i ~/.ssh/id_aws -o BatchMode=yes  $remoteUserName@$server echo ok 2>&1 )
+    if [ $success != "ok" ]
+    then
+        echo "Passwordless login not successful for $remoteUserName on $server. Exiting..."
+        exit -1
+    fi
+done
+
+for client in "${clients[@]}"
+do
+    success=$( ssh -i ~/.ssh/id_aws -o BatchMode=yes  $remoteUserName@$client echo ok 2>&1 )
+    if [ $success != "ok" ]
+    then
+	    echo "Passwordless login not successful for $remoteUserName on $client. Exiting..."
+	    exit -1
+    fi
+done
+echo "OK"
+
 #####################################
 #
 # Cleanup initially
@@ -176,29 +206,6 @@ echo "OK"
 # Copy server and clients to machines
 #
 #####################################
-
-echo -ne "  Testing passwordless connection to the server and client machines... "
-# Check if command can be run on server and client
-for server in "${servers[@]}"
-do
-    success=$( ssh -i ~/.ssh/id_aws -o BatchMode=yes  $remoteUserName@$server echo ok 2>&1 )
-    if [ $success != "ok" ]
-    then
-        echo "Passwordless login not successful for $remoteUserName on $server. Exiting..."
-        exit -1
-    fi
-done
-
-for client in "${clients[@]}"
-do
-    success=$( ssh -i ~/.ssh/id_aws -o BatchMode=yes  $remoteUserName@$client echo ok 2>&1 )
-    if [ $success != "ok" ]
-    then
-	    echo "Passwordless login not successful for $remoteUserName on $client. Exiting..."
-	    exit -1
-    fi
-done
-echo "OK"
 
 #echo -ne "  Copying server.jar to server machines: $serverMachine..."
 # Copy jar to server machine
