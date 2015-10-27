@@ -113,6 +113,7 @@ public abstract class TrafficGenerator implements Runnable {
                 //log.info("Write message [" + counter + "] to buffer");
                 socketChannel.write(messageBuffer);
             } catch (IOException e) {
+                log.error("Error when writing message to buffer");
                 e.printStackTrace();
             }
         }
@@ -131,6 +132,7 @@ public abstract class TrafficGenerator implements Runnable {
             try {
                 socketChannel.close();
             } catch (IOException e1) {
+                log.error("Error when forced closing channel");
                 e1.printStackTrace();
             }
             throw new NoAnswerException("Forced close");
@@ -143,12 +145,13 @@ public abstract class TrafficGenerator implements Runnable {
             try {
                 socketChannel.close();
             } catch (IOException e) {
+                log.error("Error when cleanly closing channel");
                 e.printStackTrace();
             }
             throw new NoAnswerException("Cleanly closed");
         }
         if (numRead > 0) {
-            return MessagePassingProtocol.parseAnswer(messageBuffer.array(), numRead);
+            return MessagePassingProtocol.parseAnswer(messageBuffer.array(), numRead, log);
 
         }
         throw new NoAnswerException("No answer");
@@ -162,11 +165,12 @@ public abstract class TrafficGenerator implements Runnable {
         MessagePassingProtocol.logRequest(request, log);
         answer = null;
         try {
-            log.debug("Wait for init answer");
+            log.debug("Wait for client add answer");
             answer = getAnswer();
             long estimatedTime = System.nanoTime() - startTime;
             MessagePassingProtocol.logAnswer(answer, log, estimatedTime);
         } catch (NoAnswerException e) {
+            log.error("No client add answer");
             e.printStackTrace();
         }
         // sleep for a predefined time
@@ -187,11 +191,12 @@ public abstract class TrafficGenerator implements Runnable {
         MessagePassingProtocol.logRequest(request, log);
         answer = null;
         try {
-            log.debug("Wait for init answer");
+            log.debug("Wait for client delete answer");
             answer = getAnswer();
             long estimatedTime = System.nanoTime() - startTime;
             MessagePassingProtocol.logAnswer(answer, log, estimatedTime);
         } catch (NoAnswerException e) {
+            log.error("No client delete answer");
             e.printStackTrace();
         }
         log.info("Deregistered");

@@ -105,7 +105,7 @@ public class Worker implements Runnable {
         }
         if (numRead > 0) {
             //log.debug(requestBuffer.array());
-            request = MessagePassingProtocol.parseRequest(messageBuffer.array(), numRead);
+            request = MessagePassingProtocol.parseRequest(messageBuffer.array(), numRead, log);
             // split on request type and create appropriate answer
             MessagePassingProtocol.logRequest(request, log);
             int newid;
