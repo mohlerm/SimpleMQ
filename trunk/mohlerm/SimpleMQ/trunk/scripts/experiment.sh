@@ -258,7 +258,7 @@ for server in "${servers[@]}"
 do
     echo "  Starting the server $server"
     #port=$(($serverPort+$i))
-    screen -dmS server$i ssh -i ~/.ssh/id_aws $remoteUserName@$server "cd $executionDir; java -jar SimpleMQ_server.jar $i $serverPort $serverWorker $dbMachine $dbPort" # 2>&1 > $executionDir/server_$i.log"
+    screen -dmSL server$i ssh -i ~/.ssh/id_aws $remoteUserName@$server "cd $executionDir; java -jar SimpleMQ_server.jar $i $serverPort $serverWorker $dbMachine $dbPort" # 2>&1 > $executionDir/server_$i.log"
 
     # Wait for the server to start up
     echo -ne "  Waiting for the server to start up..."
