@@ -59,6 +59,7 @@ public class StaticTrafficGenerator extends TrafficGenerator {
             long estimatedTime = System.nanoTime() - timer;
             MessagePassingProtocol.logAnswer(answer, log, estimatedTime);
         } catch (NoAnswerException e) {
+            log.error("No answer received");
             e.printStackTrace();
         }
     }
@@ -72,12 +73,13 @@ public class StaticTrafficGenerator extends TrafficGenerator {
         answer = null;
         queueNumber = 1;
         try {
-            log.debug("Wait for answer");
+            log.debug("Wait for create queue answer");
             answer = getAnswer();
             long estimatedTime = System.nanoTime() - timer;
             MessagePassingProtocol.logAnswer(answer, log, estimatedTime);
             queueNumber = answer.getResultId();
         } catch (NoAnswerException e) {
+            log.error("No create queue answer received");
             e.printStackTrace();
         }
     }
@@ -90,12 +92,13 @@ public class StaticTrafficGenerator extends TrafficGenerator {
         MessagePassingProtocol.logRequest(request,log);
         answer = null;
         try {
-            log.debug("Wait for answer");
+            log.debug("Wait for delete queue answer");
             answer = getAnswer();
             long estimatedTime = System.nanoTime() - timer;
             MessagePassingProtocol.logAnswer(answer, log, estimatedTime);
             queueNumber = answer.getResultId();
         } catch (NoAnswerException e) {
+            log.error("No delete queue answer received");
             e.printStackTrace();
         }
     }
