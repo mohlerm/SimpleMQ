@@ -13,6 +13,23 @@ from matplotlib.ticker import FuncFormatter
 
 ########################################
 #
+# find smallest index which satisfies a value
+# used to cut off first X seconds of measurements
+#
+########################################
+def find_ge(a, key):
+    '''Find smallest index where the item is greater-than or equal to key.
+    Raise ValueError if no such item exists.
+    If multiple keys are equal, return the leftmost.
+
+    '''
+    i = bisect_left(a, key)
+    if i == len(a):
+        raise ValueError('No item found with key at or above: %r' % (key,))
+    return i
+
+########################################
+#
 # custom percentage for y label
 #
 ########################################
@@ -109,6 +126,40 @@ for line in inputfile:
                 # if found == False:
                 #     logging.info(line)
 
+ans_snd_miliseconds = []
+ans_rcv_miliseconds = []
+for s in ans_snd_time:
+    ans_snd_miliseconds.append(datetime.datetime.strptime(s,"%Y-%m-%d %H:%M:%S,%f"))
+for s in ans_rcv_time:
+    ans_rcv_miliseconds.append(datetime.datetime.strptime(s,"%Y-%m-%d %H:%M:%S,%f"))
+
+startDate = datetime.datetime.strptime(req_snd_time[0],"%Y-%m-%d %H:%M:%S,%f")
+endDate = datetime.datetime.strptime(ans_snd_time[len(ans_snd_time)-1],"%Y-%m-%d %H:%M:%S,%f")
+ans_snd_miliseconds[:] = [(t-startDate).total_seconds() for t in ans_snd_miliseconds]
+ans_rcv_miliseconds[:] = [(t-startDate).total_seconds() for t in ans_rcv_miliseconds]
+logging.info("First request:          " + str(startDate))
+logging.info("Last answer:            " + str(endDate))
+total_seconds = (endDate-startDate).total_seconds()
+logging.info("Difference:             " + str(total_seconds))
+
+########################################
+#
+# cut off first 2 minutes
+#
+########################################
+ans_snd_startIndex = find_ge(ans_snd_miliseconds,120)
+ans_rcv_startIndex = find_ge(ans_rcv_miliseconds,120)
+ans_snd_time = ans_snd_time[ans_snd_startIndex,ans_snd_time.length-1]
+ans_snd_index = ans_snd_index[ans_snd_startIndex,ans_snd_index.length-1]
+ans_snd_response = ans_snd_response[ans_snd_startIndex,ans_snd_response.length-1]
+ans_rcv_time = ans_rcv_time[ans_rcv_startIndex,ans_rcv_time.length-1]
+ans_rcv_index = ans_rcv_index[ans_rcv_startIndex,ans_rcv_index.length-1]
+ans_rcv_response = ans_rcv_response[ans_rcv_startIndex,ans_rcv_response.length-1]
+# req_snd_time = []
+# req_snd_index = []
+# req_rcv_time = []
+# req_rcv_index = []
+
 ########################################
 #
 # calculate and print means etc.
@@ -126,19 +177,7 @@ logging.info("Mean RECEIVE acks:      " + str(mean_ans_rcv_response) + "+-" +str
 logging.info("median SEND acks:       " + str(median_ans_snd_response))
 logging.info("median RECEIVE acks:    " + str(median_ans_rcv_response))
 
-ans_snd_miliseconds = []
-ans_rcv_miliseconds = []
-for s in ans_snd_time:
-    ans_snd_miliseconds.append(datetime.datetime.strptime(s,"%Y-%m-%d %H:%M:%S,%f"))
-for s in ans_rcv_time:
-    ans_rcv_miliseconds.append(datetime.datetime.strptime(s,"%Y-%m-%d %H:%M:%S,%f"))
 
-startDate = datetime.datetime.strptime(req_snd_time[0],"%Y-%m-%d %H:%M:%S,%f")
-endDate = datetime.datetime.strptime(ans_snd_time[len(ans_snd_time)-1],"%Y-%m-%d %H:%M:%S,%f")
-logging.info("First request:          " + str(startDate))
-logging.info("Last answer:            " + str(endDate))
-total_seconds = (endDate-startDate).total_seconds()
-logging.info("Difference:             " + str(total_seconds))
 
 logging.info("Number of REQ sends:    " + str(len(req_snd_time)))
 logging.info("Number of REQ receives: " + str(len(req_rcv_time)))
@@ -158,8 +197,6 @@ logging.info("Throughput:             " + str( (len(ans_snd_time)+len(ans_rcv_ti
 # RESPONSE TIME (individual)
 #
 ########################################
-ans_snd_miliseconds[:] = [(t-startDate).total_seconds() for t in ans_snd_miliseconds]
-ans_rcv_miliseconds[:] = [(t-startDate).total_seconds() for t in ans_rcv_miliseconds]
 plt.plot(ans_snd_miliseconds, ans_snd_response, 'b.', alpha=0.5, label="SEND (message send) - total: "+str(len(ans_snd_response)))
 plt.plot(ans_rcv_miliseconds, ans_rcv_response, 'g.', alpha=0.5, label="RECEIVE (message peak/pop) - total: " +str(len(ans_rcv_response)))
 plt.xlabel('Time since start of measurement [in seconds]')
