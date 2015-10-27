@@ -3,6 +3,7 @@ import sys
 import statistics
 import datetime
 import logging
+import bisect
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -22,7 +23,7 @@ def find_ge(a, key):
     If multiple keys are equal, return the leftmost.
 
     '''
-    i = bisect_left(a, key)
+    i = bisect.bisect_left(a, key)
     if i == len(a):
         raise ValueError('No item found with key at or above: %r' % (key,))
     return i
@@ -54,6 +55,7 @@ if(len(sys.argv) != 3):
 
 clientAmount = int(sys.argv[1])
 experimentId = sys.argv[2]
+warmupTime = 120
 logging.basicConfig(filename=experimentId+'/experiment_'+experimentId+'.log',level=logging.DEBUG)
 logging.info("Using experimentID="+experimentId)
 # import log file
@@ -145,14 +147,21 @@ logging.info("Difference:             " + str(total_seconds))
 # cut off first 2 minutes
 #
 ########################################
-ans_snd_startIndex = find_ge(ans_snd_miliseconds,120)
-ans_rcv_startIndex = find_ge(ans_rcv_miliseconds,120)
-ans_snd_time = ans_snd_time[ans_snd_startIndex,ans_snd_time.length-1]
-ans_snd_index = ans_snd_index[ans_snd_startIndex,ans_snd_index.length-1]
-ans_snd_response = ans_snd_response[ans_snd_startIndex,ans_snd_response.length-1]
-ans_rcv_time = ans_rcv_time[ans_rcv_startIndex,ans_rcv_time.length-1]
-ans_rcv_index = ans_rcv_index[ans_rcv_startIndex,ans_rcv_index.length-1]
-ans_rcv_response = ans_rcv_response[ans_rcv_startIndex,ans_rcv_response.length-1]
+ans_snd_startIndex = find_ge(ans_snd_miliseconds,warmupTime)
+ans_rcv_startIndex = find_ge(ans_rcv_miliseconds,warmupTime)
+ans_snd_miliseconds = ans_snd_miliseconds[ans_snd_startIndex:len(ans_snd_miliseconds)-1]
+ans_rcv_miliseconds = ans_rcv_miliseconds[ans_rcv_startIndex:len(ans_rcv_miliseconds)-1]
+ans_snd_time = ans_snd_time[ans_snd_startIndex:len(ans_snd_time)-1]
+ans_snd_index = ans_snd_index[ans_snd_startIndex:len(ans_snd_index)-1]
+ans_snd_response = ans_snd_response[ans_snd_startIndex:len(ans_snd_response)-1]
+ans_rcv_time = ans_rcv_time[ans_rcv_startIndex:len(ans_rcv_time)-1]
+ans_rcv_index = ans_rcv_index[ans_rcv_startIndex:len(ans_rcv_index)-1]
+ans_rcv_response = ans_rcv_response[ans_rcv_startIndex:len(ans_rcv_response)-1]
+
+startDate = datetime.datetime.strptime(ans_snd_time[0],"%Y-%m-%d %H:%M:%S,%f")
+endDate = datetime.datetime.strptime(ans_snd_time[len(ans_snd_time)-1],"%Y-%m-%d %H:%M:%S,%f")
+total_seconds = (endDate-startDate).total_seconds()
+logging.info("Cutoff Difference:     " + str(total_seconds))
 # req_snd_time = []
 # req_snd_index = []
 # req_rcv_time = []
@@ -238,7 +247,7 @@ plt.clf()
 # Throughput over time
 #
 ########################################
-timestamps = np.array(range(int(total_seconds)+2))
+timestamps = np.array(range(warmupTime,warmupTime+int(total_seconds)+2))
 throughput_values = np.zeros(int(total_seconds)+2)
 #logging.info(timestamps)
 low_water_mark = 0
@@ -248,7 +257,7 @@ for i in range(0,len(ans_snd_miliseconds)):
     else:
         low_water_mark = low_water_mark+1
         throughput_values[low_water_mark] += 1
-low_water_mark = 0
+low_water_mark = 0;
 for i in range(0,len(ans_rcv_miliseconds)):
     if ans_rcv_miliseconds[i] < timestamps[low_water_mark+1]:
         throughput_values[low_water_mark] += 1
@@ -266,7 +275,7 @@ plt.clf()
 # Response time over time
 #
 ########################################
-timestamps = np.array(range(int(total_seconds)+2))
+timestamps = np.array(range(warmupTime,warmupTime+int(total_seconds)+2))
 ans_snd_response_time_value = np.zeros(int(total_seconds)+2)
 #logging.info(timestamps)
 low_water_mark = 0
@@ -300,3 +309,4 @@ plt.xlabel('Time since start of measurement [in seconds]')
 plt.ylabel('Average response time [in milliseconds] - 1s slots')
 plt.legend(loc='upper right')
 plt.savefig(experimentId+"/experiment_"+experimentId+"_response_time_overtime.pdf")
+
