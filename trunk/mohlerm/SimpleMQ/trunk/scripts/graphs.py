@@ -55,7 +55,7 @@ if(len(sys.argv) != 3):
 
 clientAmount = int(sys.argv[1])
 experimentId = sys.argv[2]
-warmupTime = 120
+warmupTime = 60
 logging.basicConfig(filename=experimentId+'/experiment_'+experimentId+'.log',level=logging.DEBUG)
 logging.info("Using experimentID="+experimentId)
 # import log file
@@ -287,6 +287,8 @@ for i in range(0,len(ans_snd_miliseconds)):
     else:
         if counter > 0:
             ans_snd_response_time_value[low_water_mark] = ans_snd_response_time_value[low_water_mark]/counter
+        else:
+            ans_snd_response_time_value[low_water_mark] = 0
         counter = 1
         low_water_mark = low_water_mark+1
         ans_snd_response_time_value[low_water_mark] += ans_snd_response[i]
@@ -298,7 +300,10 @@ for i in range(0,len(ans_rcv_miliseconds)):
         ans_rcv_response_time_value[low_water_mark] += ans_rcv_response[i]
         counter += 1
     else:
-        ans_rcv_response_time_value[low_water_mark] = ans_rcv_response_time_value[low_water_mark]/counter
+        if counter > 0:
+            ans_rcv_response_time_value[low_water_mark] = ans_rcv_response_time_value[low_water_mark]/counter
+        else:
+            ans_rcv_response_time_value[low_water_mark] = 0
         counter = 1
         low_water_mark = low_water_mark+1
         ans_rcv_response_time_value[low_water_mark] += ans_rcv_response[i]

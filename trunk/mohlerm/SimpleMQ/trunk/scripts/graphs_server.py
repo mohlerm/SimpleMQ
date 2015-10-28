@@ -56,7 +56,7 @@ if len(sys.argv) != 3:
 clientAmount = int(sys.argv[1])
 #serverAmount = int(sys.argv[2])
 experimentId = sys.argv[2]
-warmupTime = 120
+warmupTime = 60
 logging.basicConfig(filename=experimentId+'/experiment_server_'+experimentId+'.log',level=logging.DEBUG)
 logging.info("Using experimentID="+experimentId)
 # import log file
@@ -72,6 +72,8 @@ req_snd_time = []
 req_snd_index = []
 req_rcv_time = []
 req_rcv_index = []
+ans_snd_database = []
+ans_rcv_database = []
 
 currentClients = 0
 ########################################
@@ -96,20 +98,22 @@ for line in inputfile:
     else:
         # TODO exclude the acks for 0 messages (where insert did not return a valid message id)
         # If message is a send answer
-        m = re.search(r"(\d*-\d*-\d*\s\d*:\d*:\d*,\d*)\s*\S*\s*\S*\s*ANS\|SendMessageToReceiver\|(\d*)\|\d*\|\d*\|\S*\|\|[-+]?([0-9]*\.[0-9]+|[0-9]+)",line)
+        m = re.search(r"(\d*-\d*-\d*\s\d*:\d*:\d*,\d*)\s*\S*\s*\S*\s*ANS\|SendMessageToReceiver\|(\d*)\|\d*\|\d*\|OK*\|\|[-+]?([0-9]*\.[0-9]+|[0-9]+)\|\|[-+]?([0-9]*\.[0-9]+|[0-9]+)",line)
         if m is not None:
             ans_snd_time.append(m.group(1))
             ans_snd_index.append(m.group(2))
             ans_snd_response.append(float(m.group(3)))
+            ans_snd_database.append(float(m.group(4)))
             found = True
         # if message is a peek/pop answer
         if found == False:
-            m = re.search(r"(\d*-\d*-\d*\s\d*:\d*:\d*,\d*)\s*\S*\s*\S*\s*ANS\|(Pop|Peek)Queue\|(\d*)\|\d*\|\d*\|(small|medium|large)Message\|\|[-+]?([0-9]*\.[0-9]+|[0-9]+)",line)
+            m = re.search(r"(\d*-\d*-\d*\s\d*:\d*:\d*,\d*)\s*\S*\s*\S*\s*ANS\|(Pop|Peek)Queue\|(\d*)\|\d*\|\d*\|(small|medium|large)Message\|\|[-+]?([0-9]*\.[0-9]+|[0-9]+)\|\|[-+]?([0-9]*\.[0-9]+|[0-9]+)",line)
             if m is not None:
                 ans_rcv_time.append(m.group(1))
                 # match group 2 is peek/pop which isn't used currently
                 ans_rcv_index.append(m.group(3))
                 ans_rcv_response.append(float(m.group(5)))
+                ans_rcv_database.append(float(m.group(6)))
                 found = True
                 # if message is a send request
         if found == False:
@@ -158,6 +162,8 @@ ans_snd_response = ans_snd_response[ans_snd_startIndex:len(ans_snd_response)-1]
 ans_rcv_time = ans_rcv_time[ans_rcv_startIndex:len(ans_rcv_time)-1]
 ans_rcv_index = ans_rcv_index[ans_rcv_startIndex:len(ans_rcv_index)-1]
 ans_rcv_response = ans_rcv_response[ans_rcv_startIndex:len(ans_rcv_response)-1]
+ans_snd_database = ans_snd_database[ans_snd_startIndex:len(ans_snd_database)-1]
+ans_rcv_database = ans_rcv_database[ans_rcv_startIndex:len(ans_rcv_database)-1]
 startDate = datetime.datetime.strptime(ans_snd_time[0],"%Y-%m-%d %H:%M:%S,%f")
 endDate = datetime.datetime.strptime(ans_snd_time[len(ans_snd_time)-1],"%Y-%m-%d %H:%M:%S,%f")
 total_seconds = (endDate-startDate).total_seconds()
@@ -178,12 +184,21 @@ stdev_ans_snd_response = statistics.stdev(ans_snd_response)
 stdev_ans_rcv_response = statistics.stdev(ans_rcv_response)
 median_ans_snd_response = statistics.median(ans_snd_response)
 median_ans_rcv_response = statistics.median(ans_rcv_response)
+mean_ans_snd_database = statistics.mean(ans_snd_database)
+mean_ans_rcv_database = statistics.mean(ans_rcv_database)
+stdev_ans_snd_database = statistics.stdev(ans_snd_database)
+stdev_ans_rcv_database = statistics.stdev(ans_rcv_database)
+median_ans_snd_database = statistics.median(ans_snd_database)
+median_ans_rcv_database = statistics.median(ans_rcv_database)
 
 logging.info("Mean SEND acks:         " + str(mean_ans_snd_response) + "+-" + str(2*stdev_ans_snd_response))
 logging.info("Mean RECEIVE acks:      " + str(mean_ans_rcv_response) + "+-" +str(2*stdev_ans_rcv_response))
 logging.info("median SEND acks:       " + str(median_ans_snd_response))
 logging.info("median RECEIVE acks:    " + str(median_ans_rcv_response))
-
+logging.info("Mean SEND DB acks:      " + str(mean_ans_snd_database) + "+-" + str(2*stdev_ans_snd_database))
+logging.info("Mean RECEIVE DB acks:   " + str(mean_ans_rcv_database) + "+-" +str(2*stdev_ans_rcv_database))
+logging.info("median SEND DB acks:    " + str(median_ans_snd_database))
+logging.info("median RECEIVE DB acks: " + str(median_ans_rcv_database))
 
 
 logging.info("Number of REQ sends:    " + str(len(req_snd_time)))
@@ -270,7 +285,7 @@ for i in range(0,len(ans_rcv_miliseconds)):
 plt.plot(timestamps[0:len(timestamps)-3],throughput_values[0:len(timestamps)-3], 'b-', label="Throughput over time")
 plt.xlabel('Time since start of measurement [in seconds]')
 plt.ylabel('Average throughput [in messages/second] - 1s slots')
-plt.savefig(experimentId+"/experiment_"+experimentId+"_throughput_overtime.pdf")
+plt.savefig(experimentId+"/experiment_server"+experimentId+"_throughput_overtime.pdf")
 plt.clf()
 ########################################
 #
@@ -289,6 +304,8 @@ for i in range(0,len(ans_snd_miliseconds)):
     else:
         if counter > 0:
             ans_snd_response_time_value[low_water_mark] = ans_snd_response_time_value[low_water_mark]/counter
+        else:
+            ans_snd_response_time_value[low_water_mark] = 0
         counter = 1
         low_water_mark = low_water_mark+1
         ans_snd_response_time_value[low_water_mark] += ans_snd_response[i]
@@ -300,7 +317,10 @@ for i in range(0,len(ans_rcv_miliseconds)):
         ans_rcv_response_time_value[low_water_mark] += ans_rcv_response[i]
         counter += 1
     else:
-        ans_rcv_response_time_value[low_water_mark] = ans_rcv_response_time_value[low_water_mark]/counter
+        if counter > 0:
+            ans_rcv_response_time_value[low_water_mark] = ans_rcv_response_time_value[low_water_mark]/counter
+        else:
+            ans_rcv_response_time_value[low_water_mark] = 0         
         counter = 1
         low_water_mark = low_water_mark+1
         ans_rcv_response_time_value[low_water_mark] += ans_rcv_response[i]
@@ -310,5 +330,49 @@ plt.plot(timestamps[0:len(timestamps)-3],ans_rcv_response_time_value[0:len(times
 plt.xlabel('Time since start of measurement [in seconds]')
 plt.ylabel('Average response time [in milliseconds] - 1s slots')
 plt.legend(loc='upper right')
-plt.savefig(experimentId+"/experiment_"+experimentId+"_response_time_overtime.pdf")
+plt.savefig(experimentId+"/experiment_server"+experimentId+"_response_time_overtime.pdf")
+########################################
+#
+# Response time over time DB
+#
+########################################
+timestamps = np.array(range(warmupTime,warmupTime+int(total_seconds)+2))
+ans_snd_database_time_value = np.zeros(int(total_seconds)+2)
+#logging.info(timestamps)
+low_water_mark = 0
+counter = 0
+for i in range(0,len(ans_snd_miliseconds)):
+    if ans_snd_miliseconds[i] < timestamps[low_water_mark+1]:
+        ans_snd_database_time_value[low_water_mark] += ans_snd_database[i]
+        counter += 1
+    else:
+        if counter > 0:
+            ans_snd_database_time_value[low_water_mark] = ans_snd_database_time_value[low_water_mark]/counter
+        else:
+            ans_snd_database_time_value[low_water_mark] = 0
+        counter = 1
+        low_water_mark = low_water_mark+1
+        ans_snd_database_time_value[low_water_mark] += ans_snd_database[i]
+ans_rcv_database_time_value = np.zeros(int(total_seconds)+2)
+low_water_mark = 0
+counter = 0
+for i in range(0,len(ans_rcv_miliseconds)):
+    if ans_rcv_miliseconds[i] < timestamps[low_water_mark+1]:
+        ans_rcv_database_time_value[low_water_mark] += ans_rcv_database[i]
+        counter += 1
+    else:
+        if counter > 0:
+            ans_rcv_database_time_value[low_water_mark] = ans_rcv_database_time_value[low_water_mark]/counter
+        else:
+            ans_rcv_database_time_value[low_water_mark] = 0         
+        counter = 1
+        low_water_mark = low_water_mark+1
+        ans_rcv_database_time_value[low_water_mark] += ans_rcv_database[i]
+#logging.info(throughput_values)
+plt.plot(timestamps[0:len(timestamps)-3],ans_snd_database_time_value[0:len(timestamps)-3], 'b-', label="SEND")
+plt.plot(timestamps[0:len(timestamps)-3],ans_rcv_database_time_value[0:len(timestamps)-3], 'g-', label="RECEIVE")
+plt.xlabel('Time since start of measurement [in seconds]')
+plt.ylabel('Average database time [in milliseconds] - 1s slots')
+plt.legend(loc='upper right')
+plt.savefig(experimentId+"/experiment_server"+experimentId+"_database_time_overtime.pdf")
 
