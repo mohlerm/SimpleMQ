@@ -28,7 +28,7 @@
 
 function usage() {
 	local programName=$1
-	echo "Usage: $programName --dbMachine=<address> --dbPersistent=<true/false> --serverMachines=<address> --serverWorkerTotal=<int> --clientMachines=<address> --clientTotal=<int> --clientWorkload=<string> --clientRunTime=<seconds> --clientRunCount=<int> --remoteUserName=<username> --experimentId=<id>"
+	echo "Usage: $programName --dbMachine=<address> --dbPersistent=<true/false> --serverMachines=<address> --serverWorkerTotal=<int> --clientMachines=<address> --clientTotal=<int> --clientWorkload=<string> --clientRunTime=<seconds> --clientRunCount=<int> --clientThinkTime=<milliseconds>--remoteUserName=<username> --experimentId=<id>"
 	exit -1
 }
 
@@ -41,6 +41,7 @@ clientWorkload=""
 clientTotal=""
 clientRunTime=""
 clientRunCount=""
+clientThinkTime=""
 remoteUserName=""
 experimentId=""
 
@@ -51,7 +52,7 @@ executionDir="/home/ubuntu/simplemq"
 serverStartMessage="Using server id: "
 
 # Extract command line arguments
-TEMP=`getopt -o b: --long dbMachine:,dbPersistent:,serverMachines:,serverWorkerTotal:,clientMachines:,clientTotal:,clientWorkload:,clientRunTime:,clientRunCount:,remoteUserName:,experimentId: \
+TEMP=`getopt -o b: --long dbMachine:,dbPersistent:,serverMachines:,serverWorkerTotal:,clientMachines:,clientTotal:,clientWorkload:,clientRunTime:,clientRunCount:,clientThinkTime:,remoteUserName:,experimentId: \
      -n 'experiment.sh' -- "$@"`
 
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
@@ -70,6 +71,7 @@ while true ; do
                 --clientWorkload) clientWorkload="$2" ; shift 2 ;;
                 --clientRunTime) clientRunTime="$2" ; shift 2 ;;
                 --clientRunCount) clientRunCount="$2" ; shift 2 ;;
+                --clientThinkTime) clientThinkTime="$2" ; shift 2 ;;
                 --remoteUserName) remoteUserName="$2" ; shift 2 ;;
                 --experimentId) experimentId="$2" ; shift 2 ;;
                 --) shift ; break ;;
@@ -78,7 +80,7 @@ while true ; do
 done
 
 # Check for correctness of the commandline arguments
-if [[ $dbMachine == "" || $dbPersistent == "" || $serverMachines == "" || $serverWorkerTotal == "" || $clientMachines == "" || $clientTotal == "" || $clientWorkload == "" || $clientRunTime == "" || $clientRunCount == "" || $remoteUserName == "" || $experimentId == "" ]]
+if [[ $dbMachine == "" || $dbPersistent == "" || $serverMachines == "" || $serverWorkerTotal == "" || $clientMachines == "" || $clientTotal == "" || $clientWorkload == "" || $clientRunTime == "" || $clientRunCount == "" || $clientThinkTime == "" || $remoteUserName == "" || $experimentId == "" ]]
 then
 	usage $1
 fi
@@ -116,7 +118,7 @@ echo ${clients[*]}
 #####################################
 rm -R $experimentId
 mkdir -p $experimentId
-echo -e "#!/bin/bash\nbash experiment.sh --dbMachine=$dbMachine --dbPersistent=$dbPersistent --serverMachines=$serverMachines --serverWorkerTotal=$serverWorkerTotal --clientMachines=$clientMachines --clientTotal=$clientTotal --clientWorkload=$clientWorkload --clientRunTime=$clientRunTime --clientRunCount=$clientRunCount --remoteUserName=$remoteUserName --experimentId=$experimentId" > $experimentId/experiment_$experimentId.sh
+echo -e "#!/bin/bash\nbash experiment.sh --dbMachine=$dbMachine --dbPersistent=$dbPersistent --serverMachines=$serverMachines --serverWorkerTotal=$serverWorkerTotal --clientMachines=$clientMachines --clientTotal=$clientTotal --clientWorkload=$clientWorkload --clientRunTime=$clientRunTime --clientRunCount=$clientRunCount --clientThinkTime=$clientThinkTime --remoteUserName=$remoteUserName --experimentId=$experimentId" > $experimentId/experiment_$experimentId.sh
 
 #####################################
 #
@@ -279,7 +281,7 @@ do
     echo "  Start the clients id$idStart to id$idEnd on the client machine: $client"
     # we use all servermachines
     #screen -dmS client_sub$idStart_$idEnd bash experiment_sub.sh `$remoteUserName $client $executionDir $serverMachines $serverPort $clientTotal $idStart $idEnd $clientWorkload $clientRunTime $clientRunCount`
-    screen -dmS client_sub$idStart_$idEnd ssh -i ~/.ssh/id_aws $remoteUserName@$client "cd $executionDir; bash client.sh $serverMachines $serverPort $clientTotal $idStart $idEnd $clientWorkload $clientRunTime $clientRunCount"
+    screen -dmS client_sub$idStart_$idEnd ssh -i ~/.ssh/id_aws $remoteUserName@$client "cd $executionDir; bash client.sh $serverMachines $serverPort $clientTotal $idStart $idEnd $clientWorkload $clientRunTime $clientRunCount $clientThinkTime"
     # Run the clients
     idStart=$(($idStart+$idStep))
     idEnd=$(($idEnd+$idStep))

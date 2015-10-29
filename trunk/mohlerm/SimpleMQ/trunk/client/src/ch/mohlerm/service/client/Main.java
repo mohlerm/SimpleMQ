@@ -26,8 +26,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         // basic setup
-        if(args.length != 7 ) {
-            System.out.println("Please specify <clientid>, <serverip>, <serverport>, <clientTotal>, <traffictype>, <time>, <amount>!");
+        if(args.length != 8 ) {
+            System.out.println("Please specify <clientid>, <serverip>, <serverport>, <clientTotal>, <traffictype>, <time>, <amount>, <thinktime>!");
         } else {
             String trafficType = args[4];
             if(!(trafficType.equals("staticsmall")||trafficType.equals("staticmedium")||trafficType.equals("staticlarge"))) {
@@ -48,6 +48,8 @@ public class Main {
                 log.info("Using time for client requests: " + String.valueOf(Config.CLIENTTIME));
                 Config.CLIENTAMOUNT = Integer.parseInt(args[6]);
                 log.info("Using amount of client requests: " + String.valueOf(Config.CLIENTAMOUNT));
+                Config.CLIENTTHINKTIME = Integer.parseInt(args[7]);
+                log.info("Using client thinktime: " + String.valueOf(Config.CLIENTTHINKTIME));
                 SocketChannel socketChannel = SocketChannel.open();
                 socketChannel.connect(new InetSocketAddress(Config.SERVERIP, Config.SERVERPORT));
                 TrafficGenerator trafficGenerator = null;
