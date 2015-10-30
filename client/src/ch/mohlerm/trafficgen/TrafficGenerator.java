@@ -59,7 +59,7 @@ public abstract class TrafficGenerator implements Runnable {
         // +2 because we start with 2 (0 is the register message, 1, the startTraffic , n+2 is the queue delete, n+3 is the endTraffic message)
         while(System.nanoTime() - start < Config.CLIENTTIME*1E9 && (numberOfRequests == -1 || messageCounter < numberOfRequests+2 )) {
         //while((numberOfRequests == -1 || messageCounter < numberOfRequests+2 )) {
-        generateTraffic();
+            generateTraffic();
             messageCounter++;
             if(Config.CLIENTTHINKTIME > 0) {
                 // sleep for a predefined time

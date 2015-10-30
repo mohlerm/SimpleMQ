@@ -15,5 +15,4 @@ public class Config {
     public static int CLIENTAMOUNT = 0;
     public static int CLIENTTHINKTIME = 0;
     public static int INITWAIT = 0;
-
 }

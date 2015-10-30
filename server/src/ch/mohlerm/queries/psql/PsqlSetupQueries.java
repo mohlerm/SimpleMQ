@@ -29,6 +29,6 @@ public class PsqlSetupQueries {
         // create the 0 client (catchall)
           PsqlInsertQueries.insertClient(connection, 0);
         // create initial queue
-          //PsqlInsertQueries.insertQueue(connection);
+          PsqlInsertQueries.insertQueue(connection);
     }
 }
