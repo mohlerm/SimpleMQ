@@ -2,6 +2,7 @@ package ch.mohlerm.service.client;
 
 import ch.mohlerm.config.client.Config;
 import ch.mohlerm.config.client.CustomConfigurationFactory;
+import ch.mohlerm.trafficdirect.TrafficDirect;
 import ch.mohlerm.trafficgen.TrafficGenerator;
 import ch.mohlerm.trafficgen.TrafficGeneratorFactory;
 import ch.mohlerm.trafficgen.TrafficGeneratorNotFoundException;
@@ -30,8 +31,8 @@ public class Main {
             System.out.println("Please specify <clientid>, <serverip>, <serverport>, <clientTotal>, <traffictype>, <time>, <amount>, <thinktime>!");
         } else {
             String trafficType = args[4];
-            if(!(trafficType.equals("staticsmall")||trafficType.equals("staticmedium")||trafficType.equals("staticlarge"))) {
-                System.out.println("Please specify traffictype: staticsmall, staticmedium or staticlarge");
+            if(!(trafficType.equals("staticsmall")||trafficType.equals("staticmedium")||trafficType.equals("staticlarge")||trafficType.equals("directsmall")||trafficType.equals("directlarge"))) {
+                System.out.println("Please specify traffictype: staticsmall, staticmedium, staticlarge, directsmall or directlarge");
             } else {
                 Config.CLIENTID = Integer.parseInt(args[0]);
 
@@ -50,15 +51,21 @@ public class Main {
                 log.info("Using amount of client requests: " + String.valueOf(Config.CLIENTAMOUNT));
                 Config.CLIENTTHINKTIME = Integer.parseInt(args[7]);
                 log.info("Using client thinktime: " + String.valueOf(Config.CLIENTTHINKTIME));
-                SocketChannel socketChannel = SocketChannel.open();
-                socketChannel.connect(new InetSocketAddress(Config.SERVERIP, Config.SERVERPORT));
-                TrafficGenerator trafficGenerator = null;
-                try {
-                    trafficGenerator = TrafficGeneratorFactory.getTrafficGenerator(socketChannel, trafficType);
-                    Thread t = new Thread(trafficGenerator);
+                if(!(trafficType.equals("directsmall")||trafficType.equals("directlarge"))) {
+                    SocketChannel socketChannel = SocketChannel.open();
+                    socketChannel.connect(new InetSocketAddress(Config.SERVERIP, Config.SERVERPORT));
+                    TrafficGenerator trafficGenerator = null;
+                    try {
+                        trafficGenerator = TrafficGeneratorFactory.getTrafficGenerator(socketChannel, trafficType);
+                        Thread t = new Thread(trafficGenerator);
+                        t.start();
+                    } catch (TrafficGeneratorNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    TrafficDirect trafficDirect = new TrafficDirect(trafficType);
+                    Thread t = new Thread(trafficDirect);
                     t.start();
-                } catch (TrafficGeneratorNotFoundException e) {
-                    e.printStackTrace();
                 }
             }
         }
