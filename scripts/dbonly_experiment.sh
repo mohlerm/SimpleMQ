@@ -44,8 +44,8 @@ remoteUserName=""
 experimentId=""
 
 dbPort=51230
-#executionDir="/home/ubuntu/simplemq"
-executionDir="/mnt/local/mohlerm"
+executionDir="/home/ubuntu/simplemq"
+#executionDir="/mnt/local/mohlerm"
 
 
 # Extract command line arguments
