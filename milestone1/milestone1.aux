@@ -1,12 +1,12 @@
 \relax 
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces DB schema}}{2}}
-\newlabel{fig:dbschema}{{1}{2}}
 \@writefile{toc}{\contentsline {section}{\numberline {1}System Description}{2}}
 \newlabel{sec:system-description}{{1}{2}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Database}{2}}
 \newlabel{sec:database}{{1.1}{2}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.1}Schema and Indexes}{2}}
 \newlabel{sec:schema-and-indexes}{{1.1.1}{2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces DB schema}}{2}}
+\newlabel{fig:dbschema}{{1}{2}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.2}Stored Procedures}{2}}
 \newlabel{sec:stored-procedures}{{1.1.2}{2}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.3}Design decisions}{2}}
@@ -15,55 +15,61 @@
 \newlabel{tab:storedprocedures}{{1}{3}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.4}Performance characteristics}{3}}
 \newlabel{sec:performance-characteristics}{{1.1.4}{3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Middleware}{3}}
-\newlabel{sec:middleware}{{1.2}{3}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.1}Design overview}{3}}
-\newlabel{sec:design-overview}{{1.2.1}{3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Database baseline performance with small and large messages}}{4}}
+\newlabel{fig:dbonly}{{2}{4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Middleware}{4}}
+\newlabel{sec:middleware}{{1.2}{4}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.1}Design overview}{4}}
+\newlabel{sec:design-overview}{{1.2.1}{4}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.2}Interfacing with clients}{4}}
 \newlabel{sec:interfacing-with-clients}{{1.2.2}{4}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.3}Queuing and Connection pool to database}{4}}
-\newlabel{sec:queuing-and-connection-pool-to-database}{{1.2.3}{4}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.4}Performance characteristics}{4}}
-\newlabel{sec:performance-characteristics-1}{{1.2.4}{4}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Clients}{4}}
-\newlabel{sec:clients}{{1.3}{4}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.1}Design and interface}{4}}
-\newlabel{sec:design-and-interface}{{1.3.1}{4}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.2}Instrumentation}{4}}
-\newlabel{sec:instrumentation}{{1.3.2}{4}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.3}Workloads and deployment}{4}}
-\newlabel{sec:workloads-and-deployment}{{1.3.3}{4}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.4}Sanity checks}{5}}
-\newlabel{sec:sanity-checks}{{1.3.4}{5}}
-\@writefile{toc}{\contentsline {section}{\numberline {2}Experimental Setup}{5}}
-\newlabel{sec:experimental-setup}{{2}{5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}System Configurations}{5}}
-\newlabel{sec:system-configurations}{{2.1}{5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Configuration and Deployment mechanisms}{5}}
-\newlabel{sec:configuration-and-deployment-mechanisms}{{2.2}{5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Logging and Benchmarking mechanisms}{5}}
-\newlabel{sec:logging-and-benchmarking-mechanisms}{{2.3}{5}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Evaluation}{5}}
-\newlabel{sec:evaluation}{{3}{5}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces }}{6}}
-\newlabel{fig:throughput30min}{{2}{6}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces }}{6}}
-\newlabel{fig:response30min}{{3}{6}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}System Stability}{6}}
-\newlabel{sec:system-stability}{{3.1}{6}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}System Throughput}{6}}
-\newlabel{sec:system-throughput}{{3.2}{6}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Scaling the number of clients - left small, right large messages}}{7}}
-\newlabel{fig:maxclientperinstance}{{4}{7}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}System Scalability}{7}}
-\newlabel{sec:system-scalability}{{3.3}{7}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.1}Fix workers - scale clients}{7}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.2}Fix clients - scale workers}{7}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Response Time Variations}{7}}
-\newlabel{sec:response-time-variations}{{3.4}{7}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Scaling the number of workers - left small, right large messages}}{8}}
-\newlabel{fig:maxworkerperinstance}{{5}{8}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}$2^k$ Experiment}{8}}
-\newlabel{sec:k-experiment}{{3.5}{8}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Conclusion}{8}}
-\newlabel{sec:conclusion}{{3.6}{8}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Overview of the system}}{5}}
+\newlabel{fig:middleware}{{3}{5}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.3}Queuing and Connection pool to database}{5}}
+\newlabel{sec:queuing-and-connection-pool-to-database}{{1.2.3}{5}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.4}Performance characteristics}{5}}
+\newlabel{sec:performance-characteristics-1}{{1.2.4}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Clients}{5}}
+\newlabel{sec:clients}{{1.3}{5}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.1}Design and interface}{5}}
+\newlabel{sec:design-and-interface}{{1.3.1}{5}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.2}Instrumentation}{6}}
+\newlabel{sec:instrumentation}{{1.3.2}{6}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.3}Workloads and deployment}{6}}
+\newlabel{sec:workloads-and-deployment}{{1.3.3}{6}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.4}Sanity checks}{6}}
+\newlabel{sec:sanity-checks}{{1.3.4}{6}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Experimental Setup}{6}}
+\newlabel{sec:experimental-setup}{{2}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}System Configurations}{7}}
+\newlabel{sec:system-configurations}{{2.1}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Configuration and Deployment mechanisms}{7}}
+\newlabel{sec:configuration-and-deployment-mechanisms}{{2.2}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Logging and Benchmarking mechanisms}{7}}
+\newlabel{sec:logging-and-benchmarking-mechanisms}{{2.3}{7}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Evaluation}{8}}
+\newlabel{sec:evaluation}{{3}{8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}System Stability}{8}}
+\newlabel{sec:system-stability}{{3.1}{8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}System Throughput}{8}}
+\newlabel{sec:system-throughput}{{3.2}{8}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces }}{9}}
+\newlabel{fig:longrun}{{4}{9}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces }}{9}}
+\newlabel{tab:}{{2}{9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}System Scalability}{10}}
+\newlabel{sec:system-scalability}{{3.3}{10}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.1}Fix workers - scale clients}{10}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.2}Fix clients - scale workers}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Response Time Variations}{10}}
+\newlabel{sec:response-time-variations}{{3.4}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}$2^k$ Experiment}{10}}
+\newlabel{sec:k-experiment}{{3.5}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Scaling the number of clients - left small, right large messages}}{11}}
+\newlabel{fig:maxclientperinstance}{{5}{11}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces }}{11}}
+\newlabel{tab:2kparam}{{3}{11}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Conclusion}{11}}
+\newlabel{sec:conclusion}{{3.6}{11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Scaling the number of workers - left small, right large messages}}{12}}
+\newlabel{fig:maxworkerperinstance}{{6}{12}}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Arch Linux) (preloaded format=pdflatex 2015.9.15)  29 OCT 2015 00:19
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Arch Linux) (preloaded format=pdflatex 2015.9.15)  3 NOV 2015 13:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -81,21 +81,25 @@ Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 ))
 \Gin@req@height=\dimen111
 \Gin@req@width=\dimen112
+)
+(/usr/share/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip10
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 ) (./milestone1.aux)
 \openout1 = `milestone1.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -189,11 +193,11 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 35.
+(Font)              <12> on input line 36.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 35.
+(Font)              <8> on input line 36.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 35.
+(Font)              <6> on input line 36.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
@@ -201,97 +205,129 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 File: figures/dbschema.pdf Graphic file (type pdf)
 
 <use figures/dbschema.pdf>
-Package pdftex.def Info: figures/dbschema.pdf used on input line 61.
+Package pdftex.def Info: figures/dbschema.pdf used on input line 50.
 (pdftex.def)             Requested size: 271.7835pt x 142.09155pt.
-
-Overfull \hbox (40.22281pt too wide) in paragraph at lines 56--66
-\OT1/cmr/m/n/10.95 (\OT1/cmtt/m/n/10.95 pop[]queue()\OT1/cmr/m/n/10.95 , \OT1/c
-mtt/m/n/10.95 peek[]queue()\OT1/cmr/m/n/10.95 ), sender[]id (\OT1/cmtt/m/n/10.9
-5 pop[]message()\OT1/cmr/m/n/10.95 ) and re-ceiver[]id (\OT1/cmtt/m/n/10.95 pop
-[]queue()\OT1/cmr/m/n/10.95 , \OT1/cmtt/m/n/10.95 peek[]queue()\OT1/cmr/m/n/10.
-95 ,
- []
-
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <10.95> on input line 73.
+(Font)              <10.95> on input line 64.
 
-Underfull \hbox (badness 10000) in paragraph at lines 76--76
+Underfull \hbox (badness 10000) in paragraph at lines 67--67
 []\OT1/cmr/m/n/10.95 msg[]id
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 77--77
+Underfull \hbox (badness 10000) in paragraph at lines 68--68
 []\OT1/cmr/m/n/10.95 queue[]id
  []
 
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 90.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 90.
-[2 <./figures/dbschema.pdf>] [3] [4]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 175.
 
+Underfull \hbox (badness 10000) in paragraph at lines 73--73
+[]\OT1/cmtt/m/n/10.95 pop[]message\OT1/cmr/m/n/10.95 (sender, re-
+ []
 
-(/usr/share/texmf-dist/tex/latex/base/omscmr.fd
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <9> on input line 81.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 81.
+[2 <./figures/dbschema.pdf>]
+<../results/dbonly.pdf, id=29, 853.1875pt x 569.12625pt>
+File: ../results/dbonly.pdf Graphic file (type pdf)
+
+<use ../results/dbonly.pdf>
+Package pdftex.def Info: ../results/dbonly.pdf used on input line 89.
+(pdftex.def)             Requested size: 362.37569pt x 241.73216pt.
+ [3]
+<figures/middleware.pdf, id=37, 260.975pt x 127.80199pt>
+File: figures/middleware.pdf Graphic file (type pdf)
+
+<use figures/middleware.pdf>
+Package pdftex.def Info: figures/middleware.pdf used on input line 122.
+(pdftex.def)             Requested size: 362.37569pt x 177.46092pt.
+ [4 <../results/dbonly.pdf>] [5 <./figures/middleware.pdf>]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 165.
+
+ (/usr/share/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 175.
- [5]
-<../results/30min_small_throughput.pdf, id=43, 578.16pt x 433.62pt>
-File: ../results/30min_small_throughput.pdf Graphic file (type pdf)
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 165.
 
-<use ../results/30min_small_throughput.pdf>
-Package pdftex.def Info: ../results/30min_small_throughput.pdf used on input li
-ne 208.
-(pdftex.def)             Requested size: 226.48395pt x 169.85878pt.
-File: ../results/30min_small_throughput.pdf Graphic file (type pdf)
+Overfull \hbox (13.16808pt too wide) in paragraph at lines 165--172
+\OT1/cmr/m/n/10.95 quests it-er-a-tively: SendMes-sage-To-Queue, PeekMes-sage-F
+romQueue, PopMes-sage-FromQueue. 
+ []
 
-<use ../results/30min_small_throughput.pdf>
-Package pdftex.def Info: ../results/30min_small_throughput.pdf used on input li
-ne 215.
-(pdftex.def)             Requested size: 226.48395pt x 169.85878pt.
- [6 <../results/30min_small_throughput.pdf>]
-<../results/maxclientperinstance.pdf, id=82, 853.1875pt x 569.12625pt>
+[6] [7] <../results/longrun.pdf, id=78, 853.1875pt x 853.1875pt>
+File: ../results/longrun.pdf Graphic file (type pdf)
+
+<use ../results/longrun.pdf>
+Package pdftex.def Info: ../results/longrun.pdf used on input line 241.
+(pdftex.def)             Requested size: 362.37569pt x 362.38509pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 234--247
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 248--249
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 252--260
+
+ []
+
+[8]
+Underfull \hbox (badness 10000) in paragraph at lines 289--290
+
+ []
+
+[9 <../results/longrun.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 306--312
+
+ []
+
+<../results/maxclientperinstance.pdf, id=94, 853.1875pt x 569.12625pt>
 File: ../results/maxclientperinstance.pdf Graphic file (type pdf)
 
 <use ../results/maxclientperinstance.pdf>
 Package pdftex.def Info: ../results/maxclientperinstance.pdf used on input line
- 239.
+ 315.
 (pdftex.def)             Requested size: 407.66833pt x 271.94435pt.
 
-<../results/maxworkerperinstance.pdf, id=83, 853.1875pt x 569.12625pt>
+<../results/maxworkerperinstance.pdf, id=95, 853.1875pt x 569.12625pt>
 File: ../results/maxworkerperinstance.pdf Graphic file (type pdf)
 
 <use ../results/maxworkerperinstance.pdf>
 Package pdftex.def Info: ../results/maxworkerperinstance.pdf used on input line
- 247.
+ 328.
 (pdftex.def)             Requested size: 407.66833pt x 271.94435pt.
- [7 <../results/maxclientperinstance.pdf>] [8 <../results/maxworkerperinstance.
-pdf>] (./milestone1.aux) ) 
+ [10] [11 <../results/maxclientperinstance.pdf>] [12 <../results/maxworkerperin
+stance.pdf>] (./milestone1.aux) ) 
 Here is how much of TeX's memory you used:
- 2056 strings out of 493089
- 29793 string characters out of 6140694
- 100537 words of memory out of 5000000
- 5527 multiletter control sequences out of 15000+600000
- 10584 words of font info for 37 fonts, out of 8000000 for 9000
+ 2143 strings out of 493089
+ 30835 string characters out of 6140694
+ 102655 words of memory out of 5000000
+ 5607 multiletter control sequences out of 15000+600000
+ 10751 words of font info for 38 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 37i,11n,32p,816b,272s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></
-usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf
--dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmr17.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb
-></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmti10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti1
-2.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on milestone1.pdf (8 pages, 253708 bytes).
+ 37i,11n,32p,811b,311s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12
+.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/shar
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmr17.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/sh
+are/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmti10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmti12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb><
+/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb>
+Output written on milestone1.pdf (12 pages, 583448 bytes).
 PDF statistics:
- 151 PDF objects out of 1000 (max. 8388607)
- 87 compressed objects within 1 object stream
+ 170 PDF objects out of 1000 (max. 8388607)
+ 118 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 21 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
